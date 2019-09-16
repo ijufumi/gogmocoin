@@ -1,4 +1,4 @@
-module api_client
+module gogmocoin
 
 go 1.12
 

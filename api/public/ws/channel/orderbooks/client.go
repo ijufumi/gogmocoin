@@ -1,12 +1,13 @@
 package orderbooks
 
 import (
-	"api_client/api/common/configuration"
-	"api_client/api/public/ws/internal/connect"
 	"encoding/json"
+	"gogmocoin/api/common/configuration"
+	"gogmocoin/api/public/ws/internal/connect"
 	"log"
 )
 
+// Client ...
 type Client interface {
 	Subscribe() error
 	Unsubscribe() error
@@ -17,6 +18,7 @@ type client struct {
 	conn *connect.Connection
 }
 
+// New ...
 func New(symbol configuration.Symbol) Client {
 	conn := connect.New()
 	conn.SetSubscribeFunc(func() interface{} {

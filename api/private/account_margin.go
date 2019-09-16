@@ -1,13 +1,14 @@
 package private
 
 import (
-	"api_client/api/private/internal/connect"
-	"api_client/api/private/model"
 	"encoding/json"
 	"fmt"
+	"gogmocoin/api/private/internal/connect"
+	"gogmocoin/api/private/model"
 	"net/url"
 )
 
+// AccountMargin ...
 type AccountMargin interface {
 	AccountMargin() (*model.AccountMarginRes, error)
 }

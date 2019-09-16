@@ -1,13 +1,14 @@
 package rest
 
 import (
-	"api_client/api/public/rest/internal/connect"
-	"api_client/api/public/rest/model"
 	"encoding/json"
 	"fmt"
+	"gogmocoin/api/public/rest/internal/connect"
+	"gogmocoin/api/public/rest/model"
 	"net/url"
 )
 
+// Status ...
 type Status interface {
 	Status() (*model.StatusRes, error)
 }

@@ -1,8 +1,8 @@
 package main
 
 import (
-	"api_client/api/common/configuration"
-	"api_client/api/public/ws/channel/ticker"
+	"gogmocoin/api/common/configuration"
+	"gogmocoin/api/public/ws/channel/ticker"
 	"log"
 	"time"
 )

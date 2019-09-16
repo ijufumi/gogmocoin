@@ -1,8 +1,8 @@
 package orderbooks
 
 import (
-	"api_client/api/common/configuration"
-	"api_client/api/public/ws/model"
+	"gogmocoin/api/common/configuration"
+	"gogmocoin/api/public/ws/model"
 
 	"github.com/shopspring/decimal"
 )

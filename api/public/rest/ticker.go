@@ -1,11 +1,11 @@
 package rest
 
 import (
-	"api_client/api/common/configuration"
-	"api_client/api/public/rest/internal/connect"
-	"api_client/api/public/rest/model"
 	"encoding/json"
 	"fmt"
+	"gogmocoin/api/common/configuration"
+	"gogmocoin/api/public/rest/internal/connect"
+	"gogmocoin/api/public/rest/model"
 	"net/url"
 )
 

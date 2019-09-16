@@ -1,6 +1,6 @@
 package model
 
-import "api_client/api/common/model"
+import "gogmocoin/api/common/model"
 
 // CancelOrderReq ...
 type CancelOrderReq struct {

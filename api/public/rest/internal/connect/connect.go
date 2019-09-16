@@ -1,8 +1,8 @@
 package connect
 
 import (
-	"api_client/api/common/configuration"
 	"fmt"
+	"gogmocoin/api/common/configuration"
 	"io/ioutil"
 	"net/http"
 	"net/url"

@@ -1,8 +1,8 @@
 package main
 
 import (
-	"api_client/api/common/configuration"
-	"api_client/api/public/rest"
+	"gogmocoin/api/common/configuration"
+	"gogmocoin/api/public/rest"
 	"log"
 )
 

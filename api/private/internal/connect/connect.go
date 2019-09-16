@@ -1,10 +1,10 @@
 package connect
 
 import (
-	"api_client/api/common/configuration"
-	"api_client/api/private/internal/auth"
 	"encoding/json"
 	"fmt"
+	"gogmocoin/api/common/configuration"
+	"gogmocoin/api/private/internal/auth"
 	"io/ioutil"
 	"net/http"
 	"net/url"

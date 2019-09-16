@@ -1,14 +1,15 @@
 package private
 
 import (
-	"api_client/api/private/internal/connect"
-	"api_client/api/private/model"
 	"encoding/json"
 	"fmt"
+	"gogmocoin/api/private/internal/connect"
+	"gogmocoin/api/private/model"
 
 	"github.com/shopspring/decimal"
 )
 
+// ChangeOrder ...
 type ChangeOrder interface {
 	ChangeOrder(orderID int64, price decimal.Decimal) (*model.ChangeOrderRes, error)
 }

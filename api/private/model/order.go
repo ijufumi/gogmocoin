@@ -1,8 +1,8 @@
 package model
 
 import (
-	"api_client/api/common/configuration"
-	"api_client/api/common/model"
+	"gogmocoin/api/common/configuration"
+	"gogmocoin/api/common/model"
 
 	"github.com/shopspring/decimal"
 )

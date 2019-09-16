@@ -1,11 +1,11 @@
 package private
 
 import (
-	"api_client/api/common/configuration"
-	"api_client/api/private/internal/connect"
-	"api_client/api/private/model"
 	"encoding/json"
 	"fmt"
+	"gogmocoin/api/common/configuration"
+	"gogmocoin/api/private/internal/connect"
+	"gogmocoin/api/private/model"
 
 	"github.com/shopspring/decimal"
 )

@@ -1,7 +1,7 @@
 package private
 
 import (
-	"api_client/api/private/internal/connect"
+	"gogmocoin/api/private/internal/connect"
 	"os"
 )
 

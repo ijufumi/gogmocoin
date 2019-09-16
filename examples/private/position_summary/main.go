@@ -1,8 +1,8 @@
 package main
 
 import (
-	"api_client/api/common/configuration"
-	"api_client/api/private"
+	"gogmocoin/api/common/configuration"
+	"gogmocoin/api/private"
 	"log"
 
 	_ "github.com/joho/godotenv/autoload"
