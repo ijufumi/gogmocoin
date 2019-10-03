@@ -13,7 +13,7 @@ https://api.coin.z.com/docs
 * ticker
 * orderbooks
 
-### Public Private API
+### Private API
 * /private/v1/account/margin
 * /private/v1/account/assets
 * /private/v1/orders
