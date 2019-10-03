@@ -45,7 +45,7 @@ if err != nil {
 log.Printf("[result]%+v", orderbooks)
 ```
 
-[Examples](https://github.com/ijufumi/gogmocoin-examples/app/public/rest)
+[Examples](https://github.com/ijufumi/gogmocoin-examples/tree/master/app/public/rest)
 
 ### Public Websocket API
 ```golang
@@ -70,7 +70,7 @@ if e != nil {
 }
 ```
 
-[Examples](https://github.com/ijufumi/gogmocoin-examples/app/public/ws)
+[Examples](https://github.com/ijufumi/gogmocoin-examples/tree/master/app/public/ws)
 
 ### Public Private API
 #### 1. Edit .env file
@@ -93,7 +93,7 @@ if err != nil {
 log.Printf("ordersRes:%+v", ordersRes)
 ```
 
-[Examples](https://github.com/ijufumi/gogmocoin-examples/app/private)
+[Examples](https://github.com/ijufumi/gogmocoin-examples/tree/master/app/private)
 
 ## Welcome your contribution.
 If you modified code by anything reasons (typo, bad coding, implements of features, etc...), please make `Issue` and `Pull Request`.
