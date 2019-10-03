@@ -1,4 +1,4 @@
-module gogmocoin
+module github.com/ijufumi/gogmocoin
 
 go 1.12
 
