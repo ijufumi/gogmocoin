@@ -124,6 +124,7 @@ type WebSocketChannel string
 const (
 	WebSocketChannelTicker     = WebSocketChannel("ticker")
 	WebSocketChannelOrderBooks = WebSocketChannel("orderbooks")
+	WebSocketChannelTrades     = WebSocketChannel("trades")
 )
 
 // ExchangeStatus ...

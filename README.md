@@ -12,6 +12,7 @@ https://api.coin.z.com/docs
 ### Public Websocket API
 * ticker
 * orderbooks
+* trades
 
 ### Private API
 * /private/v1/account/margin
