@@ -1,6 +1,6 @@
 package model
 
-import "gogmocoin/api/common/configuration"
+import "github.com/ijufumi/gogmocoin/api/common/configuration"
 
 // ResponseCommon ...
 type ResponseCommon struct {

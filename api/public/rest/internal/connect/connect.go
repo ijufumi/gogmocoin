@@ -2,10 +2,11 @@ package connect
 
 import (
 	"fmt"
-	"gogmocoin/api/common/configuration"
 	"io/ioutil"
 	"net/http"
 	"net/url"
+
+	"github.com/ijufumi/gogmocoin/api/common/configuration"
 )
 
 const host = "https://api.coin.z.com/public"

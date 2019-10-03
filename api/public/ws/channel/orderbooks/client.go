@@ -2,9 +2,10 @@ package orderbooks
 
 import (
 	"encoding/json"
-	"gogmocoin/api/common/configuration"
-	"gogmocoin/api/public/ws/internal/connect"
 	"log"
+
+	"github.com/ijufumi/gogmocoin/api/common/configuration"
+	"github.com/ijufumi/gogmocoin/api/public/ws/internal/connect"
 )
 
 // Client ...

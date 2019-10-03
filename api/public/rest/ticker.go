@@ -3,10 +3,11 @@ package rest
 import (
 	"encoding/json"
 	"fmt"
-	"gogmocoin/api/common/configuration"
-	"gogmocoin/api/public/rest/internal/connect"
-	"gogmocoin/api/public/rest/model"
 	"net/url"
+
+	"github.com/ijufumi/gogmocoin/api/common/configuration"
+	"github.com/ijufumi/gogmocoin/api/public/rest/internal/connect"
+	"github.com/ijufumi/gogmocoin/api/public/rest/model"
 )
 
 // Ticker ...

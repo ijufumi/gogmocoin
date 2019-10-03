@@ -1,10 +1,10 @@
 package model
 
 import (
-	"gogmocoin/api/common/configuration"
-	"gogmocoin/api/common/model"
 	"time"
 
+	"github.com/ijufumi/gogmocoin/api/common/configuration"
+	"github.com/ijufumi/gogmocoin/api/common/model"
 	"github.com/shopspring/decimal"
 )
 

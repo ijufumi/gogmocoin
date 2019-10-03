@@ -1,10 +1,10 @@
 package ticker
 
 import (
-	"gogmocoin/api/common/configuration"
-	"gogmocoin/api/public/ws/model"
 	"time"
 
+	"github.com/ijufumi/gogmocoin/api/common/configuration"
+	"github.com/ijufumi/gogmocoin/api/public/ws/model"
 	"github.com/shopspring/decimal"
 )
 

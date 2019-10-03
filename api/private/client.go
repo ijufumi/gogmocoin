@@ -1,8 +1,9 @@
 package private
 
 import (
-	"gogmocoin/api/private/internal/connect"
 	"os"
+
+	"github.com/ijufumi/gogmocoin/api/private/internal/connect"
 )
 
 // Client ...

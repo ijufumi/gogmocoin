@@ -3,13 +3,14 @@ package connect
 import (
 	"encoding/json"
 	"fmt"
-	"gogmocoin/api/common/configuration"
-	"gogmocoin/api/private/internal/auth"
 	"io/ioutil"
 	"net/http"
 	"net/url"
 	"strings"
 	"time"
+
+	"github.com/ijufumi/gogmocoin/api/common/configuration"
+	"github.com/ijufumi/gogmocoin/api/private/internal/auth"
 )
 
 const host = "https://api.coin.z.com/private"

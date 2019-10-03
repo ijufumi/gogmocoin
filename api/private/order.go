@@ -3,10 +3,10 @@ package private
 import (
 	"encoding/json"
 	"fmt"
-	"gogmocoin/api/common/configuration"
-	"gogmocoin/api/private/internal/connect"
-	"gogmocoin/api/private/model"
 
+	"github.com/ijufumi/gogmocoin/api/common/configuration"
+	"github.com/ijufumi/gogmocoin/api/private/internal/connect"
+	"github.com/ijufumi/gogmocoin/api/private/model"
 	"github.com/shopspring/decimal"
 )
 

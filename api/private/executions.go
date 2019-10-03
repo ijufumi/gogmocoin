@@ -3,10 +3,11 @@ package private
 import (
 	"encoding/json"
 	"fmt"
-	"gogmocoin/api/private/internal/connect"
-	"gogmocoin/api/private/model"
 	"net/url"
 	"strconv"
+
+	"github.com/ijufumi/gogmocoin/api/private/internal/connect"
+	"github.com/ijufumi/gogmocoin/api/private/model"
 )
 
 // Executions ...
