@@ -20,13 +20,14 @@ type client struct {
 }
 
 // New ...
-func New(symbol configuration.Symbol) Client {
+func New(symbol configuration.Symbol, option *configuration.Option) Client {
 	conn := connect.New()
 	conn.SetSubscribeFunc(func() interface{} {
 		return Request{
 			Command: configuration.WebSocketCommandSubscribe,
 			Channel: configuration.WebSocketChannelTrades,
 			Symbol:  symbol,
+			Option:  option,
 		}
 	})
 	conn.SetUnsubscribeFunc(func() interface{} {
@@ -34,6 +35,7 @@ func New(symbol configuration.Symbol) Client {
 			Command: configuration.WebSocketCommandUnsubscribe,
 			Channel: configuration.WebSocketChannelTrades,
 			Symbol:  symbol,
+			Option:  option,
 		}
 	})
 	c := &client{

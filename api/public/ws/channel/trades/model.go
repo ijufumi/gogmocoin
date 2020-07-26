@@ -13,6 +13,7 @@ type Request struct {
 	Command              configuration.WebSocketCommand `json:"command"`
 	Channel              configuration.WebSocketChannel `json:"channel"`
 	configuration.Symbol `json:"symbol"`
+	Option               *configuration.Option `json:"option"`
 }
 
 // Response is response of ticker.

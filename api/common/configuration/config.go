@@ -146,3 +146,11 @@ const (
 	// ExchangeStatusMaintenance ...
 	ExchangeStatusMaintenance = ExchangeStatus("MAINTENANCE")
 )
+
+// Option ...
+type Option string
+
+const (
+	// OptionTakerOnly ...
+	OptionTakerOnly = Option("TAKER_ONLY")
+)
