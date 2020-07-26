@@ -24,6 +24,7 @@ type ActiveOrdersRes struct {
 			Size          decimal.Decimal             `json:"size"`
 			ExecutedSize  decimal.Decimal             `json:"executedSize"`
 			Price         decimal.Decimal             `json:"price"`
+			LossCutPrice  decimal.Decimal             `json:"losscutPrice"`
 			Status        configuration.OrderStatus   `json:"status"`
 			TimeInForce   configuration.TimeInForce   `json:"timeInForce"`
 			Timestamp     time.Time                   `json:"timestamp"`

@@ -12,6 +12,7 @@ type OrderReq struct {
 	Side          configuration.Side          `json:"side"`
 	ExecutionType configuration.ExecutionType `json:"executionType"`
 	Price         *decimal.Decimal            `json:"price,omitempty"`
+	LossCutPrice  *decimal.Decimal            `json:"losscutPrice,omitempty"`
 	Size          decimal.Decimal             `json:"size"`
 }
 

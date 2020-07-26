@@ -7,8 +7,9 @@ import (
 
 // ChangeOrderReq ...
 type ChangeOrderReq struct {
-	OrderID int64           `json:"orderId"`
-	Price   decimal.Decimal `json:"price"`
+	OrderID      int64            `json:"orderId"`
+	Price        decimal.Decimal  `json:"price"`
+	LossCutPrice *decimal.Decimal `json:"losscutPrice,omitempty"`
 }
 
 // ChangeOrderRes ...
