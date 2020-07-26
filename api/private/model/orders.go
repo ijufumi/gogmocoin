@@ -24,6 +24,7 @@ type OrdersRes struct {
 			Price                       decimal.Decimal           `json:"price"`
 			LossCutPrice                decimal.Decimal           `json:"losscutPrice"`
 			Status                      configuration.OrderStatus `json:"status"`
+			configuration.CancelType    `json:"cancelType"`
 			configuration.TimeInForce   `json:"timeInForce"`
 			Timestamp                   time.Time `json:"timestamp"`
 		} `json:"list"`

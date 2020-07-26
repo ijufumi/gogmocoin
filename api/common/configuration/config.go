@@ -154,3 +154,13 @@ const (
 	// OptionTakerOnly ...
 	OptionTakerOnly = Option("TAKER_ONLY")
 )
+
+// CancelType ...
+type CancelType string
+
+const (
+	// CancelTypeUser ...
+	CancelTypeUser = CancelType("USER")
+	// CancelTypePositionLossCut ...
+	CancelTypePositionLossCut = CancelType("POSITION_LOSSCUT")
+)
