@@ -12,6 +12,9 @@ const (
 
 	// ExecutionTypeLIMIT ...
 	ExecutionTypeLIMIT = ExecutionType("LIMIT")
+
+	// ExecutionTypeSTOP ...
+	ExecutionTypeSTOP = ExecutionType("STOP")
 )
 
 // Side ...
@@ -114,7 +117,9 @@ const (
 type WebSocketCommand string
 
 const (
-	WebSocketCommandSubscribe   = WebSocketCommand("subscribe")
+	// WebSocketCommandSubscribe ...
+	WebSocketCommandSubscribe = WebSocketCommand("subscribe")
+	// WebSocketCommandUnsubscribe ...
 	WebSocketCommandUnsubscribe = WebSocketCommand("unsubscribe")
 )
 
@@ -122,16 +127,22 @@ const (
 type WebSocketChannel string
 
 const (
-	WebSocketChannelTicker     = WebSocketChannel("ticker")
+	// WebSocketChannelTicker ...
+	WebSocketChannelTicker = WebSocketChannel("ticker")
+	// WebSocketChannelOrderBooks ...
 	WebSocketChannelOrderBooks = WebSocketChannel("orderbooks")
-	WebSocketChannelTrades     = WebSocketChannel("trades")
+	// WebSocketChannelTrades ...
+	WebSocketChannelTrades = WebSocketChannel("trades")
 )
 
 // ExchangeStatus ...
 type ExchangeStatus string
 
 const (
-	ExchangeStatusOpen        = ExchangeStatus("OPEN")
-	ExchangeStatusPreOpen     = ExchangeStatus("PREOPEN")
+	// ExchangeStatusOpen ...
+	ExchangeStatusOpen = ExchangeStatus("OPEN")
+	// ExchangeStatusPreOpen ...
+	ExchangeStatusPreOpen = ExchangeStatus("PREOPEN")
+	// ExchangeStatusMaintenance ...
 	ExchangeStatusMaintenance = ExchangeStatus("MAINTENANCE")
 )
