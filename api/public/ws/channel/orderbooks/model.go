@@ -1,6 +1,8 @@
 package orderbooks
 
 import (
+	"time"
+
 	"github.com/ijufumi/gogmocoin/api/common/configuration"
 	"github.com/ijufumi/gogmocoin/api/public/ws/model"
 	"github.com/shopspring/decimal"
@@ -24,5 +26,6 @@ type Response struct {
 		Price decimal.Decimal `json:"price"`
 		Size  decimal.Decimal `json:"size"`
 	}
-	Symbol configuration.Symbol `json:"symbol"`
+	Symbol    configuration.Symbol `json:"symbol"`
+	Timestamp time.Time            `json:"timestamp"`
 }
