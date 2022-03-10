@@ -1,0 +1,36 @@
+Arguments: 
+  /usr/local/Cellar/node/17.6.0_1/bin/node /usr/local/Cellar/yarn/1.22.17_2/libexec/bin/yarn.js init
+
+PATH: 
+  /usr/local/Cellar/nodenv/1.4.0/libexec:/usr/local/opt/node@16/bin:/usr/local/opt/mysql-client/bin:/Users/ijufumi/.nodenv/shims:/Users/ijufumi/.pyenv/shims:/Users/ijufumi/.pyenv/bin:/Users/ijufumi/workspaces/go/bin:/Users/ijufumi/.goenv/versions/1.12.7/bin:/Users/ijufumi/.goenv/shims:/Users/ijufumi/.goenv/bin:/Users/ijufumi/.sdkman/candidates/scala/current/bin:/Users/ijufumi/.sdkman/candidates/sbt/current/bin:/Users/ijufumi/.sdkman/candidates/micronaut/current/bin:/Users/ijufumi/.sdkman/candidates/maven/current/bin:/Users/ijufumi/.sdkman/candidates/kotlin/current/bin:/Users/ijufumi/.sdkman/candidates/java/current/bin:/Users/ijufumi/.sdkman/candidates/gradle/current/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/share/dotnet:~/.dotnet/tools:/Library/Apple/usr/bin:/Library/Frameworks/Mono.framework/Versions/Current/Commands:/Users/ijufumi/.krew/bin
+
+Yarn version: 
+  1.22.17
+
+Node version: 
+  17.6.0
+
+Platform: 
+  darwin x64
+
+Trace: 
+  Error: canceled
+      at Interface.<anonymous> (/usr/local/Cellar/yarn/1.22.17_2/libexec/lib/cli.js:137143:13)
+      at Interface.emit (node:events:527:28)
+      at Interface.[_ttyWrite] [as _ttyWrite] (node:internal/readline/interface:1117:18)
+      at ReadStream.onkeypress (node:internal/readline/interface:269:20)
+      at ReadStream.emit (node:events:527:28)
+      at emitKeys (node:internal/readline/utils:358:14)
+      at emitKeys.next (<anonymous>)
+      at ReadStream.onData (node:internal/readline/emitKeypressEvents:64:36)
+      at ReadStream.emit (node:events:527:28)
+      at addChunk (node:internal/streams/readable:324:12)
+
+npm manifest: 
+  No manifest
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
