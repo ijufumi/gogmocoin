@@ -72,7 +72,7 @@ if e != nil {
 
 [Examples](https://github.com/ijufumi/gogmocoin-examples/tree/master/app/public/ws)
 
-### Public Private API
+### Private API
 #### 1. Edit .env file
 Input your `API_KEY` and `API_SECRET` to .env file.
 
