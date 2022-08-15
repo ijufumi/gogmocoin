@@ -73,8 +73,8 @@ if e != nil {
 [Examples](https://github.com/ijufumi/gogmocoin-examples/tree/master/app/public/ws)
 
 ### Private API
-#### 1. Edit .env file
-Input your `API_KEY` and `API_SECRET` to .env file.
+#### 1. Create .env file
+Copy `.env.example` to `.env` ant then input your `API_KEY` and `API_SECRET` to `.env` file.
 
 ```.env
 API_KEY=YOUR_API_KEY
