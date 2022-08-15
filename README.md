@@ -4,31 +4,31 @@ https://api.coin.z.com/docs
 
 ## Implemented API list
 ### Public API
-* /public/v1/status
-* /public/v1/ticker
-* /public/v1/orderbooks
-* /public/v1/trades
+* `/public/v1/status`
+* `/public/v1/ticker`
+* `/public/v1/orderbooks`
+* `/public/v1/trades`
 
 ### Public Websocket API
-* ticker
-* orderbooks
-* trades
+* `ticker`
+* `orderbooks`
+* `trades`
 
 ### Private API
-* /private/v1/account/margin
-* /private/v1/account/assets
-* /private/v1/orders
-* /private/v1/activeOrders
-* /private/v1/executions
-* /private/v1/latestExecutions
-* /private/v1/openPositions
-* /private/v1/positionSummary
-* /private/v1/order
-* /private/v1/changeOrder
-* /private/v1/cancelOrder
-* /private/v1/closeOrder
-* /private/v1/closeBulkOrder
-* /private/v1/changeLosscutPrice
+* `/private/v1/account/margin`
+* `/private/v1/account/assets`
+* `/private/v1/orders`
+* `/private/v1/activeOrders`
+* `/private/v1/executions`
+* `/private/v1/latestExecutions`
+* `/private/v1/openPositions`
+* `/private/v1/positionSummary`
+* `/private/v1/order`
+* `/private/v1/changeOrder`
+* `/private/v1/cancelOrder`
+* `/private/v1/closeOrder`
+* `/private/v1/closeBulkOrder`
+* `/private/v1/changeLosscutPrice`
 
 ## How to use
 ### Public API
