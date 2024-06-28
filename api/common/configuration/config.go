@@ -165,6 +165,16 @@ const (
 	WebSocketChannelOrderBooks = WebSocketChannel("orderbooks")
 	// WebSocketChannelTrades ...
 	WebSocketChannelTrades = WebSocketChannel("trades")
+
+	// Private channels
+	// WebSocketChannelExecutions ...
+	WebSocketChannelExecutions = WebSocketChannel("executionEvents")
+	// WebSocketChannelOrders ...
+	WebSocketChannelOrders = WebSocketChannel("orderEvents")
+	// WebSocketChannelPositions ...
+	WebSocketChannelPositions = WebSocketChannel("positionEvents")
+	// WebSocketChannelPositionSummary ...
+	WebSocketChannelPositionSummary = WebSocketChannel("positionSummaryEvents")
 )
 
 // ExchangeStatus ...
@@ -185,6 +195,9 @@ type Option string
 const (
 	// OptionTakerOnly ...
 	OptionTakerOnly = Option("TAKER_ONLY")
+
+	// OptionPeriodic for Private::PositionSummary
+	OptionPeriodic = Option("PERIODIC")
 )
 
 // CancelType ...
