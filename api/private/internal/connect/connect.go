@@ -3,7 +3,7 @@ package connect
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/url"
 	"strings"
@@ -53,7 +53,7 @@ func (c *Connection) Post(body interface{}, path string) ([]byte, error) {
 	defer func() {
 		res.Body.Close()
 	}()
-	resBody, err := ioutil.ReadAll(res.Body)
+	resBody, err := io.ReadAll(res.Body)
 	if err != nil {
 		return nil, err
 	}
@@ -91,7 +91,7 @@ func (c *Connection) Get(param url.Values, path string) ([]byte, error) {
 	defer func() {
 		res.Body.Close()
 	}()
-	resBody, err := ioutil.ReadAll(res.Body)
+	resBody, err := io.ReadAll(res.Body)
 	if err != nil {
 		return nil, err
 	}
@@ -101,6 +101,82 @@ func (c *Connection) Get(param url.Values, path string) ([]byte, error) {
 	}
 	return resBody, nil
 
+}
+
+// Put ... for use RevokeAccessToken
+// METHOD is just different.
+func (c *Connection) Put(body interface{}, path string) ([]byte, error) {
+	b, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	req, err := http.NewRequest(http.MethodPut, host+path, strings.NewReader(string(b)))
+	if err != nil {
+		return nil, err
+	}
+	// put method does not need body.
+	c.makeHeader(time.Now(), req, http.MethodPut, path, "")
+
+	if configuration.Debug {
+		fmt.Printf("[Request]Header:%v\n", req.Header)
+		fmt.Printf("[Request]Body:%v\n", string(b))
+	}
+	res, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return nil, err
+	}
+
+	defer func() {
+		res.Body.Close()
+	}()
+	resBody, err := io.ReadAll(res.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	if configuration.Debug {
+		fmt.Printf("[Response]Body:%v\n", string(resBody))
+	}
+
+	return resBody, nil
+}
+
+// Delete ... for use RevokeAccessToken
+// METHOD is just different.
+func (c *Connection) Delete(body interface{}, path string) ([]byte, error) {
+	b, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	req, err := http.NewRequest(http.MethodDelete, host+path, strings.NewReader(string(b)))
+	if err != nil {
+		return nil, err
+	}
+	// delete method does not need body.
+	c.makeHeader(time.Now(), req, http.MethodDelete, path, "")
+
+	if configuration.Debug {
+		fmt.Printf("[Request]Header:%v\n", req.Header)
+		fmt.Printf("[Request]Body:%v\n", string(b))
+	}
+	res, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return nil, err
+	}
+
+	defer func() {
+		res.Body.Close()
+	}()
+	resBody, err := io.ReadAll(res.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	if configuration.Debug {
+		fmt.Printf("[Response]Body:%v\n", string(resBody))
+	}
+
+	return resBody, nil
 }
 
 func (c *Connection) makeHeader(systemDatetime time.Time, r *http.Request, method, path, body string) {
