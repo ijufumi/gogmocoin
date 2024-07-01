@@ -28,6 +28,7 @@ https://api.coin.z.com/docs
 * `/private/v1/cancelOrder`
 * `/private/v1/closeOrder`
 * `/private/v1/closeBulkOrder`
+* `/private/v1/changeLosscutPrice`
 * `/private/v1/ws-auth` POST, PUT, DELETE 
 
 ### Public Websocket API
