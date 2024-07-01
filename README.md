@@ -28,7 +28,7 @@ https://api.coin.z.com/docs
 * `/private/v1/cancelOrder`
 * `/private/v1/closeOrder`
 * `/private/v1/closeBulkOrder`
-* `/private/v1/changeLosscutPrice`
+* `/private/v1/ws-auth` POST, PUT, DELETE 
 
 ### Public Websocket API
 * `executionEvents`
@@ -102,7 +102,7 @@ log.Printf("ordersRes:%+v", ordersRes)
 [Examples](https://github.com/ijufumi/gogmocoin-examples/tree/master/app/private)
 
 
-### Public Websocket API
+### Private Websocket API
 ```golang
     // periodic execution
     isPeriodic := false
