@@ -30,6 +30,12 @@ https://api.coin.z.com/docs
 * `/private/v1/closeBulkOrder`
 * `/private/v1/changeLosscutPrice`
 
+### Public Websocket API
+* `executionEvents`
+* `orderEvents`
+* `positionEvents`
+* `positionSummaryEvents` option: PRIODIC
+
 ## How to use
 ### Public API
 ```golang
@@ -94,6 +100,38 @@ log.Printf("ordersRes:%+v", ordersRes)
 ```
 
 [Examples](https://github.com/ijufumi/gogmocoin-examples/tree/master/app/private)
+
+
+### Public Websocket API
+```golang
+    // periodic execution
+    isPeriodic := false
+	client := summary.New(isPeriodic)
+	if client == nil {
+        log.Println("Client should not be nil")
+        return
+    }
+
+	endTicker := time.NewTimer(60 * time.Second)
+EXIT:
+	for {
+		select {
+		case v := <-client.Receive():
+			log.Printf("msg: %+v", v)
+
+		case <-endTicker.C:
+			log.Println("timeout...")
+			break EXIT
+		}
+	}
+
+	err := client.Unsubscribe()
+	if err != nil {
+        log.Println("Unsubscription should not produce an error")
+    }
+```
+
+[Examples](https://github.com/ijufumi/gogmocoin-examples/tree/master/app/private/ws)
 
 ## Welcome your contribution.
 If you modified code by anything reasons (typo, bad coding, implements of features, etc...), please make `Issue` and `Pull Request`.
