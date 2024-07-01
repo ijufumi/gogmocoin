@@ -18,13 +18,11 @@ func TestClient_Connection(t *testing.T) {
 	client := executions.New()
 	assert.NotNil(t, client, "Client should not be nil")
 
-	err := client.Subscribe()
-	assert.NoError(t, err, "Subscription should not produce an error")
-
 	rxChan := client.Receive()
 	assert.NotNil(t, rxChan, "Receive channel should not be nil")
 
 	// Simulate data reception and other assertions here
+	endTicker := time.NewTimer(60 * time.Second)
 EXIT:
 	select {
 	case res := <-rxChan:
@@ -32,11 +30,11 @@ EXIT:
 		// データ確認に関してはここに詳細なテストとアサートを追加してください。通常はJSONの構造や具体的なフィールドを確認します。
 		log.Printf("received:%v", res)
 
-	case <-time.After(60 * time.Second):
+	case <-endTicker.C:
 		log.Println("timeout")
 		break EXIT
 	}
 
-	err = client.Unsubscribe()
+	err := client.Unsubscribe()
 	assert.NoError(t, err, "Unsubscription should not produce an error")
 }

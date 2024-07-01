@@ -1,6 +1,7 @@
 package private
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"testing"
@@ -11,6 +12,17 @@ import (
 	"github.com/shopspring/decimal"
 	"github.com/stretchr/testify/assert"
 )
+
+var (
+	SYMBOLS = []string{"ASTR", "BTC_JPY", "ETH_JPY", "BCH_JPY", "LTC_JPY", "XRP_JPY", "DOT_JPY", "ATOM_JPY", "ADA_JPY", "LINK_JPY", "DOGE_JPY", "SOL_JPY", "BTC", "ETH", "BCH", "LTC", "XRP", "XEM", "XLM", "BAT", "XTZ", "QTUM", "ENJ", "DOT", "ATOM", "MKR", "DAI", "XYM", "MONA", "FCR", "ADA", "LINK", "DOGE", "SOL"}
+)
+
+func TestParse(t *testing.T) {
+
+	for _, v := range SYMBOLS {
+		fmt.Printf("v: %+v\n", v)
+	}
+}
 
 func TestGetAccountAssets(t *testing.T) {
 	godotenv.Load("../../.env.sample")
@@ -44,10 +56,13 @@ func TestGetLastExecutions(t *testing.T) {
 	count := 10
 
 	client := New()
-	res, err := client.LastExecutions(configuration.SymbolBTCJPY, page, count)
-	assert.NoError(t, err)
 
-	log.Printf("result: %+v", res)
+	for _, v := range SYMBOLS {
+		res, err := client.LastExecutions(configuration.Symbol(v), page, count)
+		assert.NoError(t, err)
+
+		log.Printf("result: %+v\n", res)
+	}
 }
 
 func TestOrderAndCancel(t *testing.T) {

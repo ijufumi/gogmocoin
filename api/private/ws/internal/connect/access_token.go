@@ -52,6 +52,9 @@ func (a *AccessToken) Get() *AccessToken {
 	}
 	a.token = token
 	a.createdAt = time.Now()
+
+	log.Printf("[success] access token: %v, expiration to %s", a.token, a.createdAt.Add(60*time.Minute).String())
+
 	return a
 }
 

@@ -121,7 +121,7 @@ func (c *Connection) receive() {
 			}
 			e := c.subscribeFunc()
 			if e != nil {
-				log.Printf("[Subscribe]error:%v", e)
+				log.Printf("[Subscribe] error:%v", e)
 				_ = c.conn.Close()
 				c.state.Store(connectionStateClosed)
 				continue // TODO:review
@@ -168,7 +168,7 @@ func (c *Connection) Send(msg interface{}) error {
 	if err != nil {
 		return fmt.Errorf("write error:%v", err)
 	}
-	log.Printf("[Send]msg:%+v", msg)
+	log.Printf("[Send] msg:%+v", msg)
 	return nil
 }
 
