@@ -1,4 +1,8 @@
 # Wrapper code of GMO Coin's API
+
+## Update
+2024/07/01: supported private websocket.
+
 ## API document
 https://api.coin.z.com/docs
 
@@ -31,7 +35,7 @@ https://api.coin.z.com/docs
 * `/private/v1/changeLosscutPrice`
 * `/private/v1/ws-auth` POST, PUT, DELETE 
 
-### Public Websocket API
+### Private Websocket API
 * `executionEvents`
 * `orderEvents`
 * `positionEvents`
