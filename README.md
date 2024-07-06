@@ -109,31 +109,32 @@ log.Printf("ordersRes:%+v", ordersRes)
 
 ### Private Websocket API
 ```golang
-    // periodic execution
-    isPeriodic := false
-	client := summary.New(isPeriodic)
-	if client == nil {
-        log.Println("Client should not be nil")
-        return
-    }
+// periodic execution
+isPeriodic := false
+client := summary.New(isPeriodic)
+if client == nil {
+    log.Println("Client should not be nil")
+    return
+}
 
-	endTicker := time.NewTimer(60 * time.Second)
+endTicker := time.NewTimer(60 * time.Second)
+
 EXIT:
-	for {
-		select {
-		case v := <-client.Receive():
-			log.Printf("msg: %+v", v)
+for {
+    select {
+    case v := <-client.Receive():
+        log.Printf("msg: %+v", v)
 
-		case <-endTicker.C:
-			log.Println("timeout...")
-			break EXIT
-		}
-	}
-
-	err := client.Unsubscribe()
-	if err != nil {
-        log.Println("Unsubscription should not produce an error")
+    case <-endTicker.C:
+        log.Println("timeout...")
+        break EXIT
     }
+}
+
+err := client.Unsubscribe()
+if err != nil {
+    log.Println("Unsubscription should not produce an error")
+}
 ```
 
 [Examples](https://github.com/ijufumi/gogmocoin-examples/tree/master/app/private/ws)
