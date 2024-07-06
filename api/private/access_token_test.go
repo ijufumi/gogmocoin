@@ -22,18 +22,17 @@ func TestAccessToken(t *testing.T) {
 	}
 
 	gotToken := ""
-
+	client := New()
 	for _, method := range methods {
-		client := New()
-		token, err := client.AccessToken(method, gotToken)
+		// get access token, next extend access token, next delete access token
+		tokenRes, err := client.AccessToken(method, gotToken)
 		assert.NoError(t, err)
+
 		if method == http.MethodPost {
-			assert.NotEqual(t, token, "")
-			gotToken = token
-		} else {
-			assert.Equal(t, token, gotToken)
+			assert.NotEqual(t, tokenRes.Data, "")
+			gotToken = tokenRes.Data
 		}
 
-		log.Printf("[%s] token:%s", method, token)
+		log.Printf("[%s] token: %s", method, tokenRes.Data)
 	}
 }

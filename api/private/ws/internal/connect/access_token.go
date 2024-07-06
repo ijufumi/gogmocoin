@@ -45,12 +45,12 @@ func (a *AccessToken) IsExpired() bool {
 
 func (a *AccessToken) Get() *AccessToken {
 	client := private.New()
-	token, err := client.AccessToken(http.MethodPost)
+	res, err := client.AccessToken(http.MethodPost)
 	if err != nil {
 		log.Printf("failed to get access token: %v", err)
 		return nil
 	}
-	a.token = token
+	a.token = res.Data
 	a.createdAt = time.Now()
 
 	log.Printf("[success] access token: %v, expiration to %s", a.token, a.createdAt.Add(60*time.Minute).String())
@@ -60,14 +60,9 @@ func (a *AccessToken) Get() *AccessToken {
 
 func (a *AccessToken) Extend() *AccessToken {
 	client := private.New()
-	token, err := client.AccessToken(http.MethodPut, a.token)
+	_, err := client.AccessToken(http.MethodPut, a.token)
 	if err != nil {
 		log.Printf("failed to get access token: %v", err)
-		return nil
-	}
-
-	if token != a.token {
-		log.Printf("token is not matched, failed extend token: %v", token)
 		return nil
 	}
 
@@ -78,14 +73,9 @@ func (a *AccessToken) Extend() *AccessToken {
 
 func (a *AccessToken) Delete() *AccessToken {
 	client := private.New()
-	token, err := client.AccessToken(http.MethodDelete, a.token)
+	_, err := client.AccessToken(http.MethodDelete, a.token)
 	if err != nil {
 		log.Printf("failed to get access token: %v", err)
-		return nil
-	}
-
-	if token != a.token {
-		log.Printf("token is not matched, failed delete token: %v", token)
 		return nil
 	}
 

@@ -6,12 +6,13 @@ import (
 	"net/http"
 
 	"github.com/ijufumi/gogmocoin/api/private/internal/connect"
+	"github.com/ijufumi/gogmocoin/api/private/model"
 )
 
 // AccessToken ...
 type AccessToken interface {
 	// AccessToken required targetToken for extend/delete
-	AccessToken(method string, targetToken ...string) (string, error)
+	AccessToken(method string, targetToken ...string) (*model.AccessTokenRes, error)
 }
 
 type accessToken struct {
@@ -24,7 +25,7 @@ type RequestForAccessToken struct {
 
 // AccessToken ... choose method to get as post/extend as put/revoke as delete access token
 // required targetToken for extend/delete
-func (c *accessToken) AccessToken(method string, targetToken ...string) (string, error) {
+func (c *accessToken) AccessToken(method string, targetToken ...string) (*model.AccessTokenRes, error) {
 	req := RequestForAccessToken{}
 
 	var (
@@ -40,7 +41,7 @@ func (c *accessToken) AccessToken(method string, targetToken ...string) (string,
 	case http.MethodPut:
 		// extend access token for websocket extend 60mins
 		if len(targetToken) == 0 {
-			return "", fmt.Errorf("extend token is not found")
+			return nil, fmt.Errorf("extend token is not found")
 		}
 		req.Token = targetToken[0]
 		res, err = c.con.Put(req, "/v1/ws-auth")
@@ -48,37 +49,32 @@ func (c *accessToken) AccessToken(method string, targetToken ...string) (string,
 	case http.MethodDelete:
 		// delete access token for websocket
 		if len(targetToken) == 0 {
-			return "", fmt.Errorf("extend token is not found")
+			return nil, fmt.Errorf("extend token is not found")
 		}
 		req.Token = targetToken[0]
 		res, err = c.con.Delete(req, "/v1/ws-auth")
 
 	default:
-		return "", fmt.Errorf("method:%s is not supported", method)
+		return nil, fmt.Errorf("method:%s is not supported", method)
 	}
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
-	result := new(map[string]interface{})
+	result := new(model.AccessTokenRes)
 	err = json.Unmarshal(res, result)
 	if err != nil {
-		return "", fmt.Errorf("[order]error:%v,body:%s", err, res)
+		return nil, fmt.Errorf("[order]error:%v,body:%s", err, res)
 	}
 
-	token, isThere := (*result)["data"]
-	if !isThere {
+	if result.Data == "" {
 		// for put/delete
-		status, isThere := (*result)["status"]
-		if !isThere {
-			return "", fmt.Errorf("access token is not found in response")
+		if result.Status != 0 {
+			return nil, fmt.Errorf("status is not success")
 		}
-
-		if fmt.Sprintf("%v", status) != "0" {
-			return "", fmt.Errorf("status is not success")
-		}
-		return targetToken[0], nil
+		return result, nil
 	}
 
-	return token.(string), nil
+	// result.Data as AccessToken
+	return result, nil
 }
