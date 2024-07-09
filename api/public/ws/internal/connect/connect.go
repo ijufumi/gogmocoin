@@ -49,7 +49,7 @@ func New() *Connection {
 		stream:    make(chan []byte, 100),
 		msgStream: make(chan msgRequest, 1),
 	}
-	conn.state.Store(connectionStateClosed)
+	conn.changeStateToClosed()
 
 	go conn.send()
 	go conn.receive()
@@ -88,13 +88,12 @@ func (c *Connection) createSendFunc(f func() interface{}) func() error {
 }
 
 func (c *Connection) send() {
-	ctx, _ := context.WithCancel(c.ctx)
 	for {
 		select {
 		case m := <-c.msgStream:
 			e := c.Send(m.msg)
 			m.errChan <- e
-		case <-ctx.Done():
+		case <-c.ctx.Done():
 			return
 		}
 	}
@@ -118,7 +117,7 @@ func (c *Connection) receive() {
 			if e != nil {
 				log.Println(fmt.Sprintf("[Subscribe]error:%v", e))
 				_ = c.conn.Close()
-				c.state.Store(connectionStateClosed)
+				c.changeStateToClosed()
 				continue // TODO:review
 			}
 		}
@@ -126,7 +125,7 @@ func (c *Connection) receive() {
 		if err != nil {
 			log.Println(fmt.Sprintf("[ReadMessage]error:%v", err))
 			_ = c.conn.Close()
-			c.state.Store(connectionStateClosed)
+			c.changeStateToClosed()
 			continue // TODO:review
 		}
 
@@ -145,7 +144,7 @@ func (c *Connection) isConnected() bool {
 	v, ok := c.state.Load().(connectionState)
 
 	if !ok {
-		c.state.Store(connectionStateClosed)
+		c.changeStateToClosed()
 		return false
 	}
 
@@ -187,14 +186,14 @@ func (c *Connection) dial() error {
 
 	log.Println("dial start")
 	if c.conn != nil {
-		c.state.Store(connectionStateClosed)
+		c.changeStateToClosed()
 		_ = c.conn.Close()
 	}
 
-	c.state.Store(connectionStateConnecting)
+	c.changeStateToConnecting()
 	conn, res, err := websocket.DefaultDialer.Dial(host, nil)
 	if err != nil {
-		c.state.Store(connectionStateClosed)
+		c.changeStateToClosed()
 		return fmt.Errorf("dial error:%v, response:%v", err, res)
 	}
 
@@ -205,7 +204,7 @@ func (c *Connection) dial() error {
 		return nil
 	})
 	c.conn = conn
-	c.state.Store(connectionStateConnected)
+	c.changeStateToConnected()
 
 	return nil
 }
@@ -218,4 +217,16 @@ func (c *Connection) Stream() <-chan []byte {
 // Close is ...
 func (c *Connection) Close() {
 	c.stopFunc()
+}
+
+func (c *Connection) changeStateToClosed() {
+	c.state.Store(connectionStateClosed)
+}
+
+func (c *Connection) changeStateToConnected() {
+	c.state.Store(connectionStateConnected)
+}
+
+func (c *Connection) changeStateToConnecting() {
+	c.state.Store(connectionStateConnecting)
 }
