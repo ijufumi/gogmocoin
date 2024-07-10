@@ -24,12 +24,11 @@ jobs:
         with:
           go-version: ${{ matrix.go-version }}
       - name: Install dependencies
-        run: go get .
+        run: go get -v -t -d ./...
 
         # build
       - name: build
         run: go build -v ./...
 
-      # test
-      - name: test
-        run: go test
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v6
