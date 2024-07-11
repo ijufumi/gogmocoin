@@ -115,7 +115,7 @@ func (c *Connection) receive() {
 			}
 			e := c.subscribeFunc()
 			if e != nil {
-				log.Println(fmt.Sprintf("[Subscribe]error:%v", e))
+				log.Printf("[Subscribe]error:%v\n", e)
 				_ = c.conn.Close()
 				c.changeStateToClosed()
 				continue // TODO:review
@@ -123,7 +123,7 @@ func (c *Connection) receive() {
 		}
 		_, msg, err := c.conn.ReadMessage()
 		if err != nil {
-			log.Println(fmt.Sprintf("[ReadMessage]error:%v", err))
+			log.Printf("[ReadMessage]error:%v\n", err)
 			_ = c.conn.Close()
 			c.changeStateToClosed()
 			continue // TODO:review
