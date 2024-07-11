@@ -1,0 +1,34 @@
+name: Inspect codes of backend
+
+on:
+  push:
+    paths:
+      - 'api/**'
+      - 'go.mod'
+      - 'go.sum'
+      - '.github/workflows/inspect-code.yaml'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        go-version: [ '1.21', '1.22' ]
+    steps:
+      # Initial setup
+      - name: checkout
+        uses: actions/checkout@v4
+      - name: Setup Go ${{ matrix.go-version }}
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ matrix.go-version }}
+      - name: Install dependencies
+        run: go get -v -t -d ./...
+
+        # build
+      - name: build
+        run: go build -v ./...
+
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v6

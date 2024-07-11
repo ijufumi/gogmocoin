@@ -2,7 +2,7 @@ package connect
 
 import (
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/url"
 
@@ -36,9 +36,9 @@ func (c *Connection) Get(param url.Values, path string) ([]byte, error) {
 	}
 
 	defer func() {
-		res.Body.Close()
+		_ = res.Body.Close()
 	}()
-	resBody, err := ioutil.ReadAll(res.Body)
+	resBody, err := io.ReadAll(res.Body)
 	if err != nil {
 		return nil, err
 	}

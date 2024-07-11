@@ -3,7 +3,7 @@ package connect
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/url"
 	"strings"
@@ -51,9 +51,9 @@ func (c *Connection) Post(body interface{}, path string) ([]byte, error) {
 	}
 
 	defer func() {
-		res.Body.Close()
+		_ = res.Body.Close()
 	}()
-	resBody, err := ioutil.ReadAll(res.Body)
+	resBody, err := io.ReadAll(res.Body)
 	if err != nil {
 		return nil, err
 	}
@@ -89,9 +89,9 @@ func (c *Connection) Get(param url.Values, path string) ([]byte, error) {
 	}
 
 	defer func() {
-		res.Body.Close()
+		_ = res.Body.Close()
 	}()
-	resBody, err := ioutil.ReadAll(res.Body)
+	resBody, err := io.ReadAll(res.Body)
 	if err != nil {
 		return nil, err
 	}
