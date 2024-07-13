@@ -3,9 +3,9 @@ package private
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/ijufumi/gogmocoin/api/common/api"
 	"net/url"
 
-	"github.com/ijufumi/gogmocoin/api/private/internal/connect"
 	"github.com/ijufumi/gogmocoin/api/private/model"
 )
 
@@ -14,12 +14,18 @@ type AccountMargin interface {
 	AccountMargin() (*model.AccountMarginRes, error)
 }
 
+func newAccountMargin(apiKey, secretKey string) accountMargin {
+	return accountMargin{
+		RestAPIBase: api.NewPrivateRestAPIBase(apiKey, secretKey),
+	}
+}
+
 type accountMargin struct {
-	con *connect.Connection
+	api.RestAPIBase
 }
 
 func (a *accountMargin) AccountMargin() (*model.AccountMarginRes, error) {
-	res, err := a.con.Get(url.Values{}, "/v1/account/margin")
+	res, err := a.Get(url.Values{}, "/v1/account/margin")
 	if err != nil {
 		return nil, err
 	}

@@ -1,41 +1,44 @@
-package connect
+package api
 
 import (
+	"crypto/hmac"
+	"crypto/sha256"
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
+	"github.com/ijufumi/gogmocoin/api/common/configuration"
 	"io"
 	"net/http"
 	"net/url"
 	"strings"
 	"time"
-
-	"github.com/ijufumi/gogmocoin/api/common/configuration"
-	"github.com/ijufumi/gogmocoin/api/private/internal/auth"
 )
 
-const host = "https://api.coin.z.com/private"
-
-// Connection ...
-type Connection struct {
+type RestAPIBase struct {
+	needsAuth bool
 	apiKey    string
 	secretKey string
 }
 
-// New ...
-func New(apiKey, secretKey string) *Connection {
-	return &Connection{
+func NewRestAPIBase() RestAPIBase {
+	return RestAPIBase{}
+}
+
+func NewPrivateRestAPIBase(apiKey, secretKey string) RestAPIBase {
+	return RestAPIBase{
+		needsAuth: true,
 		apiKey:    apiKey,
 		secretKey: secretKey,
 	}
 }
 
 // Post ...
-func (c *Connection) Post(body interface{}, path string) ([]byte, error) {
+func (c *RestAPIBase) Post(body interface{}, path string) ([]byte, error) {
 	b, err := json.Marshal(body)
 	if err != nil {
 		return nil, err
 	}
-	req, err := http.NewRequest("POST", host+path, strings.NewReader(string(b)))
+	req, err := http.NewRequest("POST", c.getHost()+path, strings.NewReader(string(b)))
 	if err != nil {
 		return nil, err
 	}
@@ -66,9 +69,9 @@ func (c *Connection) Post(body interface{}, path string) ([]byte, error) {
 }
 
 // Get ...
-func (c *Connection) Get(param url.Values, path string) ([]byte, error) {
+func (c *RestAPIBase) Get(param url.Values, path string) ([]byte, error) {
 	queryString := param.Encode()
-	urlString := host + path
+	urlString := c.getHost() + path
 	if len(queryString) != 0 {
 		urlString = urlString + "?" + queryString
 	}
@@ -103,9 +106,22 @@ func (c *Connection) Get(param url.Values, path string) ([]byte, error) {
 
 }
 
-func (c *Connection) makeHeader(systemDatetime time.Time, r *http.Request, method, path, body string) {
+func (c *RestAPIBase) makeHeader(systemDatetime time.Time, r *http.Request, method, path, body string) {
 	timeStamp := systemDatetime.Unix()*1000 + int64(systemDatetime.Nanosecond())/int64(time.Millisecond)
 	r.Header.Set("API-TIMESTAMP", fmt.Sprint(timeStamp))
 	r.Header.Set("API-KEY", c.apiKey)
-	r.Header.Set("API-SIGN", auth.MakeSign(c.secretKey, timeStamp, method, path, body))
+	r.Header.Set("API-SIGN", c.makeSign(c.secretKey, timeStamp, method, path, body))
+}
+
+func (c *RestAPIBase) makeSign(secretKey string, timeStamp int64, method, path, body string) string {
+	h := hmac.New(sha256.New, []byte(secretKey))
+	h.Write([]byte(fmt.Sprintf("%v%v%v%v", timeStamp, method, path, body)))
+	return hex.EncodeToString(h.Sum(nil))
+}
+
+func (c *RestAPIBase) getHost() string {
+	if c.needsAuth {
+		return configuration.PrivateRestAPIHost
+	}
+	return configuration.PublicRestAPIHost
 }

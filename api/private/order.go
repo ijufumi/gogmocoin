@@ -3,9 +3,9 @@ package private
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/ijufumi/gogmocoin/api/common/api"
 
 	"github.com/ijufumi/gogmocoin/api/common/configuration"
-	"github.com/ijufumi/gogmocoin/api/private/internal/connect"
 	"github.com/ijufumi/gogmocoin/api/private/model"
 	"github.com/shopspring/decimal"
 )
@@ -15,8 +15,14 @@ type Order interface {
 	Order(symbol configuration.Symbol, side configuration.Side, executionType configuration.ExecutionType, price, size decimal.Decimal) (*model.OrderRes, error)
 }
 
+func newOrder(apiKey, secretKey string) order {
+	return order{
+		RestAPIBase: api.NewPrivateRestAPIBase(apiKey, secretKey),
+	}
+}
+
 type order struct {
-	con *connect.Connection
+	api.RestAPIBase
 }
 
 // Order ...
@@ -32,7 +38,7 @@ func (c *order) Order(symbol configuration.Symbol, side configuration.Side, exec
 		req.Price = &price
 	}
 
-	res, err := c.con.Post(req, "/v1/order")
+	res, err := c.Post(req, "/v1/order")
 	if err != nil {
 		return nil, err
 	}

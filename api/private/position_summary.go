@@ -3,10 +3,10 @@ package private
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/ijufumi/gogmocoin/api/common/api"
 	"net/url"
 
 	"github.com/ijufumi/gogmocoin/api/common/configuration"
-	"github.com/ijufumi/gogmocoin/api/private/internal/connect"
 	"github.com/ijufumi/gogmocoin/api/private/model"
 )
 
@@ -15,8 +15,14 @@ type PositionSummary interface {
 	PositionSummary(symbol configuration.Symbol) (*model.PositionSummaryRes, error)
 }
 
+func newPositionSummary(apiKey, secretKey string) positionSummary {
+	return positionSummary{
+		RestAPIBase: api.NewPrivateRestAPIBase(apiKey, secretKey),
+	}
+}
+
 type positionSummary struct {
-	con *connect.Connection
+	api.RestAPIBase
 }
 
 func (p *positionSummary) PositionSummary(symbol configuration.Symbol) (*model.PositionSummaryRes, error) {
@@ -24,7 +30,7 @@ func (p *positionSummary) PositionSummary(symbol configuration.Symbol) (*model.P
 		"symbol": {string(symbol)},
 	}
 
-	res, err := p.con.Get(param, "/v1/positionSummary")
+	res, err := p.Get(param, "/v1/positionSummary")
 	if err != nil {
 		return nil, err
 	}

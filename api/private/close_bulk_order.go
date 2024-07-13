@@ -3,9 +3,9 @@ package private
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/ijufumi/gogmocoin/api/common/api"
 
 	"github.com/ijufumi/gogmocoin/api/common/configuration"
-	"github.com/ijufumi/gogmocoin/api/private/internal/connect"
 	"github.com/ijufumi/gogmocoin/api/private/model"
 	"github.com/shopspring/decimal"
 )
@@ -15,8 +15,14 @@ type CloseBulkOrder interface {
 	CloseBulkOrder(symbol configuration.Symbol, side configuration.Side, executionType configuration.ExecutionType, price, size decimal.Decimal) (*model.CloseBulkOrderRes, error)
 }
 
+func newCloseBulkOrder(apiKey, secretKey string) closeBulkOrder {
+	return closeBulkOrder{
+		RestAPIBase: api.NewPrivateRestAPIBase(apiKey, secretKey),
+	}
+}
+
 type closeBulkOrder struct {
-	con *connect.Connection
+	api.RestAPIBase
 }
 
 // CloseBulkOrder ...
@@ -32,7 +38,7 @@ func (c *closeBulkOrder) CloseBulkOrder(symbol configuration.Symbol, side config
 		request.Price = &price
 	}
 
-	res, err := c.con.Post(request, "/v1/closeBulkOrder")
+	res, err := c.Post(request, "/v1/closeBulkOrder")
 	if err != nil {
 		return nil, err
 	}

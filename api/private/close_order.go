@@ -3,9 +3,9 @@ package private
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/ijufumi/gogmocoin/api/common/api"
 
 	"github.com/ijufumi/gogmocoin/api/common/configuration"
-	"github.com/ijufumi/gogmocoin/api/private/internal/connect"
 	"github.com/ijufumi/gogmocoin/api/private/model"
 	"github.com/shopspring/decimal"
 )
@@ -15,8 +15,14 @@ type CloseOrder interface {
 	CloseOrder(positionID int64, symbol configuration.Symbol, side configuration.Side, executionType configuration.ExecutionType, price, size decimal.Decimal) (*model.CloseOrderRes, error)
 }
 
+func newCloseOrder(apiKey, secretKey string) closeOrder {
+	return closeOrder{
+		RestAPIBase: api.NewPrivateRestAPIBase(apiKey, secretKey),
+	}
+}
+
 type closeOrder struct {
-	con *connect.Connection
+	api.RestAPIBase
 }
 
 // CloseOrder ...
@@ -35,7 +41,7 @@ func (c *closeOrder) CloseOrder(positionID int64, symbol configuration.Symbol, s
 		req.Price = &price
 	}
 
-	res, err := c.con.Post(req, "/v1/closeOrder")
+	res, err := c.Post(req, "/v1/closeOrder")
 	if err != nil {
 		return nil, err
 	}

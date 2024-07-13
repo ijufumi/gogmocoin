@@ -3,9 +3,9 @@ package private
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/ijufumi/gogmocoin/api/common/api"
 	"net/url"
 
-	"github.com/ijufumi/gogmocoin/api/private/internal/connect"
 	"github.com/ijufumi/gogmocoin/api/private/model"
 )
 
@@ -14,12 +14,18 @@ type AccountAssets interface {
 	AccountAssets() (*model.AccountAssetsRes, error)
 }
 
+func newAccountAssets(apiKey, secretKey string) accountAssets {
+	return accountAssets{
+		RestAPIBase: api.NewPrivateRestAPIBase(apiKey, secretKey),
+	}
+}
+
 type accountAssets struct {
-	con *connect.Connection
+	api.RestAPIBase
 }
 
 func (a *accountAssets) AccountAssets() (*model.AccountAssetsRes, error) {
-	res, err := a.con.Get(url.Values{}, "/v1/account/assets")
+	res, err := a.Get(url.Values{}, "/v1/account/assets")
 	if err != nil {
 		return nil, err
 	}

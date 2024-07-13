@@ -3,11 +3,11 @@ package private
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/ijufumi/gogmocoin/api/common/api"
 	"net/url"
 	"strconv"
 
 	"github.com/ijufumi/gogmocoin/api/common/configuration"
-	"github.com/ijufumi/gogmocoin/api/private/internal/connect"
 	"github.com/ijufumi/gogmocoin/api/private/model"
 )
 
@@ -16,8 +16,14 @@ type LastExecutions interface {
 	LastExecutions(symbol configuration.Symbol, page, count int) (*model.LastExecutionsRes, error)
 }
 
+func newLastExecutions(apiKey, secretKey string) lastExecutions {
+	return lastExecutions{
+		RestAPIBase: api.NewPrivateRestAPIBase(apiKey, secretKey),
+	}
+}
+
 type lastExecutions struct {
-	con *connect.Connection
+	api.RestAPIBase
 }
 
 func (l *lastExecutions) LastExecutions(symbol configuration.Symbol, page, count int) (*model.LastExecutionsRes, error) {
@@ -33,7 +39,7 @@ func (l *lastExecutions) LastExecutions(symbol configuration.Symbol, page, count
 		param.Set("count", strconv.Itoa(count))
 	}
 
-	res, err := l.con.Get(param, "/v1/latestExecutions")
+	res, err := l.Get(param, "/v1/latestExecutions")
 	if err != nil {
 		return nil, err
 	}
