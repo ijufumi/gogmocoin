@@ -3,8 +3,8 @@ package private
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/ijufumi/gogmocoin/api/common/api"
 
-	"github.com/ijufumi/gogmocoin/api/private/internal/connect"
 	"github.com/ijufumi/gogmocoin/api/private/model"
 	"github.com/shopspring/decimal"
 )
@@ -14,8 +14,14 @@ type ChangeLosscutPrice interface {
 	ChangeLosscutPrice(positionID int64, losscutPrice decimal.Decimal) (*model.ChangeLosscutPriceRes, error)
 }
 
+func newChangeLosscutPrice(apiKey, secretKey string) changeLosscutPrice {
+	return changeLosscutPrice{
+		RestAPIBase: api.NewPrivateRestAPIBase(apiKey, secretKey),
+	}
+}
+
 type changeLosscutPrice struct {
-	con *connect.Connection
+	api.RestAPIBase
 }
 
 func (c *changeLosscutPrice) ChangeLosscutPrice(positionID int64, losscutPrice decimal.Decimal) (*model.ChangeLosscutPriceRes, error) {
@@ -24,7 +30,7 @@ func (c *changeLosscutPrice) ChangeLosscutPrice(positionID int64, losscutPrice d
 		LosscutPrice: losscutPrice,
 	}
 
-	res, err := c.con.Post(request, "/v1/changeLosscutPrice")
+	res, err := c.Post(request, "/v1/changeLosscutPrice")
 	if err != nil {
 		return nil, err
 	}

@@ -3,9 +3,9 @@ package rest
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/ijufumi/gogmocoin/api/common/api"
 	"net/url"
 
-	"github.com/ijufumi/gogmocoin/api/public/rest/internal/connect"
 	"github.com/ijufumi/gogmocoin/api/public/rest/model"
 )
 
@@ -14,12 +14,18 @@ type Status interface {
 	Status() (*model.StatusRes, error)
 }
 
+func newStatus() status {
+	return status{
+		RestAPIBase: api.NewRestAPIBase(),
+	}
+}
+
 type status struct {
-	con connect.Connection
+	api.RestAPIBase
 }
 
 func (s *status) Status() (*model.StatusRes, error) {
-	res, err := s.con.Get(url.Values{}, "/v1/status")
+	res, err := s.Get(url.Values{}, "/v1/status")
 	if err != nil {
 		return nil, err
 	}

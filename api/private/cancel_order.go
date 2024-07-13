@@ -3,8 +3,8 @@ package private
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/ijufumi/gogmocoin/api/common/api"
 
-	"github.com/ijufumi/gogmocoin/api/private/internal/connect"
 	"github.com/ijufumi/gogmocoin/api/private/model"
 )
 
@@ -13,14 +13,20 @@ type CancelOrder interface {
 	CancelOrder(orderID int64) error
 }
 
+func newCancelOrder(apiKey, secretKey string) cancelOrder {
+	return cancelOrder{
+		RestAPIBase: api.NewPrivateRestAPIBase(apiKey, secretKey),
+	}
+}
+
 type cancelOrder struct {
-	con *connect.Connection
+	api.RestAPIBase
 }
 
 // CancelOrder ...
 func (c *cancelOrder) CancelOrder(orderID int64) error {
 	req := model.CancelOrderReq{OrderID: orderID}
-	res, err := c.con.Post(req, "/v1/cancelOrder")
+	res, err := c.Post(req, "/v1/cancelOrder")
 	if err != nil {
 		return err
 	}

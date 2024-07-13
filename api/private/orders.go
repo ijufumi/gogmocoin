@@ -3,10 +3,10 @@ package private
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/ijufumi/gogmocoin/api/common/api"
 	"net/url"
 	"strconv"
 
-	"github.com/ijufumi/gogmocoin/api/private/internal/connect"
 	"github.com/ijufumi/gogmocoin/api/private/model"
 )
 
@@ -15,8 +15,14 @@ type Orders interface {
 	Orders(orderID int64) (*model.OrdersRes, error)
 }
 
+func newOrders(apiKey, secretKey string) orders {
+	return orders{
+		RestAPIBase: api.NewPrivateRestAPIBase(apiKey, secretKey),
+	}
+}
+
 type orders struct {
-	con *connect.Connection
+	api.RestAPIBase
 }
 
 func (o *orders) Orders(orderID int64) (*model.OrdersRes, error) {
@@ -24,7 +30,7 @@ func (o *orders) Orders(orderID int64) (*model.OrdersRes, error) {
 		"orderId": {strconv.FormatInt(orderID, 10)},
 	}
 
-	res, err := o.con.Get(param, "/v1/orders")
+	res, err := o.Get(param, "/v1/orders")
 	if err != nil {
 		return nil, err
 	}

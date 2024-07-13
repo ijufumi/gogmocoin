@@ -3,10 +3,10 @@ package rest
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/ijufumi/gogmocoin/api/common/api"
 	"net/url"
 
 	"github.com/ijufumi/gogmocoin/api/common/configuration"
-	"github.com/ijufumi/gogmocoin/api/public/rest/internal/connect"
 	"github.com/ijufumi/gogmocoin/api/public/rest/model"
 )
 
@@ -15,30 +15,36 @@ type OrderBooks interface {
 	OrderBooks(symbol configuration.Symbol) (*model.OrderBooksRes, error)
 }
 
-type orderbooks struct {
-	con connect.Connection
+func newOrderBooks() orderBooks {
+	return orderBooks{
+		RestAPIBase: api.NewRestAPIBase(),
+	}
 }
 
-func (o *orderbooks) OrderBooks(symbol configuration.Symbol) (*model.OrderBooksRes, error) {
+type orderBooks struct {
+	api.RestAPIBase
+}
+
+func (o *orderBooks) OrderBooks(symbol configuration.Symbol) (*model.OrderBooksRes, error) {
 	param := url.Values{
 		"symbol": {string(symbol)},
 	}
 
-	res, err := o.con.Get(param, "/v1/orderbooks")
+	res, err := o.Get(param, "/v1/orderbooks")
 	if err != nil {
 		return nil, err
 	}
 
-	orderbooksRes := new(model.OrderBooksRes)
-	err = json.Unmarshal(res, orderbooksRes)
+	orderBooksRes := new(model.OrderBooksRes)
+	err = json.Unmarshal(res, orderBooksRes)
 	if err != nil {
 		return nil, fmt.Errorf("[OrderBooks]error:%v,body:%s", err, res)
 	}
 
-	if len(orderbooksRes.Messages) != 0 {
-		return nil, fmt.Errorf("%v", orderbooksRes.Messages)
+	if len(orderBooksRes.Messages) != 0 {
+		return nil, fmt.Errorf("%v", orderBooksRes.Messages)
 	}
 
-	return orderbooksRes, nil
+	return orderBooksRes, nil
 
 }

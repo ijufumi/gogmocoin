@@ -3,10 +3,10 @@ package private
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/ijufumi/gogmocoin/api/common/api"
 	"net/url"
 	"strconv"
 
-	"github.com/ijufumi/gogmocoin/api/private/internal/connect"
 	"github.com/ijufumi/gogmocoin/api/private/model"
 )
 
@@ -17,8 +17,14 @@ type Executions interface {
 	ExecutionsByExecutionID(executionID int64) (*model.ExecutionsRes, error)
 }
 
+func newExecutions(apiKey, secretKey string) executions {
+	return executions{
+		RestAPIBase: api.NewPrivateRestAPIBase(apiKey, secretKey),
+	}
+}
+
 type executions struct {
-	con *connect.Connection
+	api.RestAPIBase
 }
 
 func (e *executions) ExecutionsByOrderID(orderID int64) (*model.ExecutionsRes, error) {
@@ -40,7 +46,7 @@ func (e *executions) Executions(orderID, executionID int64) (*model.ExecutionsRe
 		param.Set("executionId", strconv.FormatInt(executionID, 10))
 	}
 
-	res, err := e.con.Get(param, "/v1/executions")
+	res, err := e.Get(param, "/v1/executions")
 	if err != nil {
 		return nil, err
 	}

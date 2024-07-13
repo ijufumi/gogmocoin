@@ -3,10 +3,10 @@ package rest
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/ijufumi/gogmocoin/api/common/api"
 	"net/url"
 
 	"github.com/ijufumi/gogmocoin/api/common/configuration"
-	"github.com/ijufumi/gogmocoin/api/public/rest/internal/connect"
 	"github.com/ijufumi/gogmocoin/api/public/rest/model"
 )
 
@@ -15,8 +15,14 @@ type Ticker interface {
 	Ticker(symbol configuration.Symbol) (*model.TickerRes, error)
 }
 
+func newTicker() ticker {
+	return ticker{
+		RestAPIBase: api.NewRestAPIBase(),
+	}
+}
+
 type ticker struct {
-	con connect.Connection
+	api.RestAPIBase
 }
 
 // Ticker ...
@@ -27,7 +33,7 @@ func (t ticker) Ticker(symbol configuration.Symbol) (*model.TickerRes, error) {
 		param.Set("symbol", string(symbol))
 	}
 
-	res, err := t.con.Get(param, "/v1/ticker")
+	res, err := t.Get(param, "/v1/ticker")
 	if err != nil {
 		return nil, err
 	}

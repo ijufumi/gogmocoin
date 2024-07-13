@@ -11,11 +11,16 @@ type Client interface {
 type client struct {
 	ticker
 	status
-	orderbooks
+	orderBooks
 	trades
 }
 
 // New ...
 func New() Client {
-	return &client{}
+	return &client{
+		ticker:     newTicker(),
+		status:     newStatus(),
+		orderBooks: newOrderBooks(),
+		trades:     newTrades(),
+	}
 }

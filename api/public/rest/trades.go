@@ -3,11 +3,11 @@ package rest
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/ijufumi/gogmocoin/api/common/api"
 	"net/url"
 	"strconv"
 
 	"github.com/ijufumi/gogmocoin/api/common/configuration"
-	"github.com/ijufumi/gogmocoin/api/public/rest/internal/connect"
 	"github.com/ijufumi/gogmocoin/api/public/rest/model"
 )
 
@@ -16,8 +16,14 @@ type Trades interface {
 	Trades(symbol configuration.Symbol, page, count int64) (*model.TradesRes, error)
 }
 
+func newTrades() trades {
+	return trades{
+		RestAPIBase: api.NewRestAPIBase(),
+	}
+}
+
 type trades struct {
-	con connect.Connection
+	api.RestAPIBase
 }
 
 func (t *trades) Trades(symbol configuration.Symbol, page, count int64) (*model.TradesRes, error) {
@@ -33,7 +39,7 @@ func (t *trades) Trades(symbol configuration.Symbol, page, count int64) (*model.
 		param.Set("count", strconv.FormatInt(count, 10))
 	}
 
-	res, err := t.con.Get(param, "/v1/trades")
+	res, err := t.Get(param, "/v1/trades")
 	if err != nil {
 		return nil, err
 	}

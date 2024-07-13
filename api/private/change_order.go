@@ -3,8 +3,8 @@ package private
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/ijufumi/gogmocoin/api/common/api"
 
-	"github.com/ijufumi/gogmocoin/api/private/internal/connect"
 	"github.com/ijufumi/gogmocoin/api/private/model"
 	"github.com/shopspring/decimal"
 )
@@ -14,8 +14,14 @@ type ChangeOrder interface {
 	ChangeOrder(orderID int64, price decimal.Decimal) (*model.ChangeOrderRes, error)
 }
 
+func newChangeOrder(apiKey, secretKey string) changeOrder {
+	return changeOrder{
+		RestAPIBase: api.NewPrivateRestAPIBase(apiKey, secretKey),
+	}
+}
+
 type changeOrder struct {
-	con *connect.Connection
+	api.RestAPIBase
 }
 
 func (c *changeOrder) ChangeOrder(orderID int64, price decimal.Decimal) (*model.ChangeOrderRes, error) {
@@ -24,7 +30,7 @@ func (c *changeOrder) ChangeOrder(orderID int64, price decimal.Decimal) (*model.
 		Price:   price,
 	}
 
-	res, err := c.con.Post(request, "/v1/changeOrder")
+	res, err := c.Post(request, "/v1/changeOrder")
 	if err != nil {
 		return nil, err
 	}

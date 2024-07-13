@@ -2,8 +2,6 @@ package private
 
 import (
 	"os"
-
-	"github.com/ijufumi/gogmocoin/api/private/internal/connect"
 )
 
 // Client ...
@@ -51,26 +49,26 @@ type client struct {
 
 // NewWithKeys create Client instance.
 func NewWithKeys(apiKey, secretKey string) Client {
-	c := &client{}
-	con := connect.New(apiKey, secretKey)
-	c.accountMargin.con = con
-	c.accountAssets.con = con
+	c := &client{
+		accountAssets: newAccountAssets(apiKey, secretKey),
+		accountMargin: newAccountMargin(apiKey, secretKey),
 
-	c.orders.con = con
-	c.activeOrders.con = con
-	c.executions.con = con
-	c.lastExecutions.con = con
-	c.openPositions.con = con
-	c.positionSummary.con = con
+		activeOrders:    newActiveOrders(apiKey, secretKey),
+		orders:          newOrders(apiKey, secretKey),
+		executions:      newExecutions(apiKey, secretKey),
+		lastExecutions:  newLastExecutions(apiKey, secretKey),
+		openPositions:   newOpenPositions(apiKey, secretKey),
+		positionSummary: newPositionSummary(apiKey, secretKey),
 
-	c.order.con = con
-	c.changeOrder.con = con
-	c.cancelOrder.con = con
+		order:       newOrder(apiKey, secretKey),
+		changeOrder: newChangeOrder(apiKey, secretKey),
+		cancelOrder: newCancelOrder(apiKey, secretKey),
 
-	c.closeOrder.con = con
-	c.closeBulkOrder.con = con
+		closeOrder:     newCloseOrder(apiKey, secretKey),
+		closeBulkOrder: newCloseBulkOrder(apiKey, secretKey),
 
-	c.changeLosscutPrice.con = con
+		changeLosscutPrice: newChangeLosscutPrice(apiKey, secretKey),
+	}
 
 	return c
 }

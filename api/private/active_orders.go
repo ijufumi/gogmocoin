@@ -3,10 +3,10 @@ package private
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/ijufumi/gogmocoin/api/common/api"
 	"net/url"
 
 	"github.com/ijufumi/gogmocoin/api/common/configuration"
-	"github.com/ijufumi/gogmocoin/api/private/internal/connect"
 	"github.com/ijufumi/gogmocoin/api/private/model"
 )
 
@@ -15,8 +15,14 @@ type ActiveOrders interface {
 	ActiveOrders(symbol configuration.Symbol, pageNo int) (*model.ActiveOrdersRes, error)
 }
 
+func newActiveOrders(apiKey, secretKey string) activeOrders {
+	return activeOrders{
+		RestAPIBase: api.NewPrivateRestAPIBase(apiKey, secretKey),
+	}
+}
+
 type activeOrders struct {
-	con *connect.Connection
+	api.RestAPIBase
 }
 
 // ActiveOrders ...
@@ -25,7 +31,7 @@ func (c activeOrders) ActiveOrders(symbol configuration.Symbol, pageNo int) (*mo
 		"symbol": {string(symbol)},
 		"page":   {fmt.Sprint(pageNo)},
 	}
-	res, err := c.con.Get(req, "/v1/activeOrders")
+	res, err := c.Get(req, "/v1/activeOrders")
 	if err != nil {
 		return nil, err
 	}
