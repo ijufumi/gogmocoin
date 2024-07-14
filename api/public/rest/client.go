@@ -6,6 +6,7 @@ type Client interface {
 	Status
 	OrderBooks
 	Trades
+	Symbols
 }
 
 type client struct {
@@ -13,6 +14,7 @@ type client struct {
 	status
 	orderBooks
 	trades
+	symbols
 }
 
 // New ...
@@ -22,5 +24,6 @@ func New() Client {
 		status:     newStatus(),
 		orderBooks: newOrderBooks(),
 		trades:     newTrades(),
+		symbols:    newSymbols(),
 	}
 }

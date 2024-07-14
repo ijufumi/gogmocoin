@@ -8,6 +8,7 @@ https://api.coin.z.com/docs
 * `/public/v1/ticker`
 * `/public/v1/orderbooks`
 * `/public/v1/trades`
+* `/public/v1/symbols`
 
 ### Public Websocket API
 * `ticker`
