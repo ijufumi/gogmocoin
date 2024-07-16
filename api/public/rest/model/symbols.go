@@ -7,7 +7,7 @@ import (
 )
 
 type SymbolsRes struct {
-	Data struct {
+	Data []struct {
 		Symbol       configuration.Symbol `json:"symbol"`
 		MinOrderSize decimal.Decimal      `json:"minOrderSize"`
 		MaxOrderSize decimal.Decimal      `json:"maxOrderSize"`
