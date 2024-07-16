@@ -6,7 +6,7 @@ import (
 	"github.com/shopspring/decimal"
 )
 
-type KLineRes struct {
+type KLinesRes struct {
 	Data []struct {
 		OpenTime value.TimeInMillis `json:"openTime"`
 		Open     decimal.Decimal    `json:"open"`
