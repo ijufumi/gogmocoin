@@ -13,17 +13,17 @@ type KLines interface {
 	KLines(symbol configuration.Symbol, intervalType configuration.IntervalType, date string) (*model.KLinesRes, error)
 }
 
-func NewKLines() klines {
-	return klines{
+func NewKLines() kKines {
+	return kKines{
 		RestAPIBase: api.NewRestAPIBase(),
 	}
 }
 
-type klines struct {
+type kKines struct {
 	api.RestAPIBase
 }
 
-func (k *klines) KLines(symbol configuration.Symbol, intervalType configuration.IntervalType, date string) (*model.KLinesRes, error) {
+func (k *kKines) KLines(symbol configuration.Symbol, intervalType configuration.IntervalType, date string) (*model.KLinesRes, error) {
 	param := url.Values{
 		"symbol":   {string(symbol)},
 		"interval": {string(intervalType)},
