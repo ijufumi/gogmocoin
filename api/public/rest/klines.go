@@ -30,7 +30,7 @@ func (k *klines) KLines(symbol configuration.Symbol, intervalType configuration.
 		"date":     {date},
 	}
 
-	res, err := o.Get(param, "/v1/klines")
+	res, err := k.Get(param, "/v1/klines")
 	if err != nil {
 		return nil, err
 	}
