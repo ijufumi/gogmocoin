@@ -13,7 +13,7 @@ type KLines interface {
 	KLines(symbol configuration.Symbol, intervalType configuration.IntervalType, date string) (*model.KLinesRes, error)
 }
 
-func NewKLines() kKines {
+func newKLines() kKines {
 	return kKines{
 		RestAPIBase: api.NewRestAPIBase(),
 	}
