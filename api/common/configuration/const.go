@@ -84,6 +84,12 @@ const (
 	SymbolADA = Symbol("ADA")
 	// SymbolLINK ...
 	SymbolLINK = Symbol("LINK")
+	// SymbolDOGE ...
+	SymbolDOGE = Symbol("DOGE")
+	// SymbolSOL ...
+	SymbolSOL = Symbol("SOL")
+	// SymbolASTR ...
+	SymbolASTR = Symbol("ASTR")
 	// SymbolBTCJPY ...
 	SymbolBTCJPY = Symbol("BTC_JPY")
 	// SymbolETHJPY ...
@@ -94,6 +100,28 @@ const (
 	SymbolLTCJPY = Symbol("LTC_JPY")
 	// SymbolXRPJPY ...
 	SymbolXRPJPY = Symbol("XRP_JPY")
+	// SymbolDOTJPY ...
+	SymbolDOTJPY = Symbol("DOT_JPY")
+	// SymbolATOMJPY ...
+	SymbolATOMJPY = Symbol("ATOM_JPY")
+	// SymbolADAJPY ...
+	SymbolADAJPY = Symbol("ADA_JPY")
+	// SymbolLINKJPY ...
+	SymbolLINKJPY = Symbol("LINK_JPY")
+	// SymbolDOGEJPY ...
+	SymbolDOGEJPY = Symbol("DOGE_JPY")
+	// SymbolSOLJPY ...
+	SymbolSOLJPY = Symbol("SOL_JPY")
+	// SymbolJPY ...
+	SymbolJPY = Symbol("JPY")
+	// SymbolFLR ...
+	SymbolFLR = Symbol("FLR")
+	// SymbolFIL ...
+	SymbolFIL = Symbol("FIL")
+	// SymbolSAND ...
+	SymbolSAND = Symbol("SAND")
+	// SymbolCHZ ...
+	SymbolCHZ = Symbol("CHZ")
 	// SymbolNONE ...
 	SymbolNONE = Symbol("")
 )
@@ -120,11 +148,25 @@ var allSymbols = []Symbol{
 	SymbolFCR,
 	SymbolADA,
 	SymbolLINK,
+	SymbolDOGE,
+	SymbolSOL,
+	SymbolASTR,
 	SymbolBTCJPY,
 	SymbolETHJPY,
 	SymbolBCHJPY,
 	SymbolLTCJPY,
 	SymbolXRPJPY,
+	SymbolDOTJPY,
+	SymbolATOMJPY,
+	SymbolADAJPY,
+	SymbolLINKJPY,
+	SymbolDOGEJPY,
+	SymbolSOLJPY,
+	SymbolJPY,
+	SymbolFLR,
+	SymbolFIL,
+	SymbolSAND,
+	SymbolCHZ,
 }
 
 func (c *Symbol) UnmarshalJSON(d []byte) error {
