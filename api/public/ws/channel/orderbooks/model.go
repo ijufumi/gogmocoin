@@ -1,6 +1,7 @@
 package orderbooks
 
 import (
+	"github.com/ijufumi/gogmocoin/api/common/consts"
 	"time"
 
 	"github.com/ijufumi/gogmocoin/api/common/configuration"
@@ -10,9 +11,9 @@ import (
 
 // Request is request of ticker.
 type Request struct {
-	Command              configuration.WebSocketCommand `json:"command"`
-	Channel              configuration.WebSocketChannel `json:"channel"`
-	configuration.Symbol `json:"symbol"`
+	Command       consts.WebSocketCommand        `json:"command"`
+	Channel       configuration.WebSocketChannel `json:"channel"`
+	consts.Symbol `json:"symbol"`
 }
 
 // Response is response of ticker.
@@ -26,6 +27,6 @@ type Response struct {
 		Price decimal.Decimal `json:"price"`
 		Size  decimal.Decimal `json:"size"`
 	}
-	Symbol    configuration.Symbol `json:"symbol"`
-	Timestamp time.Time            `json:"timestamp"`
+	Symbol    consts.Symbol `json:"symbol"`
+	Timestamp time.Time     `json:"timestamp"`
 }

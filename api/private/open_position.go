@@ -4,15 +4,15 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/ijufumi/gogmocoin/api/common/api"
+	"github.com/ijufumi/gogmocoin/api/common/consts"
 	"net/url"
 
-	"github.com/ijufumi/gogmocoin/api/common/configuration"
 	"github.com/ijufumi/gogmocoin/api/private/model"
 )
 
 // OpenPositions ...
 type OpenPositions interface {
-	OpenPositions(symbol configuration.Symbol, pageNo int) (*model.OpenPositionRes, error)
+	OpenPositions(symbol consts.Symbol, pageNo int) (*model.OpenPositionRes, error)
 }
 
 func newOpenPositions(apiKey, secretKey string) openPositions {
@@ -26,7 +26,7 @@ type openPositions struct {
 }
 
 // OpenPositions ...
-func (c *openPositions) OpenPositions(symbol configuration.Symbol, pageNo int) (*model.OpenPositionRes, error) {
+func (c *openPositions) OpenPositions(symbol consts.Symbol, pageNo int) (*model.OpenPositionRes, error) {
 	req := url.Values{
 		"symbol": {string(symbol)},
 		"page":   {fmt.Sprint(pageNo)},

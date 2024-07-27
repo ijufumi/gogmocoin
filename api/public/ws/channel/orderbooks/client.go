@@ -2,6 +2,7 @@ package orderbooks
 
 import (
 	"encoding/json"
+	"github.com/ijufumi/gogmocoin/api/common/consts"
 	"log"
 
 	"github.com/ijufumi/gogmocoin/api/common/configuration"
@@ -20,18 +21,18 @@ type client struct {
 }
 
 // New ...
-func New(symbol configuration.Symbol) Client {
+func New(symbol consts.Symbol) Client {
 	conn := connect.New()
 	conn.SetSubscribeFunc(func() interface{} {
 		return Request{
-			Command: configuration.WebSocketCommandSubscribe,
+			Command: consts.WebSocketCommandSubscribe,
 			Channel: configuration.WebSocketChannelOrderBooks,
 			Symbol:  symbol,
 		}
 	})
 	conn.SetUnsubscribeFunc(func() interface{} {
 		return Request{
-			Command: configuration.WebSocketCommandUnsubscribe,
+			Command: consts.WebSocketCommandUnsubscribe,
 			Channel: configuration.WebSocketChannelOrderBooks,
 			Symbol:  symbol,
 		}

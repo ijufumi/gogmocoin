@@ -4,15 +4,15 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/ijufumi/gogmocoin/api/common/api"
+	"github.com/ijufumi/gogmocoin/api/common/consts"
 
-	"github.com/ijufumi/gogmocoin/api/common/configuration"
 	"github.com/ijufumi/gogmocoin/api/private/model"
 	"github.com/shopspring/decimal"
 )
 
 // CloseBulkOrder ...
 type CloseBulkOrder interface {
-	CloseBulkOrder(symbol configuration.Symbol, side configuration.Side, executionType configuration.ExecutionType, price, size decimal.Decimal) (*model.CloseBulkOrderRes, error)
+	CloseBulkOrder(symbol consts.Symbol, side consts.Side, executionType consts.ExecutionType, price, size decimal.Decimal) (*model.CloseBulkOrderRes, error)
 }
 
 func newCloseBulkOrder(apiKey, secretKey string) closeBulkOrder {
@@ -26,7 +26,7 @@ type closeBulkOrder struct {
 }
 
 // CloseBulkOrder ...
-func (c *closeBulkOrder) CloseBulkOrder(symbol configuration.Symbol, side configuration.Side, executionType configuration.ExecutionType, price, size decimal.Decimal) (*model.CloseBulkOrderRes, error) {
+func (c *closeBulkOrder) CloseBulkOrder(symbol consts.Symbol, side consts.Side, executionType consts.ExecutionType, price, size decimal.Decimal) (*model.CloseBulkOrderRes, error) {
 	request := model.CloseBulkOrderReq{
 		Symbol:        symbol,
 		Side:          side,
@@ -34,7 +34,7 @@ func (c *closeBulkOrder) CloseBulkOrder(symbol configuration.Symbol, side config
 		Size:          size,
 	}
 
-	if executionType == configuration.ExecutionTypeLIMIT {
+	if executionType == consts.ExecutionTypeLIMIT {
 		request.Price = &price
 	}
 

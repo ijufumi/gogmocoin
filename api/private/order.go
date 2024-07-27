@@ -4,15 +4,15 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/ijufumi/gogmocoin/api/common/api"
+	"github.com/ijufumi/gogmocoin/api/common/consts"
 
-	"github.com/ijufumi/gogmocoin/api/common/configuration"
 	"github.com/ijufumi/gogmocoin/api/private/model"
 	"github.com/shopspring/decimal"
 )
 
 // Order ...
 type Order interface {
-	Order(symbol configuration.Symbol, side configuration.Side, executionType configuration.ExecutionType, price, size decimal.Decimal) (*model.OrderRes, error)
+	Order(symbol consts.Symbol, side consts.Side, executionType consts.ExecutionType, price, size decimal.Decimal) (*model.OrderRes, error)
 }
 
 func newOrder(apiKey, secretKey string) order {
@@ -26,7 +26,7 @@ type order struct {
 }
 
 // Order ...
-func (c *order) Order(symbol configuration.Symbol, side configuration.Side, executionType configuration.ExecutionType, price, size decimal.Decimal) (*model.OrderRes, error) {
+func (c *order) Order(symbol consts.Symbol, side consts.Side, executionType consts.ExecutionType, price, size decimal.Decimal) (*model.OrderRes, error) {
 	req := model.OrderReq{
 		Symbol:        symbol,
 		Side:          side,
@@ -34,7 +34,7 @@ func (c *order) Order(symbol configuration.Symbol, side configuration.Side, exec
 		Size:          size,
 	}
 
-	if executionType == configuration.ExecutionTypeLIMIT {
+	if executionType == consts.ExecutionTypeLIMIT {
 		req.Price = &price
 	}
 

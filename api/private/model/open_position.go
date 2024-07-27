@@ -1,9 +1,9 @@
 package model
 
 import (
+	"github.com/ijufumi/gogmocoin/api/common/consts"
 	"time"
 
-	"github.com/ijufumi/gogmocoin/api/common/configuration"
 	"github.com/ijufumi/gogmocoin/api/common/model"
 	"github.com/shopspring/decimal"
 )
@@ -14,16 +14,16 @@ type OpenPositionRes struct {
 	Data struct {
 		model.Pagination `json:"pagination"`
 		List             []struct {
-			PositionID   int64                `json:"positionId"`
-			Symbol       configuration.Symbol `json:"symbol"`
-			Side         configuration.Side   `json:"side"`
-			Size         decimal.Decimal      `json:"size"`
-			OrderdSize   decimal.Decimal      `json:"orderdSize"`
-			Price        decimal.Decimal      `json:"price"`
-			LossGain     decimal.Decimal      `json:"lossGain"`
-			Leverage     decimal.Decimal      `json:"leverage"`
-			LosscutPrice decimal.Decimal      `json:"losscutPrice"`
-			Timestamp    time.Time            `json:"timestamp"`
+			PositionID   int64           `json:"positionId"`
+			Symbol       consts.Symbol   `json:"symbol"`
+			Side         consts.Side     `json:"side"`
+			Size         decimal.Decimal `json:"size"`
+			OrderdSize   decimal.Decimal `json:"orderdSize"`
+			Price        decimal.Decimal `json:"price"`
+			LossGain     decimal.Decimal `json:"lossGain"`
+			Leverage     decimal.Decimal `json:"leverage"`
+			LosscutPrice decimal.Decimal `json:"losscutPrice"`
+			Timestamp    time.Time       `json:"timestamp"`
 		} `json:"list"`
 	}
 }

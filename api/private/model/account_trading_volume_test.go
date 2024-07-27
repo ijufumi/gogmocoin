@@ -2,7 +2,7 @@ package model
 
 import (
 	"encoding/json"
-	"github.com/ijufumi/gogmocoin/api/common/configuration"
+	"github.com/ijufumi/gogmocoin/api/common/consts"
 	"github.com/stretchr/testify/assert"
 	"io"
 	"os"
@@ -19,8 +19,8 @@ func Test_MarshalAccountTradingVolumeResponse_Success(t *testing.T) {
 	err = json.Unmarshal(b, &response)
 	assert.Nil(t, err)
 
-	assert.Equal(t, configuration.SymbolBTCJPY, response.Data.Limit[0].Symbol)
-	assert.Equal(t, configuration.SymbolBTC, response.Data.Limit[1].Symbol)
+	assert.Equal(t, consts.SymbolBTCJPY, response.Data.Limit[0].Symbol)
+	assert.Equal(t, consts.SymbolBTC, response.Data.Limit[1].Symbol)
 }
 
 func Test_MarshalAccountTradingVolumeResponse_Failure(t *testing.T) {
@@ -31,5 +31,5 @@ func Test_MarshalAccountTradingVolumeResponse_Failure(t *testing.T) {
 
 	var response AccountTradingVolumeRes
 	err = json.Unmarshal(b, &response)
-	assert.Equal(t, configuration.ErrUnsupportedTierLevel, err)
+	assert.Equal(t, consts.ErrUnsupportedTierLevel, err)
 }

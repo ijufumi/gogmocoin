@@ -4,15 +4,15 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/ijufumi/gogmocoin/api/common/api"
+	"github.com/ijufumi/gogmocoin/api/common/consts"
 	"net/url"
 
-	"github.com/ijufumi/gogmocoin/api/common/configuration"
 	"github.com/ijufumi/gogmocoin/api/private/model"
 )
 
 // PositionSummary ...
 type PositionSummary interface {
-	PositionSummary(symbol configuration.Symbol) (*model.PositionSummaryRes, error)
+	PositionSummary(symbol consts.Symbol) (*model.PositionSummaryRes, error)
 }
 
 func newPositionSummary(apiKey, secretKey string) positionSummary {
@@ -25,7 +25,7 @@ type positionSummary struct {
 	api.RestAPIBase
 }
 
-func (p *positionSummary) PositionSummary(symbol configuration.Symbol) (*model.PositionSummaryRes, error) {
+func (p *positionSummary) PositionSummary(symbol consts.Symbol) (*model.PositionSummaryRes, error) {
 	param := url.Values{
 		"symbol": {string(symbol)},
 	}

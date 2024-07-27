@@ -3,6 +3,7 @@ package trades
 import (
 	"encoding/json"
 	"github.com/ijufumi/gogmocoin/api/common/configuration"
+	"github.com/ijufumi/gogmocoin/api/common/consts"
 	"github.com/ijufumi/gogmocoin/api/public/ws/internal/connect"
 	"log"
 )
@@ -19,11 +20,11 @@ type client struct {
 }
 
 // New ...
-func New(symbol configuration.Symbol, option *configuration.Option) Client {
+func New(symbol consts.Symbol, option *consts.Option) Client {
 	conn := connect.New()
 	conn.SetSubscribeFunc(func() interface{} {
 		return Request{
-			Command: configuration.WebSocketCommandSubscribe,
+			Command: consts.WebSocketCommandSubscribe,
 			Channel: configuration.WebSocketChannelTrades,
 			Symbol:  symbol,
 			Option:  option,
@@ -31,7 +32,7 @@ func New(symbol configuration.Symbol, option *configuration.Option) Client {
 	})
 	conn.SetUnsubscribeFunc(func() interface{} {
 		return Request{
-			Command: configuration.WebSocketCommandUnsubscribe,
+			Command: consts.WebSocketCommandUnsubscribe,
 			Channel: configuration.WebSocketChannelTrades,
 			Symbol:  symbol,
 			Option:  option,
