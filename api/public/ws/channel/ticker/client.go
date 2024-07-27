@@ -2,7 +2,6 @@ package ticker
 
 import (
 	"encoding/json"
-	"github.com/ijufumi/gogmocoin/api/common/configuration"
 	"github.com/ijufumi/gogmocoin/api/common/consts"
 	"github.com/ijufumi/gogmocoin/api/public/ws/internal/connect"
 	"log"
@@ -25,14 +24,14 @@ func New(symbol consts.Symbol) Client {
 	conn.SetSubscribeFunc(func() interface{} {
 		return Request{
 			Command: consts.WebSocketCommandSubscribe,
-			Channel: configuration.WebSocketChannelTicker,
+			Channel: consts.WebSocketChannelTicker,
 			Symbol:  symbol,
 		}
 	})
 	conn.SetUnsubscribeFunc(func() interface{} {
 		return Request{
 			Command: consts.WebSocketCommandUnsubscribe,
-			Channel: configuration.WebSocketChannelTicker,
+			Channel: consts.WebSocketChannelTicker,
 			Symbol:  symbol,
 		}
 	})

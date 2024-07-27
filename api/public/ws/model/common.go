@@ -1,8 +1,10 @@
 package model
 
-import "github.com/ijufumi/gogmocoin/api/common/configuration"
+import (
+	"github.com/ijufumi/gogmocoin/api/common/consts"
+)
 
 // ResponseCommon ...
 type ResponseCommon struct {
-	Channel configuration.WebSocketChannel `json:"channel"`
+	Channel consts.WebSocketChannel `json:"channel"`
 }
