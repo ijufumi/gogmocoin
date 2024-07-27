@@ -5,7 +5,6 @@ import (
 	"github.com/ijufumi/gogmocoin/api/common/consts"
 	"log"
 
-	"github.com/ijufumi/gogmocoin/api/common/configuration"
 	"github.com/ijufumi/gogmocoin/api/public/ws/internal/connect"
 )
 
@@ -26,14 +25,14 @@ func New(symbol consts.Symbol) Client {
 	conn.SetSubscribeFunc(func() interface{} {
 		return Request{
 			Command: consts.WebSocketCommandSubscribe,
-			Channel: configuration.WebSocketChannelOrderBooks,
+			Channel: consts.WebSocketChannelOrderBooks,
 			Symbol:  symbol,
 		}
 	})
 	conn.SetUnsubscribeFunc(func() interface{} {
 		return Request{
 			Command: consts.WebSocketCommandUnsubscribe,
-			Channel: configuration.WebSocketChannelOrderBooks,
+			Channel: consts.WebSocketChannelOrderBooks,
 			Symbol:  symbol,
 		}
 	})
