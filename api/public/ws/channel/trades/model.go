@@ -4,15 +4,14 @@ import (
 	"github.com/ijufumi/gogmocoin/api/common/consts"
 	"time"
 
-	"github.com/ijufumi/gogmocoin/api/common/configuration"
 	"github.com/ijufumi/gogmocoin/api/public/ws/model"
 	"github.com/shopspring/decimal"
 )
 
 // Request is request of ticker.
 type Request struct {
-	Command       consts.WebSocketCommand        `json:"command"`
-	Channel       configuration.WebSocketChannel `json:"channel"`
+	Command       consts.WebSocketCommand `json:"command"`
+	Channel       consts.WebSocketChannel `json:"channel"`
 	consts.Symbol `json:"symbol"`
 	Option        *consts.Option `json:"option,omitempty"`
 }
