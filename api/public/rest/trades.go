@@ -4,16 +4,16 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/ijufumi/gogmocoin/api/common/api"
+	"github.com/ijufumi/gogmocoin/api/common/consts"
 	"net/url"
 	"strconv"
 
-	"github.com/ijufumi/gogmocoin/api/common/configuration"
 	"github.com/ijufumi/gogmocoin/api/public/rest/model"
 )
 
 // Trades ...
 type Trades interface {
-	Trades(symbol configuration.Symbol, page, count int64) (*model.TradesRes, error)
+	Trades(symbol consts.Symbol, page, count int64) (*model.TradesRes, error)
 }
 
 func newTrades() trades {
@@ -26,7 +26,7 @@ type trades struct {
 	api.RestAPIBase
 }
 
-func (t *trades) Trades(symbol configuration.Symbol, page, count int64) (*model.TradesRes, error) {
+func (t *trades) Trades(symbol consts.Symbol, page, count int64) (*model.TradesRes, error) {
 	param := url.Values{
 		"symbol": {string(symbol)},
 	}

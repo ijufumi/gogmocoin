@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/ijufumi/gogmocoin/api/common/configuration"
+	"github.com/ijufumi/gogmocoin/api/common/consts"
 	"io"
 	"net/http"
 	"net/url"
@@ -121,7 +122,7 @@ func (c *RestAPIBase) makeSign(secretKey string, timeStamp int64, method, path, 
 
 func (c *RestAPIBase) getHost() string {
 	if c.needsAuth {
-		return configuration.PrivateRestAPIHost
+		return consts.PrivateRestAPIHost
 	}
-	return configuration.PublicRestAPIHost
+	return consts.PublicRestAPIHost
 }

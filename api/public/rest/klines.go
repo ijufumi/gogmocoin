@@ -4,13 +4,13 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/ijufumi/gogmocoin/api/common/api"
-	"github.com/ijufumi/gogmocoin/api/common/configuration"
+	"github.com/ijufumi/gogmocoin/api/common/consts"
 	"github.com/ijufumi/gogmocoin/api/public/rest/model"
 	"net/url"
 )
 
 type KLines interface {
-	KLines(symbol configuration.Symbol, intervalType configuration.IntervalType, date string) (*model.KLinesRes, error)
+	KLines(symbol consts.Symbol, intervalType consts.IntervalType, date string) (*model.KLinesRes, error)
 }
 
 func newKLines() kKines {
@@ -23,7 +23,7 @@ type kKines struct {
 	api.RestAPIBase
 }
 
-func (k *kKines) KLines(symbol configuration.Symbol, intervalType configuration.IntervalType, date string) (*model.KLinesRes, error) {
+func (k *kKines) KLines(symbol consts.Symbol, intervalType consts.IntervalType, date string) (*model.KLinesRes, error) {
 	param := url.Values{
 		"symbol":   {string(symbol)},
 		"interval": {string(intervalType)},

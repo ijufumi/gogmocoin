@@ -4,15 +4,15 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/ijufumi/gogmocoin/api/common/api"
+	"github.com/ijufumi/gogmocoin/api/common/consts"
 	"net/url"
 
-	"github.com/ijufumi/gogmocoin/api/common/configuration"
 	"github.com/ijufumi/gogmocoin/api/public/rest/model"
 )
 
 // OrderBooks ...
 type OrderBooks interface {
-	OrderBooks(symbol configuration.Symbol) (*model.OrderBooksRes, error)
+	OrderBooks(symbol consts.Symbol) (*model.OrderBooksRes, error)
 }
 
 func newOrderBooks() orderBooks {
@@ -25,7 +25,7 @@ type orderBooks struct {
 	api.RestAPIBase
 }
 
-func (o *orderBooks) OrderBooks(symbol configuration.Symbol) (*model.OrderBooksRes, error) {
+func (o *orderBooks) OrderBooks(symbol consts.Symbol) (*model.OrderBooksRes, error) {
 	param := url.Values{
 		"symbol": {string(symbol)},
 	}

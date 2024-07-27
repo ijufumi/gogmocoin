@@ -4,15 +4,15 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/ijufumi/gogmocoin/api/common/api"
+	"github.com/ijufumi/gogmocoin/api/common/consts"
 	"net/url"
 
-	"github.com/ijufumi/gogmocoin/api/common/configuration"
 	"github.com/ijufumi/gogmocoin/api/public/rest/model"
 )
 
 // Ticker ...
 type Ticker interface {
-	Ticker(symbol configuration.Symbol) (*model.TickerRes, error)
+	Ticker(symbol consts.Symbol) (*model.TickerRes, error)
 }
 
 func newTicker() ticker {
@@ -26,10 +26,10 @@ type ticker struct {
 }
 
 // Ticker ...
-func (t ticker) Ticker(symbol configuration.Symbol) (*model.TickerRes, error) {
+func (t ticker) Ticker(symbol consts.Symbol) (*model.TickerRes, error) {
 	param := url.Values{}
 
-	if symbol != configuration.SymbolNONE {
+	if symbol != consts.SymbolNONE {
 		param.Set("symbol", string(symbol))
 	}
 

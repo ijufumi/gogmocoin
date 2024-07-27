@@ -1,9 +1,9 @@
 package model
 
 import (
+	"github.com/ijufumi/gogmocoin/api/common/consts"
 	"time"
 
-	"github.com/ijufumi/gogmocoin/api/common/configuration"
 	"github.com/ijufumi/gogmocoin/api/common/model"
 	"github.com/shopspring/decimal"
 )
@@ -14,20 +14,20 @@ type ActiveOrdersRes struct {
 	Data struct {
 		model.Pagination `json:"pagination"`
 		List             []struct {
-			RootOrderID   int64                       `json:"rootOrderId"`
-			OrderID       int64                       `json:"orderId"`
-			Symbol        configuration.Symbol        `json:"symbol"`
-			Side          configuration.Side          `json:"side"`
-			OrderType     configuration.OrderType     `json:"orderType"`
-			ExecutionType configuration.ExecutionType `json:"executionType"`
-			SettleType    configuration.SettleType    `json:"settleType"`
-			Size          decimal.Decimal             `json:"size"`
-			ExecutedSize  decimal.Decimal             `json:"executedSize"`
-			Price         decimal.Decimal             `json:"price"`
-			LossCutPrice  decimal.Decimal             `json:"losscutPrice"`
-			Status        configuration.OrderStatus   `json:"status"`
-			TimeInForce   configuration.TimeInForce   `json:"timeInForce"`
-			Timestamp     time.Time                   `json:"timestamp"`
+			RootOrderID   int64                `json:"rootOrderId"`
+			OrderID       int64                `json:"orderId"`
+			Symbol        consts.Symbol        `json:"symbol"`
+			Side          consts.Side          `json:"side"`
+			OrderType     consts.OrderType     `json:"orderType"`
+			ExecutionType consts.ExecutionType `json:"executionType"`
+			SettleType    consts.SettleType    `json:"settleType"`
+			Size          decimal.Decimal      `json:"size"`
+			ExecutedSize  decimal.Decimal      `json:"executedSize"`
+			Price         decimal.Decimal      `json:"price"`
+			LossCutPrice  decimal.Decimal      `json:"losscutPrice"`
+			Status        consts.OrderStatus   `json:"status"`
+			TimeInForce   consts.TimeInForce   `json:"timeInForce"`
+			Timestamp     time.Time            `json:"timestamp"`
 		} `json:"list"`
 	}
 }

@@ -1,7 +1,7 @@
 package model
 
 import (
-	"github.com/ijufumi/gogmocoin/api/common/configuration"
+	"github.com/ijufumi/gogmocoin/api/common/consts"
 	"github.com/ijufumi/gogmocoin/api/common/model"
 )
 
@@ -9,6 +9,6 @@ import (
 type StatusRes struct {
 	model.ResponseCommon
 	Data struct {
-		Status configuration.ExchangeStatus `json:"status"`
+		Status consts.ExchangeStatus `json:"status"`
 	}
 }

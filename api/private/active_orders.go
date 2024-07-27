@@ -4,15 +4,15 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/ijufumi/gogmocoin/api/common/api"
+	"github.com/ijufumi/gogmocoin/api/common/consts"
 	"net/url"
 
-	"github.com/ijufumi/gogmocoin/api/common/configuration"
 	"github.com/ijufumi/gogmocoin/api/private/model"
 )
 
 // ActiveOrders ...
 type ActiveOrders interface {
-	ActiveOrders(symbol configuration.Symbol, pageNo int) (*model.ActiveOrdersRes, error)
+	ActiveOrders(symbol consts.Symbol, pageNo int) (*model.ActiveOrdersRes, error)
 }
 
 func newActiveOrders(apiKey, secretKey string) activeOrders {
@@ -26,7 +26,7 @@ type activeOrders struct {
 }
 
 // ActiveOrders ...
-func (c activeOrders) ActiveOrders(symbol configuration.Symbol, pageNo int) (*model.ActiveOrdersRes, error) {
+func (c activeOrders) ActiveOrders(symbol consts.Symbol, pageNo int) (*model.ActiveOrdersRes, error) {
 	req := url.Values{
 		"symbol": {string(symbol)},
 		"page":   {fmt.Sprint(pageNo)},

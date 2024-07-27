@@ -4,16 +4,16 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/ijufumi/gogmocoin/api/common/api"
+	"github.com/ijufumi/gogmocoin/api/common/consts"
 	"net/url"
 	"strconv"
 
-	"github.com/ijufumi/gogmocoin/api/common/configuration"
 	"github.com/ijufumi/gogmocoin/api/private/model"
 )
 
 // LastExecutions ...
 type LastExecutions interface {
-	LastExecutions(symbol configuration.Symbol, page, count int) (*model.LastExecutionsRes, error)
+	LastExecutions(symbol consts.Symbol, page, count int) (*model.LastExecutionsRes, error)
 }
 
 func newLastExecutions(apiKey, secretKey string) lastExecutions {
@@ -26,7 +26,7 @@ type lastExecutions struct {
 	api.RestAPIBase
 }
 
-func (l *lastExecutions) LastExecutions(symbol configuration.Symbol, page, count int) (*model.LastExecutionsRes, error) {
+func (l *lastExecutions) LastExecutions(symbol consts.Symbol, page, count int) (*model.LastExecutionsRes, error) {
 	param := url.Values{
 		"symbol": {string(symbol)},
 	}

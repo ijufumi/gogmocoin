@@ -37,7 +37,7 @@ https://api.coin.z.com/docs
 ```golang
 client := rest.New()
 
-orderbooks, err := client.OrderBooks(configuration.SymbolBCHJPY)
+orderbooks, err := client.OrderBooks(consts.SymbolBCHJPY)
 
 if err != nil {
     log.Println(err)
@@ -51,7 +51,7 @@ log.Printf("[result]%+v", orderbooks)
 
 ### Public Websocket API
 ```golang
-client := ticker.New(configuration.SymbolBTCJPY)
+client := ticker.New(consts.SymbolBTCJPY)
 timeoutCnt := 0
 for {
     select {
