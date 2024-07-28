@@ -2,14 +2,10 @@ package api
 
 import (
 	"context"
-	"crypto/hmac"
-	"crypto/sha256"
-	"encoding/hex"
 	"fmt"
 	"github.com/gorilla/websocket"
 	"github.com/ijufumi/gogmocoin/api/common/consts"
 	"log"
-	"net/http"
 	"sync"
 	"sync/atomic"
 	"time"
@@ -250,18 +246,18 @@ func (c *WSAPIBase) changeStateToConnecting() {
 	c.state.Store(connectionStateConnecting)
 }
 
-func (c *WSAPIBase) makeHeader(systemDatetime time.Time, r *http.Request, method, path, body string) {
-	timeStamp := systemDatetime.Unix()*1000 + int64(systemDatetime.Nanosecond())/int64(time.Millisecond)
-	r.Header.Set("API-TIMESTAMP", fmt.Sprint(timeStamp))
-	r.Header.Set("API-KEY", c.apiKey)
-	r.Header.Set("API-SIGN", c.makeSign(c.secretKey, timeStamp, method, path, body))
-}
-
-func (c *WSAPIBase) makeSign(secretKey string, timeStamp int64, method, path, body string) string {
-	h := hmac.New(sha256.New, []byte(secretKey))
-	h.Write([]byte(fmt.Sprintf("%v%v%v%v", timeStamp, method, path, body)))
-	return hex.EncodeToString(h.Sum(nil))
-}
+//func (c *WSAPIBase) makeHeader(systemDatetime time.Time, r *http.Request, method, path, body string) {
+//	timeStamp := systemDatetime.Unix()*1000 + int64(systemDatetime.Nanosecond())/int64(time.Millisecond)
+//	r.Header.Set("API-TIMESTAMP", fmt.Sprint(timeStamp))
+//	r.Header.Set("API-KEY", c.apiKey)
+//	r.Header.Set("API-SIGN", c.makeSign(c.secretKey, timeStamp, method, path, body))
+//}
+//
+//func (c *WSAPIBase) makeSign(secretKey string, timeStamp int64, method, path, body string) string {
+//	h := hmac.New(sha256.New, []byte(secretKey))
+//	h.Write([]byte(fmt.Sprintf("%v%v%v%v", timeStamp, method, path, body)))
+//	return hex.EncodeToString(h.Sum(nil))
+//}
 
 func (c *WSAPIBase) getHost() string {
 	if c.needsAuth {
