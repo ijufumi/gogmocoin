@@ -1,17 +1,19 @@
-package connect
+package api
 
 import (
 	"context"
+	"crypto/hmac"
+	"crypto/sha256"
+	"encoding/hex"
 	"fmt"
+	"github.com/gorilla/websocket"
+	"github.com/ijufumi/gogmocoin/api/common/consts"
 	"log"
+	"net/http"
 	"sync"
 	"sync/atomic"
 	"time"
-
-	"github.com/gorilla/websocket"
 )
-
-const host = "wss://api.coin.z.com/ws/public/v1"
 
 type connectionState string
 
@@ -21,8 +23,10 @@ const (
 	connectionStateClosed     = connectionState("Closed")
 )
 
-// Connection ...
-type Connection struct {
+type WSAPIBase struct {
+	needsAuth bool
+	apiKey    string
+	secretKey string
 	sync.Mutex
 	conn            *websocket.Conn
 	state           *atomic.Value
@@ -39,44 +43,57 @@ type msgRequest struct {
 	errChan chan error
 }
 
-// New is...
-func New() *Connection {
-	ctx, cancelFunc := context.WithCancel(context.Background())
-	conn := &Connection{
+func NewWSAPIBase() *WSAPIBase {
+	base := &WSAPIBase{
 		state:     &atomic.Value{},
-		ctx:       ctx,
-		stopFunc:  cancelFunc,
 		stream:    make(chan []byte, 100),
 		msgStream: make(chan msgRequest, 1),
 	}
-	conn.changeStateToClosed()
+	base.changeStateToClosed()
+	return base
+}
 
-	go conn.send()
-	go conn.receive()
-	return conn
+func NewPrivateWSAPIBase(apiKey, secretKey string) WSAPIBase {
+	return WSAPIBase{
+		needsAuth: true,
+		apiKey:    apiKey,
+		secretKey: secretKey,
+	}
+}
+func (c *WSAPIBase) initContext() {
+	ctx, cancelFunc := context.WithCancel(context.Background())
+	c.ctx = ctx
+	c.stopFunc = cancelFunc
+}
+
+// Start ...
+func (c *WSAPIBase) Start() {
+	c.initContext()
+	go c.doSendGoroutine()
+	go c.doReceiveGoroutine()
 }
 
 // SetSubscribeFunc ...
-func (c *Connection) SetSubscribeFunc(f func() interface{}) {
+func (c *WSAPIBase) SetSubscribeFunc(f func() interface{}) {
 	c.subscribeFunc = c.createSendFunc(f)
 }
 
 // SetUnsubscribeFunc ...
-func (c *Connection) SetUnsubscribeFunc(f func() interface{}) {
+func (c *WSAPIBase) SetUnsubscribeFunc(f func() interface{}) {
 	c.unsubscribeFunc = c.createSendFunc(f)
 }
 
 // Subscribe ...
-func (c *Connection) Subscribe() error {
+func (c *WSAPIBase) Subscribe() error {
 	return c.subscribeFunc()
 }
 
 // Unsubscribe ...
-func (c *Connection) Unsubscribe() error {
+func (c *WSAPIBase) Unsubscribe() error {
 	return c.unsubscribeFunc()
 }
 
-func (c *Connection) createSendFunc(f func() interface{}) func() error {
+func (c *WSAPIBase) createSendFunc(f func() interface{}) func() error {
 	return func() error {
 		req := msgRequest{
 			msg:     f(),
@@ -87,7 +104,7 @@ func (c *Connection) createSendFunc(f func() interface{}) func() error {
 	}
 }
 
-func (c *Connection) send() {
+func (c *WSAPIBase) doSendGoroutine() {
 	for {
 		select {
 		case m := <-c.msgStream:
@@ -99,7 +116,7 @@ func (c *Connection) send() {
 	}
 }
 
-func (c *Connection) receive() {
+func (c *WSAPIBase) doReceiveGoroutine() {
 	defer func() {
 		if c.isConnected() {
 			_ = c.conn.WriteMessage(websocket.CloseMessage, websocket.FormatCloseMessage(websocket.CloseNormalClosure, ""))
@@ -138,7 +155,7 @@ func (c *Connection) receive() {
 	}
 }
 
-func (c *Connection) isConnected() bool {
+func (c *WSAPIBase) isConnected() bool {
 	c.Lock()
 	defer c.Unlock()
 	v, ok := c.state.Load().(connectionState)
@@ -152,7 +169,7 @@ func (c *Connection) isConnected() bool {
 }
 
 // Send is...
-func (c *Connection) Send(msg interface{}) error {
+func (c *WSAPIBase) Send(msg interface{}) error {
 	err := c.waitForConnected()
 	if err != nil {
 		return err
@@ -166,7 +183,7 @@ func (c *Connection) Send(msg interface{}) error {
 	return nil
 }
 
-func (c *Connection) waitForConnected() error {
+func (c *WSAPIBase) waitForConnected() error {
 	if c.isConnected() {
 		return nil
 	}
@@ -180,7 +197,7 @@ func (c *Connection) waitForConnected() error {
 	return fmt.Errorf("connection timeout")
 }
 
-func (c *Connection) dial() error {
+func (c *WSAPIBase) dial() error {
 	c.Lock()
 	defer c.Unlock()
 
@@ -191,7 +208,7 @@ func (c *Connection) dial() error {
 	}
 
 	c.changeStateToConnecting()
-	conn, res, err := websocket.DefaultDialer.Dial(host, nil)
+	conn, res, err := websocket.DefaultDialer.Dial(c.getHost(), nil)
 	if err != nil {
 		c.changeStateToClosed()
 		return fmt.Errorf("dial error:%v, response:%v", err, res)
@@ -210,23 +227,45 @@ func (c *Connection) dial() error {
 }
 
 // Stream ...
-func (c *Connection) Stream() <-chan []byte {
+func (c *WSAPIBase) Stream() <-chan []byte {
 	return c.stream
 }
 
 // Close is ...
-func (c *Connection) Close() {
-	c.stopFunc()
+func (c *WSAPIBase) Close() {
+	if c.stopFunc != nil {
+		c.stopFunc()
+	}
 }
 
-func (c *Connection) changeStateToClosed() {
+func (c *WSAPIBase) changeStateToClosed() {
 	c.state.Store(connectionStateClosed)
 }
 
-func (c *Connection) changeStateToConnected() {
+func (c *WSAPIBase) changeStateToConnected() {
 	c.state.Store(connectionStateConnected)
 }
 
-func (c *Connection) changeStateToConnecting() {
+func (c *WSAPIBase) changeStateToConnecting() {
 	c.state.Store(connectionStateConnecting)
+}
+
+func (c *WSAPIBase) makeHeader(systemDatetime time.Time, r *http.Request, method, path, body string) {
+	timeStamp := systemDatetime.Unix()*1000 + int64(systemDatetime.Nanosecond())/int64(time.Millisecond)
+	r.Header.Set("API-TIMESTAMP", fmt.Sprint(timeStamp))
+	r.Header.Set("API-KEY", c.apiKey)
+	r.Header.Set("API-SIGN", c.makeSign(c.secretKey, timeStamp, method, path, body))
+}
+
+func (c *WSAPIBase) makeSign(secretKey string, timeStamp int64, method, path, body string) string {
+	h := hmac.New(sha256.New, []byte(secretKey))
+	h.Write([]byte(fmt.Sprintf("%v%v%v%v", timeStamp, method, path, body)))
+	return hex.EncodeToString(h.Sum(nil))
+}
+
+func (c *WSAPIBase) getHost() string {
+	if c.needsAuth {
+		return consts.PrivateWSAPIHost
+	}
+	return consts.PublicWSAPIHost
 }
