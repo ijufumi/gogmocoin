@@ -3,11 +3,10 @@ package private
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/ijufumi/gogmocoin/api/common/api"
+	"github.com/ijufumi/gogmocoin/v2/api/common/api"
+	"github.com/ijufumi/gogmocoin/v2/api/private/model"
 	"net/url"
 	"strconv"
-
-	"github.com/ijufumi/gogmocoin/api/private/model"
 )
 
 // Orders ...

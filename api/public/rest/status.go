@@ -3,10 +3,9 @@ package rest
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/ijufumi/gogmocoin/api/common/api"
+	"github.com/ijufumi/gogmocoin/v2/api/common/api"
+	"github.com/ijufumi/gogmocoin/v2/api/public/rest/model"
 	"net/url"
-
-	"github.com/ijufumi/gogmocoin/api/public/rest/model"
 )
 
 // Status ...

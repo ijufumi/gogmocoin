@@ -1,8 +1,8 @@
 package model
 
 import (
-	"github.com/ijufumi/gogmocoin/api/common/model"
-	"github.com/ijufumi/gogmocoin/api/common/value"
+	"github.com/ijufumi/gogmocoin/v2/api/common/model"
+	"github.com/ijufumi/gogmocoin/v2/api/common/value"
 	"github.com/shopspring/decimal"
 )
 

@@ -1,11 +1,10 @@
 package ticker
 
 import (
-	"github.com/ijufumi/gogmocoin/api/common/consts"
-	"time"
-
-	"github.com/ijufumi/gogmocoin/api/public/ws/model"
+	"github.com/ijufumi/gogmocoin/v2/api/common/consts"
+	"github.com/ijufumi/gogmocoin/v2/api/public/ws/model"
 	"github.com/shopspring/decimal"
+	"time"
 )
 
 // Request is request of ticker.

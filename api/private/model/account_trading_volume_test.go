@@ -2,7 +2,7 @@ package model
 
 import (
 	"encoding/json"
-	"github.com/ijufumi/gogmocoin/api/common/consts"
+	"github.com/ijufumi/gogmocoin/v2/api/common/consts"
 	"github.com/stretchr/testify/assert"
 	"io"
 	"os"
