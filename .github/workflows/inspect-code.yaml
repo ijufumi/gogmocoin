@@ -27,6 +27,7 @@ jobs:
           cache-dependency-path: |
             go.sum
             go.mod
+          restore-keys: golang-feature-${{ hashFiles('go.mod') }}-${{ hashFiles('go.sum') }}
       - name: Install dependencies
         run: go get -v -t -d ./...
 
