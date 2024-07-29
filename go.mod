@@ -1,4 +1,4 @@
-module github.com/ijufumi/gogmocoin
+module github.com/ijufumi/gogmocoin/v2
 
 go 1.21
 
