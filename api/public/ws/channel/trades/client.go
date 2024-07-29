@@ -2,8 +2,8 @@ package trades
 
 import (
 	"encoding/json"
-	"github.com/ijufumi/gogmocoin/api/common/consts"
-	"github.com/ijufumi/gogmocoin/api/public/ws/internal/connect"
+	"github.com/ijufumi/gogmocoin/v2/api/common/consts"
+	"github.com/ijufumi/gogmocoin/v2/api/public/ws/internal/connect"
 	"log"
 )
 
