@@ -65,7 +65,7 @@ for {
         break
     }
 }
-e := client.Unsubscribe()
+e := ticker.Unsubscribe()
 if e != nil {
     log.Println(e)
     return
