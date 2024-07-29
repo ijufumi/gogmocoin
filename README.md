@@ -51,7 +51,7 @@ log.Printf("[result]%+v", orderbooks)
 
 ### Public Websocket API
 ```golang
-ticker := client.NewTicker(consts.SymbolBTCJPY)
+ticker := ws.NewTicker(consts.SymbolBTCJPY)
 timeoutCnt := 0
 for {
     select {
