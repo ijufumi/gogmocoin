@@ -1,9 +1,9 @@
 package ws
 
 import (
-	"github.com/ijufumi/gogmocoin/api/common/api"
-	"github.com/ijufumi/gogmocoin/api/common/consts"
-	"github.com/ijufumi/gogmocoin/api/public/ws/model"
+	"github.com/ijufumi/gogmocoin/v2/api/common/api"
+	"github.com/ijufumi/gogmocoin/v2/api/common/consts"
+	"github.com/ijufumi/gogmocoin/v2/api/public/ws/model"
 )
 
 type Ticker interface {

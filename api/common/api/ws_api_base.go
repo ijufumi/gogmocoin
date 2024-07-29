@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/gorilla/websocket"
-	"github.com/ijufumi/gogmocoin/api/common/consts"
+	"github.com/ijufumi/gogmocoin/v2/api/common/consts"
 	"log"
 	"sync"
 	"sync/atomic"
