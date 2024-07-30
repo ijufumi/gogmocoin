@@ -51,11 +51,11 @@ log.Printf("[result]%+v", orderbooks)
 
 ### Public Websocket API
 ```golang
-client := ticker.New(consts.SymbolBTCJPY)
+ticker := ws.NewTicker(consts.SymbolBTCJPY)
 timeoutCnt := 0
 for {
     select {
-    case v := <-client.Receive():
+    case v := <-ticker.Receive():
         log.Printf("msg:%+v", v)
     case <-time.After(180 * time.Second):
         log.Println("timeout...")
@@ -65,7 +65,7 @@ for {
         break
     }
 }
-e := client.Unsubscribe()
+e := ticker.Unsubscribe()
 if e != nil {
     log.Println(e)
     return

@@ -1,6 +1,7 @@
 package model
 
 import (
+	"github.com/ijufumi/gogmocoin/v2/api/common/consts"
 	"time"
 )
 
@@ -15,4 +16,14 @@ type ResponseCommon struct {
 type Pagination struct {
 	CurrentPage int `json:"currentPage"`
 	Count       int `json:"count"`
+}
+
+type WebsocketRequestCommon struct {
+	Command consts.WebSocketCommand `json:"command"`
+	Channel consts.WebSocketChannel `json:"channel"`
+}
+
+// WebsocketResponseCommon ...
+type WebsocketResponseCommon struct {
+	Channel consts.WebSocketChannel `json:"channel"`
 }
