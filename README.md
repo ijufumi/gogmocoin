@@ -40,8 +40,7 @@ client := rest.New()
 orderbooks, err := client.OrderBooks(consts.SymbolBCHJPY)
 
 if err != nil {
-    log.Println(err)
-    return
+    log.Fatalln(err)
 }
 
 log.Printf("[result]%+v", orderbooks)
@@ -51,11 +50,15 @@ log.Printf("[result]%+v", orderbooks)
 
 ### Public Websocket API
 ```golang
-ticker := ws.NewTicker(consts.SymbolBTCJPY)
+client := ws.NewTicker(consts.SymbolBTCJPY)
 timeoutCnt := 0
+err := client.Subscribe()
+if err != nil {
+    log.Fatalln(err)
+}
 for {
     select {
-    case v := <-ticker.Receive():
+    case v := <-client.Receive():
         log.Printf("msg:%+v", v)
     case <-time.After(180 * time.Second):
         log.Println("timeout...")
@@ -65,10 +68,9 @@ for {
         break
     }
 }
-e := ticker.Unsubscribe()
+e := client.Unsubscribe()
 if e != nil {
-    log.Println(e)
-    return
+    log.Fatalln(e)
 }
 ```
 
@@ -89,8 +91,7 @@ API_SECRET=YOUR_API_SECRET
 client := private.New()
 ordersRes, err := client.Orders(12345676879)
 if err != nil {
-    log.Println(err)
-    return
+    log.Fatalln(err)
 }
 log.Printf("ordersRes:%+v", ordersRes)
 ```
