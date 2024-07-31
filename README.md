@@ -88,7 +88,7 @@ API_SECRET=YOUR_API_SECRET
 #### 2. Execute API
 
 ```golang
-client := private.New()
+client := rest.New()
 ordersRes, err := client.Orders(12345676879)
 if err != nil {
     log.Fatalln(err)
