@@ -36,8 +36,8 @@ func (c *cancelOrder) CancelOrder(orderID int64) error {
 		return fmt.Errorf("[CancelOrder]error:%v,body:%s", err, res)
 	}
 
-	if len(cancelOrderRes.Messages) != 0 {
-		return fmt.Errorf("%v", cancelOrderRes.Messages)
+	if !cancelOrderRes.Success() {
+		return cancelOrderRes.Error()
 	}
 	return nil
 

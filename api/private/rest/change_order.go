@@ -40,8 +40,8 @@ func (c *changeOrder) ChangeOrder(orderID int64, price decimal.Decimal) (*model.
 		return nil, fmt.Errorf("[ChangeOrder]error:%v,body:%s", err, res)
 	}
 
-	if len(response.Messages) != 0 {
-		return nil, fmt.Errorf("%v", response.Messages)
+	if !response.Success() {
+		return nil, response.Error()
 	}
 	return response, nil
 }

@@ -34,8 +34,8 @@ func (s *status) Status() (*model.StatusRes, error) {
 	if err != nil {
 		return nil, fmt.Errorf("[Status]error:%v,body:%s", err, res)
 	}
-	if len(statusRes.Messages) != 0 {
-		return nil, fmt.Errorf("%v", statusRes.Messages)
+	if !statusRes.Success() {
+		return nil, statusRes.Error()
 	}
 
 	return statusRes, nil

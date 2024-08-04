@@ -40,8 +40,8 @@ func (c activeOrders) ActiveOrders(symbol consts.Symbol, pageNo int) (*model.Act
 		return nil, fmt.Errorf("[ActiveOrders]error:%v,body:%s", err, res)
 	}
 
-	if len(activeOrdersRes.Messages) != 0 {
-		return nil, fmt.Errorf("%v", activeOrdersRes.Messages)
+	if !activeOrdersRes.Success() {
+		return nil, activeOrdersRes.Error()
 	}
 
 	return activeOrdersRes, nil

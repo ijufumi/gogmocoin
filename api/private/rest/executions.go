@@ -56,8 +56,8 @@ func (e *executions) Executions(orderID, executionID int64) (*model.ExecutionsRe
 		return nil, fmt.Errorf("[Executions]error:%v,body:%s", err, res)
 	}
 
-	if len(executionsRes.Messages) != 0 {
-		return nil, fmt.Errorf("%v", executionsRes.Messages)
+	if !executionsRes.Success() {
+		return nil, executionsRes.Error()
 	}
 
 	return executionsRes, nil

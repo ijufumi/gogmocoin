@@ -51,8 +51,8 @@ func (c *closeOrder) CloseOrder(positionID int64, symbol consts.Symbol, side con
 		return nil, fmt.Errorf("[CloseOrder]error:%v,body:%s", err, res)
 	}
 
-	if len(closeOrderRes.Messages) != 0 {
-		return nil, fmt.Errorf("%v", closeOrderRes.Messages)
+	if !closeOrderRes.Success() {
+		return nil, closeOrderRes.Error()
 	}
 	return closeOrderRes, nil
 }

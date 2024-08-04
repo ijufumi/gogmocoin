@@ -35,8 +35,8 @@ func (a *accountAssets) AccountAssets() (*model.AccountAssetsRes, error) {
 		return nil, fmt.Errorf("[AccountAssets]error:%v,body:%s", err, res)
 	}
 
-	if len(accountAssetsRes.Messages) != 0 {
-		return nil, fmt.Errorf("%v", accountAssetsRes.Messages)
+	if !accountAssetsRes.Success() {
+		return nil, accountAssetsRes.Error()
 	}
 
 	return accountAssetsRes, nil

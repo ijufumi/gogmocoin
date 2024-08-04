@@ -34,8 +34,8 @@ func (t *symbols) Symbols() (*model.SymbolsRes, error) {
 	if err != nil {
 		return nil, fmt.Errorf("[Symbols]error:%v,body:%s", err, res)
 	}
-	if len(symbolsRes.Messages) != 0 {
-		return nil, fmt.Errorf("%v", symbolsRes.Messages)
+	if !symbolsRes.Success() {
+		return nil, symbolsRes.Error()
 	}
 
 	return symbolsRes, nil

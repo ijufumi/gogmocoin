@@ -40,8 +40,8 @@ func (c *changeLosscutPrice) ChangeLosscutPrice(positionID int64, losscutPrice d
 		return nil, fmt.Errorf("[ChangeLosscutPrice]error:%v,body:%s", err, res)
 	}
 
-	if len(response.Messages) != 0 {
-		return nil, fmt.Errorf("%v", response.Messages)
+	if !response.Success() {
+		return nil, response.Error()
 	}
 	return response, nil
 }

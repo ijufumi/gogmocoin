@@ -44,8 +44,8 @@ func (t ticker) Ticker(symbol consts.Symbol) (*model.TickerRes, error) {
 		return nil, fmt.Errorf("[Ticker]error:%v,body:%s", err, res)
 	}
 
-	if len(tickerRes.Messages) != 0 {
-		return nil, fmt.Errorf("%v", tickerRes.Messages)
+	if !tickerRes.Success() {
+		return nil, tickerRes.Error()
 	}
 
 	return tickerRes, nil

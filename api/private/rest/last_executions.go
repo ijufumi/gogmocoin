@@ -49,8 +49,8 @@ func (l *lastExecutions) LastExecutions(symbol consts.Symbol, page, count int) (
 		return nil, fmt.Errorf("[LastExecutions]error:%v,body:%s", err, res)
 	}
 
-	if len(lastExecutionsRes.Messages) != 0 {
-		return nil, fmt.Errorf("%v", lastExecutionsRes.Messages)
+	if !lastExecutionsRes.Success() {
+		return nil, lastExecutionsRes.Error()
 	}
 
 	return lastExecutionsRes, nil

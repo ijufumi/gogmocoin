@@ -34,8 +34,8 @@ func (a *accountMargin) AccountMargin() (*model.AccountMarginRes, error) {
 		return nil, fmt.Errorf("[AccountMargin]error:%v,body:%s", err, res)
 	}
 
-	if len(accountMarginRes.Messages) != 0 {
-		return nil, fmt.Errorf("%v", accountMarginRes.Messages)
+	if !accountMarginRes.Success() {
+		return nil, accountMarginRes.Error()
 	}
 
 	return accountMarginRes, nil

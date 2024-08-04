@@ -41,8 +41,8 @@ func (k *kKines) KLines(symbol consts.Symbol, intervalType consts.IntervalType, 
 		return nil, fmt.Errorf("[KLines]error:%v,body:%s", err, res)
 	}
 
-	if kLinesRes.Status != 0 {
-		return nil, fmt.Errorf("%v", kLinesRes.Messages)
+	if !kLinesRes.Success() {
+		return nil, kLinesRes.Error()
 	}
 
 	return kLinesRes, nil

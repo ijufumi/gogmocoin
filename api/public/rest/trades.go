@@ -48,8 +48,8 @@ func (t *trades) Trades(symbol consts.Symbol, page, count int64) (*model.TradesR
 	if err != nil {
 		return nil, fmt.Errorf("[Trades]error:%v,body:%s", err, res)
 	}
-	if len(tradesRes.Messages) != 0 {
-		return nil, fmt.Errorf("%v", tradesRes.Messages)
+	if !tradesRes.Success() {
+		return nil, tradesRes.Error()
 	}
 
 	return tradesRes, nil
