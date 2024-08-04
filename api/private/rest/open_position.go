@@ -40,8 +40,8 @@ func (c *openPositions) OpenPositions(symbol consts.Symbol, pageNo int) (*model.
 		return nil, fmt.Errorf("[OpenPositions]error:%v,body:%s", err, res)
 	}
 
-	if len(opensPositionRes.Messages) != 0 {
-		return nil, fmt.Errorf("%v", opensPositionRes.Messages)
+	if !opensPositionRes.Success() {
+		return nil, opensPositionRes.Error()
 	}
 
 	return opensPositionRes, nil

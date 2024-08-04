@@ -48,8 +48,8 @@ func (c *order) Order(symbol consts.Symbol, side consts.Side, executionType cons
 		return nil, fmt.Errorf("[order]error:%v,body:%s", err, res)
 	}
 
-	if len(orderRes.Messages) != 0 {
-		return nil, fmt.Errorf("%v", orderRes.Messages)
+	if !orderRes.Success() {
+		return nil, orderRes.Error()
 	}
 	return orderRes, nil
 }

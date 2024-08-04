@@ -40,8 +40,8 @@ func (o *orderBooks) OrderBooks(symbol consts.Symbol) (*model.OrderBooksRes, err
 		return nil, fmt.Errorf("[OrderBooks]error:%v,body:%s", err, res)
 	}
 
-	if len(orderBooksRes.Messages) != 0 {
-		return nil, fmt.Errorf("%v", orderBooksRes.Messages)
+	if !orderBooksRes.Success() {
+		return nil, orderBooksRes.Error()
 	}
 
 	return orderBooksRes, nil

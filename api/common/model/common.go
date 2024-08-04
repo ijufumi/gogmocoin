@@ -1,6 +1,7 @@
 package model
 
 import (
+	"fmt"
 	"github.com/ijufumi/gogmocoin/v2/api/common/consts"
 	"time"
 )
@@ -8,8 +9,16 @@ import (
 // ResponseCommon ...
 type ResponseCommon struct {
 	Messages     []map[string]string `json:"messages,omitempty"`
-	Status       int                 `json:"status"`
+	Status       consts.Status       `json:"status"`
 	ResponseTime time.Time           `json:"responsetime"`
+}
+
+func (r *ResponseCommon) Error() error {
+	return fmt.Errorf("%v", r.Messages)
+}
+
+func (r *ResponseCommon) Success() bool {
+	return r.Status.IsOK()
 }
 
 // Pagination ...

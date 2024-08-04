@@ -40,8 +40,8 @@ func (p *positionSummary) PositionSummary(symbol consts.Symbol) (*model.Position
 		return nil, fmt.Errorf("[PositionSummary]error:%v,body:%s", err, res)
 	}
 
-	if len(positionSummaryRes.Messages) != 0 {
-		return nil, fmt.Errorf("%v", positionSummaryRes.Messages)
+	if !positionSummaryRes.Success() {
+		return nil, positionSummaryRes.Error()
 	}
 
 	return positionSummaryRes, nil

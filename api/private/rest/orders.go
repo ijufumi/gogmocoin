@@ -39,8 +39,8 @@ func (o *orders) Orders(orderID int64) (*model.OrdersRes, error) {
 		return nil, fmt.Errorf("[Orders]error:%v,body:%s", err, res)
 	}
 
-	if len(ordersRes.Messages) != 0 {
-		return nil, fmt.Errorf("%v", ordersRes.Messages)
+	if !ordersRes.Success() {
+		return nil, ordersRes.Error()
 	}
 	return ordersRes, nil
 }

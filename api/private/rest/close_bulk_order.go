@@ -48,8 +48,8 @@ func (c *closeBulkOrder) CloseBulkOrder(symbol consts.Symbol, side consts.Side, 
 		return nil, fmt.Errorf("[CloseBulkOrder]error:%v,body:%s", err, res)
 	}
 
-	if len(response.Messages) != 0 {
-		return nil, fmt.Errorf("%v", response.Messages)
+	if !response.Success() {
+		return nil, response.Error()
 	}
 	return response, nil
 }
