@@ -24,6 +24,8 @@ type Client interface {
 	CloseBulkOrder
 
 	ChangeLosscutPrice
+
+	WSAuth
 }
 
 type client struct {
@@ -45,6 +47,8 @@ type client struct {
 	closeBulkOrder
 
 	changeLosscutPrice
+
+	wsAuth
 }
 
 // NewWithKeys create Client instance.
@@ -68,6 +72,8 @@ func NewWithKeys(apiKey, secretKey string) Client {
 		closeBulkOrder: newCloseBulkOrder(apiKey, secretKey),
 
 		changeLosscutPrice: newChangeLosscutPrice(apiKey, secretKey),
+
+		wsAuth: newWSAuth(apiKey, secretKey),
 	}
 
 	return c

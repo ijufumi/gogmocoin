@@ -35,58 +35,50 @@ func NewPrivateRestAPIBase(apiKey, secretKey string) RestAPIBase {
 
 // Post ...
 func (c *RestAPIBase) Post(body interface{}, path string) ([]byte, error) {
-	b, err := json.Marshal(body)
-	if err != nil {
-		return nil, err
-	}
-	req, err := http.NewRequest("POST", c.getHost()+path, strings.NewReader(string(b)))
-	if err != nil {
-		return nil, err
-	}
-	c.makeHeader(time.Now(), req, "POST", path, string(b))
+	return c.sendRequest("POST", body, path)
+}
 
-	if configuration.Debug {
-		fmt.Printf("[Request]Header:%v\n", req.Header)
-		fmt.Printf("[Request]Body:%v\n", string(b))
-	}
-	res, err := http.DefaultClient.Do(req)
-	if err != nil {
-		return nil, err
-	}
-
-	defer func() {
-		_ = res.Body.Close()
-	}()
-	resBody, err := io.ReadAll(res.Body)
-	if err != nil {
-		return nil, err
-	}
-
-	if configuration.Debug {
-		fmt.Printf("[Response]Body:%v\n", string(resBody))
-	}
-
-	return resBody, nil
+// Put ...
+func (c *RestAPIBase) Put(body interface{}, path string) ([]byte, error) {
+	return c.sendRequest("PUT", body, path)
 }
 
 // Get ...
 func (c *RestAPIBase) Get(param url.Values, path string) ([]byte, error) {
 	queryString := param.Encode()
-	urlString := c.getHost() + path
+	urlString := path
 	if len(queryString) != 0 {
 		urlString = urlString + "?" + queryString
 	}
-	req, err := http.NewRequest("GET", urlString, nil)
+	return c.sendRequest("GET", nil, urlString)
+}
+
+// Delete ...
+func (c *RestAPIBase) Delete(body interface{}, path string) ([]byte, error) {
+	return c.sendRequest("DELETE", body, path)
+}
+
+func (c *RestAPIBase) sendRequest(method string, bodyData interface{}, path string) ([]byte, error) {
+	var body string
+	if bodyData != nil {
+		b, err := json.Marshal(bodyData)
+		if err != nil {
+			return nil, err
+		}
+		body = string(b)
+	}
+	req, err := http.NewRequest(method, c.getHost()+path, strings.NewReader(body))
 	if err != nil {
 		return nil, err
 	}
-	c.makeHeader(time.Now(), req, "GET", path, "")
+	if c.needsAuth {
+		c.makeHeader(time.Now(), req, method, path, body)
+	}
 
 	if configuration.Debug {
 		fmt.Printf("[Request]Header:%v\n", req.Header)
-		fmt.Printf("[Request]URL:%v\n", req.URL)
+		fmt.Printf("[Request]Body:%v\n", body)
 	}
-
 	res, err := http.DefaultClient.Do(req)
 	if err != nil {
 		return nil, err
@@ -103,8 +95,8 @@ func (c *RestAPIBase) Get(param url.Values, path string) ([]byte, error) {
 	if configuration.Debug {
 		fmt.Printf("[Response]Body:%v\n", string(resBody))
 	}
-	return resBody, nil
 
+	return resBody, nil
 }
 
 func (c *RestAPIBase) makeHeader(systemDatetime time.Time, r *http.Request, method, path, body string) {
