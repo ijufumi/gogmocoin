@@ -21,6 +21,15 @@ type RestAPIBase struct {
 	secretKey string
 }
 
+type httpMethod string
+
+const (
+	httpMethodPOST   = httpMethod("POST")
+	httpMethodGET    = httpMethod("GET")
+	httpMethodPUT    = httpMethod("PUT")
+	httpMethodDELETE = httpMethod("DELETE")
+)
+
 func NewRestAPIBase() RestAPIBase {
 	return RestAPIBase{}
 }
@@ -35,12 +44,12 @@ func NewPrivateRestAPIBase(apiKey, secretKey string) RestAPIBase {
 
 // Post ...
 func (c *RestAPIBase) Post(body interface{}, path string) ([]byte, error) {
-	return c.sendRequest("POST", body, path)
+	return c.sendRequest(httpMethodPOST, body, path)
 }
 
 // Put ...
 func (c *RestAPIBase) Put(body interface{}, path string) ([]byte, error) {
-	return c.sendRequest("PUT", body, path)
+	return c.sendRequest(httpMethodPUT, body, path)
 }
 
 // Get ...
@@ -50,15 +59,15 @@ func (c *RestAPIBase) Get(param url.Values, path string) ([]byte, error) {
 	if len(queryString) != 0 {
 		urlString = urlString + "?" + queryString
 	}
-	return c.sendRequest("GET", nil, urlString)
+	return c.sendRequest(httpMethodGET, nil, urlString)
 }
 
 // Delete ...
 func (c *RestAPIBase) Delete(body interface{}, path string) ([]byte, error) {
-	return c.sendRequest("DELETE", body, path)
+	return c.sendRequest(httpMethodDELETE, body, path)
 }
 
-func (c *RestAPIBase) sendRequest(method string, bodyData interface{}, path string) ([]byte, error) {
+func (c *RestAPIBase) sendRequest(method httpMethod, bodyData interface{}, path string) ([]byte, error) {
 	var body string
 	if bodyData != nil {
 		b, err := json.Marshal(bodyData)
@@ -67,12 +76,16 @@ func (c *RestAPIBase) sendRequest(method string, bodyData interface{}, path stri
 		}
 		body = string(b)
 	}
-	req, err := http.NewRequest(method, c.getHost()+path, strings.NewReader(body))
+	req, err := http.NewRequest(string(method), c.getHost()+path, strings.NewReader(body))
 	if err != nil {
 		return nil, err
 	}
 	if c.needsAuth {
-		c.makeHeader(time.Now(), req, method, path, body)
+		if method == httpMethodPOST {
+			c.makeHeader(time.Now(), req, method, path, body)
+		} else {
+			c.makeHeader(time.Now(), req, method, path, "")
+		}
 	}
 
 	if configuration.Debug {
@@ -99,14 +112,14 @@ func (c *RestAPIBase) sendRequest(method string, bodyData interface{}, path stri
 	return resBody, nil
 }
 
-func (c *RestAPIBase) makeHeader(systemDatetime time.Time, r *http.Request, method, path, body string) {
+func (c *RestAPIBase) makeHeader(systemDatetime time.Time, r *http.Request, method httpMethod, path, body string) {
 	timeStamp := systemDatetime.Unix()*1000 + int64(systemDatetime.Nanosecond())/int64(time.Millisecond)
 	r.Header.Set("API-TIMESTAMP", fmt.Sprint(timeStamp))
 	r.Header.Set("API-KEY", c.apiKey)
 	r.Header.Set("API-SIGN", c.makeSign(c.secretKey, timeStamp, method, path, body))
 }
 
-func (c *RestAPIBase) makeSign(secretKey string, timeStamp int64, method, path, body string) string {
+func (c *RestAPIBase) makeSign(secretKey string, timeStamp int64, method httpMethod, path, body string) string {
 	h := hmac.New(sha256.New, []byte(secretKey))
 	h.Write([]byte(fmt.Sprintf("%v%v%v%v", timeStamp, method, path, body)))
 	return hex.EncodeToString(h.Sum(nil))
