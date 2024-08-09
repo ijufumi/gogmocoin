@@ -1,7 +1,7 @@
 package rest
 
 import (
-	"os"
+	"github.com/ijufumi/gogmocoin/v2/api/common/configuration"
 )
 
 // Client ...
@@ -81,7 +81,7 @@ func NewWithKeys(apiKey, secretKey string) Client {
 
 // New ...
 func New() Client {
-	apiKey := os.Getenv("API_KEY")
-	secretKey := os.Getenv("API_SECRET")
+	apiKey := configuration.APIKey()
+	secretKey := configuration.APISecret()
 	return NewWithKeys(apiKey, secretKey)
 }
