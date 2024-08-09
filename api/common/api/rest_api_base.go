@@ -88,7 +88,7 @@ func (c *RestAPIBase) sendRequest(method httpMethod, bodyData interface{}, path 
 		}
 	}
 
-	if configuration.Debug {
+	if configuration.IsDebug() {
 		fmt.Printf("[Request]Header:%v\n", req.Header)
 		fmt.Printf("[Request]Body:%v\n", body)
 	}
@@ -105,7 +105,7 @@ func (c *RestAPIBase) sendRequest(method httpMethod, bodyData interface{}, path 
 		return nil, err
 	}
 
-	if configuration.Debug {
+	if configuration.IsDebug() {
 		fmt.Printf("[Response]Body:%v\n", string(resBody))
 	}
 
