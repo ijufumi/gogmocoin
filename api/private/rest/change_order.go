@@ -1,6 +1,7 @@
 package rest
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"github.com/ijufumi/gogmocoin/v2/api/common/api"
@@ -11,6 +12,7 @@ import (
 // ChangeOrder ...
 type ChangeOrder interface {
 	ChangeOrder(orderID int64, price decimal.Decimal) (*model.ChangeOrderRes, error)
+	ChangeOrderWithContext(ctx context.Context, orderID int64, price decimal.Decimal) (*model.ChangeOrderRes, error)
 }
 
 func newChangeOrder(apiKey, secretKey string) changeOrder {
@@ -23,13 +25,19 @@ type changeOrder struct {
 	api.RestAPIBase
 }
 
+// ChangeOrder ...
 func (c *changeOrder) ChangeOrder(orderID int64, price decimal.Decimal) (*model.ChangeOrderRes, error) {
+	return c.ChangeOrderWithContext(context.Background(), orderID, price)
+}
+
+// ChangeOrderWithContext ...
+func (c *changeOrder) ChangeOrderWithContext(ctx context.Context, orderID int64, price decimal.Decimal) (*model.ChangeOrderRes, error) {
 	request := model.ChangeOrderReq{
 		OrderID: orderID,
 		Price:   price,
 	}
 
-	res, err := c.Post(request, "/v1/changeOrder")
+	res, err := c.Post(ctx, request, "/v1/changeOrder")
 	if err != nil {
 		return nil, err
 	}

@@ -1,6 +1,7 @@
 package rest
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"github.com/ijufumi/gogmocoin/v2/api/common/api"
@@ -10,6 +11,7 @@ import (
 // CancelOrder ...
 type CancelOrder interface {
 	CancelOrder(orderID int64) error
+	CancelOrderWithContext(ctx context.Context, orderID int64) error
 }
 
 func newCancelOrder(apiKey, secretKey string) cancelOrder {
@@ -24,8 +26,13 @@ type cancelOrder struct {
 
 // CancelOrder ...
 func (c *cancelOrder) CancelOrder(orderID int64) error {
+	return c.CancelOrderWithContext(context.Background(), orderID)
+}
+
+// CancelOrderWithContext ...
+func (c *cancelOrder) CancelOrderWithContext(ctx context.Context, orderID int64) error {
 	req := model.CancelOrderReq{OrderID: orderID}
-	res, err := c.Post(req, "/v1/cancelOrder")
+	res, err := c.Post(ctx, req, "/v1/cancelOrder")
 	if err != nil {
 		return err
 	}

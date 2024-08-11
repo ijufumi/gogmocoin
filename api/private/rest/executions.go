@@ -1,6 +1,7 @@
 package rest
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"github.com/ijufumi/gogmocoin/v2/api/common/api"
@@ -12,8 +13,11 @@ import (
 // Executions ...
 type Executions interface {
 	Executions(orderID, executionID int64) (*model.ExecutionsRes, error)
+	ExecutionsWithContext(ctx context.Context, orderID, executionID int64) (*model.ExecutionsRes, error)
 	ExecutionsByOrderID(orderID int64) (*model.ExecutionsRes, error)
+	ExecutionsByOrderIDWithContext(ctx context.Context, orderID int64) (*model.ExecutionsRes, error)
 	ExecutionsByExecutionID(executionID int64) (*model.ExecutionsRes, error)
+	ExecutionsByExecutionIDWithContext(ctx context.Context, executionID int64) (*model.ExecutionsRes, error)
 }
 
 func newExecutions(apiKey, secretKey string) executions {
@@ -26,15 +30,33 @@ type executions struct {
 	api.RestAPIBase
 }
 
+// ExecutionsByOrderID ...
 func (e *executions) ExecutionsByOrderID(orderID int64) (*model.ExecutionsRes, error) {
 	return e.Executions(orderID, 0)
 }
 
+// ExecutionsByOrderIDWithContext ...
+func (e *executions) ExecutionsByOrderIDWithContext(ctx context.Context, orderID int64) (*model.ExecutionsRes, error) {
+	return e.ExecutionsWithContext(ctx, orderID, 0)
+}
+
+// ExecutionsByExecutionID ...
 func (e *executions) ExecutionsByExecutionID(executionID int64) (*model.ExecutionsRes, error) {
 	return e.Executions(0, executionID)
 }
 
+// ExecutionsByExecutionIDWithContext ...
+func (e *executions) ExecutionsByExecutionIDWithContext(ctx context.Context, executionID int64) (*model.ExecutionsRes, error) {
+	return e.ExecutionsWithContext(ctx, 0, executionID)
+}
+
+// Executions ...
 func (e *executions) Executions(orderID, executionID int64) (*model.ExecutionsRes, error) {
+	return e.ExecutionsWithContext(context.Background(), orderID, executionID)
+}
+
+// ExecutionsWithContext ...
+func (e *executions) ExecutionsWithContext(ctx context.Context, orderID, executionID int64) (*model.ExecutionsRes, error) {
 	param := url.Values{}
 
 	if orderID > 0 {
@@ -45,7 +67,7 @@ func (e *executions) Executions(orderID, executionID int64) (*model.ExecutionsRe
 		param.Set("executionId", strconv.FormatInt(executionID, 10))
 	}
 
-	res, err := e.Get(param, "/v1/executions")
+	res, err := e.Get(ctx, param, "/v1/executions")
 	if err != nil {
 		return nil, err
 	}

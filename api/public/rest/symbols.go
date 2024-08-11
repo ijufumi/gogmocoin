@@ -1,6 +1,7 @@
 package rest
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"github.com/ijufumi/gogmocoin/v2/api/common/api"
@@ -11,6 +12,7 @@ import (
 // Symbols ...
 type Symbols interface {
 	Symbols() (*model.SymbolsRes, error)
+	SymbolsWithContext(ctx context.Context) (*model.SymbolsRes, error)
 }
 
 func newSymbols() symbols {
@@ -23,8 +25,14 @@ type symbols struct {
 	api.RestAPIBase
 }
 
+// Symbols ...
 func (t *symbols) Symbols() (*model.SymbolsRes, error) {
-	res, err := t.Get(url.Values{}, "/v1/symbols")
+	return t.SymbolsWithContext(context.Background())
+}
+
+// SymbolsWithContext ...
+func (t *symbols) SymbolsWithContext(ctx context.Context) (*model.SymbolsRes, error) {
+	res, err := t.Get(ctx, url.Values{}, "/v1/symbols")
 	if err != nil {
 		return nil, err
 	}

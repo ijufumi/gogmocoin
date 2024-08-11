@@ -1,6 +1,7 @@
 package rest
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"github.com/ijufumi/gogmocoin/v2/api/common/api"
@@ -13,6 +14,7 @@ import (
 // LastExecutions ...
 type LastExecutions interface {
 	LastExecutions(symbol consts.Symbol, page, count int) (*model.LastExecutionsRes, error)
+	LastExecutionsWithContext(ctx context.Context, symbol consts.Symbol, page, count int) (*model.LastExecutionsRes, error)
 }
 
 func newLastExecutions(apiKey, secretKey string) lastExecutions {
@@ -25,7 +27,13 @@ type lastExecutions struct {
 	api.RestAPIBase
 }
 
+// LastExecutions ...
 func (l *lastExecutions) LastExecutions(symbol consts.Symbol, page, count int) (*model.LastExecutionsRes, error) {
+	return l.LastExecutionsWithContext(context.Background(), symbol, page, count)
+}
+
+// LastExecutionsWithContext ...
+func (l *lastExecutions) LastExecutionsWithContext(ctx context.Context, symbol consts.Symbol, page, count int) (*model.LastExecutionsRes, error) {
 	param := url.Values{
 		"symbol": {string(symbol)},
 	}
@@ -38,7 +46,7 @@ func (l *lastExecutions) LastExecutions(symbol consts.Symbol, page, count int) (
 		param.Set("count", strconv.Itoa(count))
 	}
 
-	res, err := l.Get(param, "/v1/latestExecutions")
+	res, err := l.Get(ctx, param, "/v1/latestExecutions")
 	if err != nil {
 		return nil, err
 	}

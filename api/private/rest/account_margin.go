@@ -1,6 +1,7 @@
 package rest
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"github.com/ijufumi/gogmocoin/v2/api/common/api"
@@ -11,6 +12,7 @@ import (
 // AccountMargin ...
 type AccountMargin interface {
 	AccountMargin() (*model.AccountMarginRes, error)
+	AccountMarginWithContext(ctx context.Context) (*model.AccountMarginRes, error)
 }
 
 func newAccountMargin(apiKey, secretKey string) accountMargin {
@@ -23,8 +25,14 @@ type accountMargin struct {
 	api.RestAPIBase
 }
 
+// AccountMargin ...
 func (a *accountMargin) AccountMargin() (*model.AccountMarginRes, error) {
-	res, err := a.Get(url.Values{}, "/v1/account/margin")
+	return a.AccountMarginWithContext(context.Background())
+}
+
+// AccountMarginWithContext ...
+func (a *accountMargin) AccountMarginWithContext(ctx context.Context) (*model.AccountMarginRes, error) {
+	res, err := a.Get(ctx, url.Values{}, "/v1/account/margin")
 	if err != nil {
 		return nil, err
 	}

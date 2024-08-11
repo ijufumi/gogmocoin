@@ -1,6 +1,7 @@
 package rest
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"github.com/ijufumi/gogmocoin/v2/api/common/api"
@@ -11,6 +12,7 @@ import (
 // Status ...
 type Status interface {
 	Status() (*model.StatusRes, error)
+	StatusWithContext(ctx context.Context) (*model.StatusRes, error)
 }
 
 func newStatus() status {
@@ -23,8 +25,14 @@ type status struct {
 	api.RestAPIBase
 }
 
+// Status ...
 func (s *status) Status() (*model.StatusRes, error) {
-	res, err := s.Get(url.Values{}, "/v1/status")
+	return s.StatusWithContext(context.Background())
+}
+
+// StatusWithContext ...
+func (s *status) StatusWithContext(ctx context.Context) (*model.StatusRes, error) {
+	res, err := s.Get(ctx, url.Values{}, "/v1/status")
 	if err != nil {
 		return nil, err
 	}

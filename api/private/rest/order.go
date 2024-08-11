@@ -1,6 +1,7 @@
 package rest
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"github.com/ijufumi/gogmocoin/v2/api/common/api"
@@ -12,6 +13,7 @@ import (
 // Order ...
 type Order interface {
 	Order(symbol consts.Symbol, side consts.Side, executionType consts.ExecutionType, price, size decimal.Decimal) (*model.OrderRes, error)
+	OrderWithContext(ctx context.Context, symbol consts.Symbol, side consts.Side, executionType consts.ExecutionType, price, size decimal.Decimal) (*model.OrderRes, error)
 }
 
 func newOrder(apiKey, secretKey string) order {
@@ -26,6 +28,11 @@ type order struct {
 
 // Order ...
 func (c *order) Order(symbol consts.Symbol, side consts.Side, executionType consts.ExecutionType, price, size decimal.Decimal) (*model.OrderRes, error) {
+	return c.OrderWithContext(context.Background(), symbol, side, executionType, price, size)
+}
+
+// OrderWithContext ...
+func (c *order) OrderWithContext(ctx context.Context, symbol consts.Symbol, side consts.Side, executionType consts.ExecutionType, price, size decimal.Decimal) (*model.OrderRes, error) {
 	req := model.OrderReq{
 		Symbol:        symbol,
 		Side:          side,
@@ -37,7 +44,7 @@ func (c *order) Order(symbol consts.Symbol, side consts.Side, executionType cons
 		req.Price = &price
 	}
 
-	res, err := c.Post(req, "/v1/order")
+	res, err := c.Post(ctx, req, "/v1/order")
 	if err != nil {
 		return nil, err
 	}

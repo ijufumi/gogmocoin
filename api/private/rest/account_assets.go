@@ -1,6 +1,7 @@
 package rest
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"github.com/ijufumi/gogmocoin/v2/api/common/api"
@@ -11,6 +12,7 @@ import (
 // AccountAssets ...
 type AccountAssets interface {
 	AccountAssets() (*model.AccountAssetsRes, error)
+	AccountAssetsWithContext(ctx context.Context) (*model.AccountAssetsRes, error)
 }
 
 func newAccountAssets(apiKey, secretKey string) accountAssets {
@@ -23,8 +25,14 @@ type accountAssets struct {
 	api.RestAPIBase
 }
 
+// AccountAssets ...
 func (a *accountAssets) AccountAssets() (*model.AccountAssetsRes, error) {
-	res, err := a.Get(url.Values{}, "/v1/account/assets")
+	return a.AccountAssetsWithContext(context.Background())
+}
+
+// AccountAssetsWithContext ...
+func (a *accountAssets) AccountAssetsWithContext(ctx context.Context) (*model.AccountAssetsRes, error) {
+	res, err := a.Get(ctx, url.Values{}, "/v1/account/assets")
 	if err != nil {
 		return nil, err
 	}
