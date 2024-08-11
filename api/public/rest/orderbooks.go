@@ -1,6 +1,7 @@
 package rest
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"github.com/ijufumi/gogmocoin/v2/api/common/api"
@@ -12,6 +13,7 @@ import (
 // OrderBooks ...
 type OrderBooks interface {
 	OrderBooks(symbol consts.Symbol) (*model.OrderBooksRes, error)
+	OrderBooksWithContext(ctx context.Context, symbol consts.Symbol) (*model.OrderBooksRes, error)
 }
 
 func newOrderBooks() orderBooks {
@@ -24,12 +26,18 @@ type orderBooks struct {
 	api.RestAPIBase
 }
 
+// OrderBooks ...
 func (o *orderBooks) OrderBooks(symbol consts.Symbol) (*model.OrderBooksRes, error) {
+	return o.OrderBooksWithContext(context.Background(), symbol)
+}
+
+// OrderBooksWithContext ...
+func (o *orderBooks) OrderBooksWithContext(ctx context.Context, symbol consts.Symbol) (*model.OrderBooksRes, error) {
 	param := url.Values{
 		"symbol": {string(symbol)},
 	}
 
-	res, err := o.Get(param, "/v1/orderbooks")
+	res, err := o.Get(ctx, param, "/v1/orderbooks")
 	if err != nil {
 		return nil, err
 	}

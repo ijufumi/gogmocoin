@@ -1,6 +1,7 @@
 package rest
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"github.com/ijufumi/gogmocoin/v2/api/common/api"
@@ -11,6 +12,7 @@ import (
 // ChangeLosscutPrice ...
 type ChangeLosscutPrice interface {
 	ChangeLosscutPrice(positionID int64, losscutPrice decimal.Decimal) (*model.ChangeLosscutPriceRes, error)
+	ChangeLosscutPriceWithContext(ctx context.Context, positionID int64, losscutPrice decimal.Decimal) (*model.ChangeLosscutPriceRes, error)
 }
 
 func newChangeLosscutPrice(apiKey, secretKey string) changeLosscutPrice {
@@ -23,13 +25,19 @@ type changeLosscutPrice struct {
 	api.RestAPIBase
 }
 
+// ChangeLosscutPrice ...
 func (c *changeLosscutPrice) ChangeLosscutPrice(positionID int64, losscutPrice decimal.Decimal) (*model.ChangeLosscutPriceRes, error) {
+	return c.ChangeLosscutPriceWithContext(context.Background(), positionID, losscutPrice)
+}
+
+// ChangeLosscutPriceWithContext ...
+func (c *changeLosscutPrice) ChangeLosscutPriceWithContext(ctx context.Context, positionID int64, losscutPrice decimal.Decimal) (*model.ChangeLosscutPriceRes, error) {
 	request := model.ChangeLosscutPriceReq{
 		PositionID:   positionID,
 		LosscutPrice: losscutPrice,
 	}
 
-	res, err := c.Post(request, "/v1/changeLosscutPrice")
+	res, err := c.Post(ctx, request, "/v1/changeLosscutPrice")
 	if err != nil {
 		return nil, err
 	}

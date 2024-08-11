@@ -1,6 +1,7 @@
 package rest
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"github.com/ijufumi/gogmocoin/v2/api/common/api"
@@ -12,6 +13,7 @@ import (
 // PositionSummary ...
 type PositionSummary interface {
 	PositionSummary(symbol consts.Symbol) (*model.PositionSummaryRes, error)
+	PositionSummaryWithContext(ctx context.Context, symbol consts.Symbol) (*model.PositionSummaryRes, error)
 }
 
 func newPositionSummary(apiKey, secretKey string) positionSummary {
@@ -24,12 +26,18 @@ type positionSummary struct {
 	api.RestAPIBase
 }
 
+// PositionSummary ...
 func (p *positionSummary) PositionSummary(symbol consts.Symbol) (*model.PositionSummaryRes, error) {
+	return p.PositionSummaryWithContext(context.Background(), symbol)
+}
+
+// PositionSummaryWithContext ...
+func (p *positionSummary) PositionSummaryWithContext(ctx context.Context, symbol consts.Symbol) (*model.PositionSummaryRes, error) {
 	param := url.Values{
 		"symbol": {string(symbol)},
 	}
 
-	res, err := p.Get(param, "/v1/positionSummary")
+	res, err := p.Get(ctx, param, "/v1/positionSummary")
 	if err != nil {
 		return nil, err
 	}

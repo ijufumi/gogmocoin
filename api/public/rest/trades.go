@@ -1,6 +1,7 @@
 package rest
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"github.com/ijufumi/gogmocoin/v2/api/common/api"
@@ -13,6 +14,7 @@ import (
 // Trades ...
 type Trades interface {
 	Trades(symbol consts.Symbol, page, count int64) (*model.TradesRes, error)
+	TradesWithContext(ctx context.Context, symbol consts.Symbol, page, count int64) (*model.TradesRes, error)
 }
 
 func newTrades() trades {
@@ -25,7 +27,13 @@ type trades struct {
 	api.RestAPIBase
 }
 
+// Trades ...
 func (t *trades) Trades(symbol consts.Symbol, page, count int64) (*model.TradesRes, error) {
+	return t.TradesWithContext(context.Background(), symbol, page, count)
+}
+
+// TradesWithContext ...
+func (t *trades) TradesWithContext(ctx context.Context, symbol consts.Symbol, page, count int64) (*model.TradesRes, error) {
 	param := url.Values{
 		"symbol": {string(symbol)},
 	}
@@ -38,7 +46,7 @@ func (t *trades) Trades(symbol consts.Symbol, page, count int64) (*model.TradesR
 		param.Set("count", strconv.FormatInt(count, 10))
 	}
 
-	res, err := t.Get(param, "/v1/trades")
+	res, err := t.Get(ctx, param, "/v1/trades")
 	if err != nil {
 		return nil, err
 	}

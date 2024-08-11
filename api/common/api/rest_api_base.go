@@ -1,6 +1,7 @@
 package api
 
 import (
+	"context"
 	"crypto/hmac"
 	"crypto/sha256"
 	"encoding/hex"
@@ -43,31 +44,31 @@ func NewPrivateRestAPIBase(apiKey, secretKey string) RestAPIBase {
 }
 
 // Post ...
-func (c *RestAPIBase) Post(body interface{}, path string) ([]byte, error) {
-	return c.sendRequest(httpMethodPOST, body, path)
+func (c *RestAPIBase) Post(ctx context.Context, body interface{}, path string) ([]byte, error) {
+	return c.sendRequest(ctx, httpMethodPOST, body, path)
 }
 
 // Put ...
-func (c *RestAPIBase) Put(body interface{}, path string) ([]byte, error) {
-	return c.sendRequest(httpMethodPUT, body, path)
+func (c *RestAPIBase) Put(ctx context.Context, body interface{}, path string) ([]byte, error) {
+	return c.sendRequest(ctx, httpMethodPUT, body, path)
 }
 
 // Get ...
-func (c *RestAPIBase) Get(param url.Values, path string) ([]byte, error) {
+func (c *RestAPIBase) Get(ctx context.Context, param url.Values, path string) ([]byte, error) {
 	queryString := param.Encode()
 	urlString := path
 	if len(queryString) != 0 {
 		urlString = urlString + "?" + queryString
 	}
-	return c.sendRequest(httpMethodGET, nil, urlString)
+	return c.sendRequest(ctx, httpMethodGET, nil, urlString)
 }
 
 // Delete ...
-func (c *RestAPIBase) Delete(body interface{}, path string) ([]byte, error) {
-	return c.sendRequest(httpMethodDELETE, body, path)
+func (c *RestAPIBase) Delete(ctx context.Context, body interface{}, path string) ([]byte, error) {
+	return c.sendRequest(ctx, httpMethodDELETE, body, path)
 }
 
-func (c *RestAPIBase) sendRequest(method httpMethod, bodyData interface{}, path string) ([]byte, error) {
+func (c *RestAPIBase) sendRequest(ctx context.Context, method httpMethod, bodyData interface{}, path string) ([]byte, error) {
 	var body string
 	if bodyData != nil {
 		b, err := json.Marshal(bodyData)
@@ -76,7 +77,7 @@ func (c *RestAPIBase) sendRequest(method httpMethod, bodyData interface{}, path 
 		}
 		body = string(b)
 	}
-	req, err := http.NewRequest(string(method), c.getHost()+path, strings.NewReader(body))
+	req, err := http.NewRequestWithContext(ctx, string(method), c.getHost()+path, strings.NewReader(body))
 	if err != nil {
 		return nil, err
 	}

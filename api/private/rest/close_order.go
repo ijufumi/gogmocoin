@@ -1,6 +1,7 @@
 package rest
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"github.com/ijufumi/gogmocoin/v2/api/common/api"
@@ -12,6 +13,7 @@ import (
 // CloseOrder ...
 type CloseOrder interface {
 	CloseOrder(positionID int64, symbol consts.Symbol, side consts.Side, executionType consts.ExecutionType, price, size decimal.Decimal) (*model.CloseOrderRes, error)
+	CloseOrderWithContext(ctx context.Context, positionID int64, symbol consts.Symbol, side consts.Side, executionType consts.ExecutionType, price, size decimal.Decimal) (*model.CloseOrderRes, error)
 }
 
 func newCloseOrder(apiKey, secretKey string) closeOrder {
@@ -26,6 +28,11 @@ type closeOrder struct {
 
 // CloseOrder ...
 func (c *closeOrder) CloseOrder(positionID int64, symbol consts.Symbol, side consts.Side, executionType consts.ExecutionType, price, size decimal.Decimal) (*model.CloseOrderRes, error) {
+	return c.CloseOrderWithContext(context.Background(), positionID, symbol, side, executionType, price, size)
+}
+
+// CloseOrderWithContext ...
+func (c *closeOrder) CloseOrderWithContext(ctx context.Context, positionID int64, symbol consts.Symbol, side consts.Side, executionType consts.ExecutionType, price, size decimal.Decimal) (*model.CloseOrderRes, error) {
 	req := model.CloseOrderReq{
 		Symbol:        symbol,
 		Side:          side,
@@ -40,7 +47,7 @@ func (c *closeOrder) CloseOrder(positionID int64, symbol consts.Symbol, side con
 		req.Price = &price
 	}
 
-	res, err := c.Post(req, "/v1/closeOrder")
+	res, err := c.Post(ctx, req, "/v1/closeOrder")
 	if err != nil {
 		return nil, err
 	}

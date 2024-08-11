@@ -1,6 +1,7 @@
 package rest
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"github.com/ijufumi/gogmocoin/v2/api/common/api"
@@ -11,6 +12,7 @@ import (
 
 type KLines interface {
 	KLines(symbol consts.Symbol, intervalType consts.IntervalType, date string) (*model.KLinesRes, error)
+	KLinesWithContext(ctx context.Context, symbol consts.Symbol, intervalType consts.IntervalType, date string) (*model.KLinesRes, error)
 }
 
 func newKLines() kKines {
@@ -23,14 +25,20 @@ type kKines struct {
 	api.RestAPIBase
 }
 
+// KLines ...
 func (k *kKines) KLines(symbol consts.Symbol, intervalType consts.IntervalType, date string) (*model.KLinesRes, error) {
+	return k.KLinesWithContext(context.Background(), symbol, intervalType, date)
+}
+
+// KLinesWithContext ...
+func (k *kKines) KLinesWithContext(ctx context.Context, symbol consts.Symbol, intervalType consts.IntervalType, date string) (*model.KLinesRes, error) {
 	param := url.Values{
 		"symbol":   {string(symbol)},
 		"interval": {string(intervalType)},
 		"date":     {date},
 	}
 
-	res, err := k.Get(param, "/v1/klines")
+	res, err := k.Get(ctx, param, "/v1/klines")
 	if err != nil {
 		return nil, err
 	}

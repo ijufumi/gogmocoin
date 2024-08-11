@@ -1,6 +1,7 @@
 package rest
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"github.com/ijufumi/gogmocoin/v2/api/common/api"
@@ -12,6 +13,7 @@ import (
 // ActiveOrders ...
 type ActiveOrders interface {
 	ActiveOrders(symbol consts.Symbol, pageNo int) (*model.ActiveOrdersRes, error)
+	ActiveOrdersWithContext(ctx context.Context, symbol consts.Symbol, pageNo int) (*model.ActiveOrdersRes, error)
 }
 
 func newActiveOrders(apiKey, secretKey string) activeOrders {
@@ -26,11 +28,16 @@ type activeOrders struct {
 
 // ActiveOrders ...
 func (c activeOrders) ActiveOrders(symbol consts.Symbol, pageNo int) (*model.ActiveOrdersRes, error) {
+	return c.ActiveOrdersWithContext(context.Background(), symbol, pageNo)
+}
+
+// ActiveOrdersWithContext ...
+func (c activeOrders) ActiveOrdersWithContext(ctx context.Context, symbol consts.Symbol, pageNo int) (*model.ActiveOrdersRes, error) {
 	req := url.Values{
 		"symbol": {string(symbol)},
 		"page":   {fmt.Sprint(pageNo)},
 	}
-	res, err := c.Get(req, "/v1/activeOrders")
+	res, err := c.Get(ctx, req, "/v1/activeOrders")
 	if err != nil {
 		return nil, err
 	}

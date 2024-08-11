@@ -1,6 +1,7 @@
 package rest
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"github.com/ijufumi/gogmocoin/v2/api/common/api"
@@ -12,6 +13,7 @@ import (
 // Ticker ...
 type Ticker interface {
 	Ticker(symbol consts.Symbol) (*model.TickerRes, error)
+	TickerWithContext(ctx context.Context, symbol consts.Symbol) (*model.TickerRes, error)
 }
 
 func newTicker() ticker {
@@ -26,13 +28,18 @@ type ticker struct {
 
 // Ticker ...
 func (t ticker) Ticker(symbol consts.Symbol) (*model.TickerRes, error) {
+	return t.TickerWithContext(context.Background(), symbol)
+}
+
+// TickerWithContext ...
+func (t ticker) TickerWithContext(ctx context.Context, symbol consts.Symbol) (*model.TickerRes, error) {
 	param := url.Values{}
 
 	if symbol != consts.SymbolNONE {
 		param.Set("symbol", string(symbol))
 	}
 
-	res, err := t.Get(param, "/v1/ticker")
+	res, err := t.Get(ctx, param, "/v1/ticker")
 	if err != nil {
 		return nil, err
 	}

@@ -1,6 +1,7 @@
 package rest
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"github.com/ijufumi/gogmocoin/v2/api/common/api"
@@ -12,6 +13,7 @@ import (
 // Orders ...
 type Orders interface {
 	Orders(orderID int64) (*model.OrdersRes, error)
+	OrdersWithContext(ctx context.Context, orderID int64) (*model.OrdersRes, error)
 }
 
 func newOrders(apiKey, secretKey string) orders {
@@ -24,12 +26,18 @@ type orders struct {
 	api.RestAPIBase
 }
 
+// Orders ...
 func (o *orders) Orders(orderID int64) (*model.OrdersRes, error) {
+	return o.OrdersWithContext(context.Background(), orderID)
+}
+
+// OrdersWithContext ...
+func (o *orders) OrdersWithContext(ctx context.Context, orderID int64) (*model.OrdersRes, error) {
 	param := url.Values{
 		"orderId": {strconv.FormatInt(orderID, 10)},
 	}
 
-	res, err := o.Get(param, "/v1/orders")
+	res, err := o.Get(ctx, param, "/v1/orders")
 	if err != nil {
 		return nil, err
 	}
