@@ -6,24 +6,24 @@ import (
 	"github.com/gorilla/websocket"
 	"github.com/ijufumi/gogmocoin/v2/api/common/consts"
 	"log"
-	"sync"
 	"sync/atomic"
 	"time"
 )
 
-type connectionState string
+type state string
 
 const (
-	connectionStateConnecting = connectionState("Connecting")
-	connectionStateConnected  = connectionState("Connected")
-	connectionStateClosed     = connectionState("Closed")
+	stateStarted          = state("Started")
+	stateStopped          = state("Stopped")
+	stateConnecting       = state("Connecting")
+	stateConnected        = state("Connected")
+	stateConnectionClosed = state("ConnectionClosed")
 )
 
 type WSAPIBase struct {
-	needsAuth bool
-	apiKey    string
-	secretKey string
-	sync.Mutex
+	needsAuth       bool
+	apiKey          string
+	secretKey       string
 	conn            *websocket.Conn
 	state           *atomic.Value
 	ctx             context.Context
@@ -64,9 +64,12 @@ func (c *WSAPIBase) initContext() {
 
 // Start ...
 func (c *WSAPIBase) Start() {
-	c.initContext()
-	go c.doSendGoroutine()
-	go c.doReceiveGoroutine()
+	if c.isStopped() {
+		c.initContext()
+		go c.doSendGoroutine()
+		go c.doReceiveGoroutine()
+		c.changeStateToStarted()
+	}
 }
 
 // SetSubscribeFunc ...
@@ -151,19 +154,6 @@ func (c *WSAPIBase) doReceiveGoroutine() {
 	}
 }
 
-func (c *WSAPIBase) isConnected() bool {
-	c.Lock()
-	defer c.Unlock()
-	v, ok := c.state.Load().(connectionState)
-
-	if !ok {
-		c.changeStateToClosed()
-		return false
-	}
-
-	return v == connectionStateConnected || v == connectionStateConnecting
-}
-
 // Send is...
 func (c *WSAPIBase) Send(msg interface{}) error {
 	err := c.waitForConnected()
@@ -194,9 +184,6 @@ func (c *WSAPIBase) waitForConnected() error {
 }
 
 func (c *WSAPIBase) dial() error {
-	c.Lock()
-	defer c.Unlock()
-
 	log.Println("dial start")
 	if c.conn != nil {
 		c.changeStateToClosed()
@@ -232,18 +219,49 @@ func (c *WSAPIBase) Close() {
 	if c.stopFunc != nil {
 		c.stopFunc()
 	}
+	c.changeStateToClosed()
+}
+
+func (c *WSAPIBase) isStopped() bool {
+	v, ok := c.state.Load().(state)
+
+	if !ok {
+		c.changeStateToStopped()
+		return true
+	}
+
+	return v == stateStopped
+}
+
+func (c *WSAPIBase) isConnected() bool {
+	v, ok := c.state.Load().(state)
+
+	if !ok {
+		c.changeStateToStopped()
+		return false
+	}
+
+	return v == stateConnected || v == stateConnecting
+}
+
+func (c *WSAPIBase) changeStateToStarted() {
+	c.state.Store(stateStarted)
+}
+
+func (c *WSAPIBase) changeStateToStopped() {
+	c.state.Store(stateStopped)
 }
 
 func (c *WSAPIBase) changeStateToClosed() {
-	c.state.Store(connectionStateClosed)
+	c.state.Store(stateConnectionClosed)
 }
 
 func (c *WSAPIBase) changeStateToConnected() {
-	c.state.Store(connectionStateConnected)
+	c.state.Store(stateConnected)
 }
 
 func (c *WSAPIBase) changeStateToConnecting() {
-	c.state.Store(connectionStateConnecting)
+	c.state.Store(stateConnecting)
 }
 
 //func (c *WSAPIBase) makeHeader(systemDatetime time.Time, r *http.Request, method, path, body string) {
