@@ -20,10 +20,10 @@ const (
 )
 
 type WSAPIBase struct {
-	needsAuth bool
-	apiKey    string
-	secretKey string
 	sync.Mutex
+	needsAuth       bool
+	apiKey          string
+	secretKey       string
 	conn            *websocket.Conn
 	state           *atomic.Value
 	ctx             context.Context
