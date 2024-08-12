@@ -68,6 +68,7 @@ func (c *WSAPIBase) Start() {
 		c.initContext()
 		go c.doSendGoroutine()
 		go c.doReceiveGoroutine()
+		c.changeStateToStarted()
 	}
 }
 

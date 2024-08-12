@@ -47,7 +47,7 @@ func (c *orderBooks) Unsubscribe() error {
 	defer func() {
 		c.WSAPIBase.Close()
 	}()
-	return c.Unsubscribe()
+	return c.WSAPIBase.Unsubscribe()
 }
 
 func (c *orderBooks) Receive() <-chan *model.OrderBooksRes {
