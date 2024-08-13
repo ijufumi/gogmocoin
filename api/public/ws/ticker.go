@@ -38,14 +38,10 @@ func newTicker(symbol consts.Symbol) *ticker {
 }
 
 func (c *ticker) Subscribe() error {
-	c.WSAPIBase.Start()
 	return c.WSAPIBase.Subscribe()
 }
 
 func (c *ticker) Unsubscribe() error {
-	defer func() {
-		c.WSAPIBase.Close()
-	}()
 	return c.WSAPIBase.Unsubscribe()
 }
 

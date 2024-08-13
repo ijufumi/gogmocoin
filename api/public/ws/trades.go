@@ -40,14 +40,10 @@ func newTrades(symbol consts.Symbol, option *consts.Option) *trades {
 }
 
 func (c *trades) Subscribe() error {
-	c.WSAPIBase.Start()
 	return c.WSAPIBase.Subscribe()
 }
 
 func (c *trades) Unsubscribe() error {
-	defer func() {
-		c.WSAPIBase.Close()
-	}()
 	return c.WSAPIBase.Unsubscribe()
 }
 

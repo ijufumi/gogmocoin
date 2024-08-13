@@ -84,11 +84,15 @@ func (c *WSAPIBase) SetUnsubscribeFunc(f func() interface{}) {
 
 // Subscribe ...
 func (c *WSAPIBase) Subscribe() error {
+	c.Start()
 	return c.subscribeFunc()
 }
 
 // Unsubscribe ...
 func (c *WSAPIBase) Unsubscribe() error {
+	defer func() {
+		c.Close()
+	}()
 	return c.unsubscribeFunc()
 }
 

@@ -39,14 +39,10 @@ func newOrderBooks(symbol consts.Symbol) *orderBooks {
 }
 
 func (c *orderBooks) Subscribe() error {
-	c.WSAPIBase.Start()
 	return c.WSAPIBase.Subscribe()
 }
 
 func (c *orderBooks) Unsubscribe() error {
-	defer func() {
-		c.WSAPIBase.Close()
-	}()
 	return c.WSAPIBase.Unsubscribe()
 }
 
