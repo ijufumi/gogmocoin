@@ -17,12 +17,12 @@ type Status interface {
 
 func newStatus() status {
 	return status{
-		RestAPIBase: api.NewRestAPIBase(),
+		apiBase: api.NewRestAPIBase(),
 	}
 }
 
 type status struct {
-	api.RestAPIBase
+	apiBase api.RestAPIBase
 }
 
 // Status ...
@@ -32,7 +32,7 @@ func (s *status) Status() (*model.StatusRes, error) {
 
 // StatusWithContext ...
 func (s *status) StatusWithContext(ctx context.Context) (*model.StatusRes, error) {
-	res, err := s.Get(ctx, url.Values{}, "/v1/status")
+	res, err := s.apiBase.Get(ctx, url.Values{}, "/v1/status")
 	if err != nil {
 		return nil, err
 	}

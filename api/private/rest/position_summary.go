@@ -18,12 +18,12 @@ type PositionSummary interface {
 
 func newPositionSummary(apiKey, secretKey string) positionSummary {
 	return positionSummary{
-		RestAPIBase: api.NewPrivateRestAPIBase(apiKey, secretKey),
+		apiBase: api.NewPrivateRestAPIBase(apiKey, secretKey),
 	}
 }
 
 type positionSummary struct {
-	api.RestAPIBase
+	apiBase api.RestAPIBase
 }
 
 // PositionSummary ...
@@ -37,7 +37,7 @@ func (p *positionSummary) PositionSummaryWithContext(ctx context.Context, symbol
 		"symbol": {string(symbol)},
 	}
 
-	res, err := p.Get(ctx, param, "/v1/positionSummary")
+	res, err := p.apiBase.Get(ctx, param, "/v1/positionSummary")
 	if err != nil {
 		return nil, err
 	}

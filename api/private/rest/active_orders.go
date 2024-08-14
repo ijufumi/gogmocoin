@@ -18,12 +18,12 @@ type ActiveOrders interface {
 
 func newActiveOrders(apiKey, secretKey string) activeOrders {
 	return activeOrders{
-		RestAPIBase: api.NewPrivateRestAPIBase(apiKey, secretKey),
+		apiBase: api.NewPrivateRestAPIBase(apiKey, secretKey),
 	}
 }
 
 type activeOrders struct {
-	api.RestAPIBase
+	apiBase api.RestAPIBase
 }
 
 // ActiveOrders ...
@@ -37,7 +37,7 @@ func (c activeOrders) ActiveOrdersWithContext(ctx context.Context, symbol consts
 		"symbol": {string(symbol)},
 		"page":   {fmt.Sprint(pageNo)},
 	}
-	res, err := c.Get(ctx, req, "/v1/activeOrders")
+	res, err := c.apiBase.Get(ctx, req, "/v1/activeOrders")
 	if err != nil {
 		return nil, err
 	}

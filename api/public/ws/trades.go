@@ -13,7 +13,7 @@ type Trades interface {
 }
 
 type trades struct {
-	*api.WSAPIBase
+	apiBase *api.WSAPIBase
 }
 
 func newTrades(symbol consts.Symbol, option *consts.Option) *trades {
@@ -35,18 +35,18 @@ func newTrades(symbol consts.Symbol, option *consts.Option) *trades {
 		)
 	})
 	return &trades{
-		WSAPIBase: apiBase,
+		apiBase: apiBase,
 	}
 }
 
 func (c *trades) Subscribe() error {
-	return c.WSAPIBase.Subscribe()
+	return c.apiBase.Subscribe()
 }
 
 func (c *trades) Unsubscribe() error {
-	return c.WSAPIBase.Unsubscribe()
+	return c.apiBase.Unsubscribe()
 }
 
 func (c *trades) Receive() <-chan *model.TradesRes {
-	return retrieveStream[model.TradesRes]("Trades", c.WSAPIBase.Stream())
+	return retrieveStream[model.TradesRes]("Trades", c.apiBase.Stream())
 }

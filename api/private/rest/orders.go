@@ -18,12 +18,12 @@ type Orders interface {
 
 func newOrders(apiKey, secretKey string) orders {
 	return orders{
-		RestAPIBase: api.NewPrivateRestAPIBase(apiKey, secretKey),
+		apiBase: api.NewPrivateRestAPIBase(apiKey, secretKey),
 	}
 }
 
 type orders struct {
-	api.RestAPIBase
+	apiBase api.RestAPIBase
 }
 
 // Orders ...
@@ -37,7 +37,7 @@ func (o *orders) OrdersWithContext(ctx context.Context, orderID int64) (*model.O
 		"orderId": {strconv.FormatInt(orderID, 10)},
 	}
 
-	res, err := o.Get(ctx, param, "/v1/orders")
+	res, err := o.apiBase.Get(ctx, param, "/v1/orders")
 	if err != nil {
 		return nil, err
 	}
