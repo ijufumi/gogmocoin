@@ -13,7 +13,7 @@ type Ticker interface {
 }
 
 type ticker struct {
-	*api.WSAPIBase
+	apiBase *api.WSAPIBase
 }
 
 func newTicker(symbol consts.Symbol) *ticker {
@@ -33,18 +33,18 @@ func newTicker(symbol consts.Symbol) *ticker {
 		)
 	})
 	return &ticker{
-		WSAPIBase: apiBase,
+		apiBase: apiBase,
 	}
 }
 
 func (c *ticker) Subscribe() error {
-	return c.WSAPIBase.Subscribe()
+	return c.apiBase.Subscribe()
 }
 
 func (c *ticker) Unsubscribe() error {
-	return c.WSAPIBase.Unsubscribe()
+	return c.apiBase.Unsubscribe()
 }
 
 func (c *ticker) Receive() <-chan *model.TickerRes {
-	return retrieveStream[model.TickerRes]("Ticker", c.WSAPIBase.Stream())
+	return retrieveStream[model.TickerRes]("Ticker", c.apiBase.Stream())
 }

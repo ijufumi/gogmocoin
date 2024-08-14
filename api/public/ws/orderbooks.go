@@ -13,7 +13,7 @@ type OrderBooks interface {
 }
 
 type orderBooks struct {
-	*api.WSAPIBase
+	apiBase *api.WSAPIBase
 }
 
 func newOrderBooks(symbol consts.Symbol) *orderBooks {
@@ -34,18 +34,18 @@ func newOrderBooks(symbol consts.Symbol) *orderBooks {
 	})
 
 	return &orderBooks{
-		WSAPIBase: apiBase,
+		apiBase: apiBase,
 	}
 }
 
 func (c *orderBooks) Subscribe() error {
-	return c.WSAPIBase.Subscribe()
+	return c.apiBase.Subscribe()
 }
 
 func (c *orderBooks) Unsubscribe() error {
-	return c.WSAPIBase.Unsubscribe()
+	return c.apiBase.Unsubscribe()
 }
 
 func (c *orderBooks) Receive() <-chan *model.OrderBooksRes {
-	return retrieveStream[model.OrderBooksRes]("OrderBooks", c.WSAPIBase.Stream())
+	return retrieveStream[model.OrderBooksRes]("OrderBooks", c.apiBase.Stream())
 }

@@ -19,12 +19,12 @@ type LastExecutions interface {
 
 func newLastExecutions(apiKey, secretKey string) lastExecutions {
 	return lastExecutions{
-		RestAPIBase: api.NewPrivateRestAPIBase(apiKey, secretKey),
+		apiBase: api.NewPrivateRestAPIBase(apiKey, secretKey),
 	}
 }
 
 type lastExecutions struct {
-	api.RestAPIBase
+	apiBase api.RestAPIBase
 }
 
 // LastExecutions ...
@@ -46,7 +46,7 @@ func (l *lastExecutions) LastExecutionsWithContext(ctx context.Context, symbol c
 		param.Set("count", strconv.Itoa(count))
 	}
 
-	res, err := l.Get(ctx, param, "/v1/latestExecutions")
+	res, err := l.apiBase.Get(ctx, param, "/v1/latestExecutions")
 	if err != nil {
 		return nil, err
 	}

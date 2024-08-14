@@ -17,12 +17,12 @@ type AccountAssets interface {
 
 func newAccountAssets(apiKey, secretKey string) accountAssets {
 	return accountAssets{
-		RestAPIBase: api.NewPrivateRestAPIBase(apiKey, secretKey),
+		apiBase: api.NewPrivateRestAPIBase(apiKey, secretKey),
 	}
 }
 
 type accountAssets struct {
-	api.RestAPIBase
+	apiBase api.RestAPIBase
 }
 
 // AccountAssets ...
@@ -32,7 +32,7 @@ func (a *accountAssets) AccountAssets() (*model.AccountAssetsRes, error) {
 
 // AccountAssetsWithContext ...
 func (a *accountAssets) AccountAssetsWithContext(ctx context.Context) (*model.AccountAssetsRes, error) {
-	res, err := a.Get(ctx, url.Values{}, "/v1/account/assets")
+	res, err := a.apiBase.Get(ctx, url.Values{}, "/v1/account/assets")
 	if err != nil {
 		return nil, err
 	}

@@ -17,12 +17,12 @@ type AccountMargin interface {
 
 func newAccountMargin(apiKey, secretKey string) accountMargin {
 	return accountMargin{
-		RestAPIBase: api.NewPrivateRestAPIBase(apiKey, secretKey),
+		apiBase: api.NewPrivateRestAPIBase(apiKey, secretKey),
 	}
 }
 
 type accountMargin struct {
-	api.RestAPIBase
+	apiBase api.RestAPIBase
 }
 
 // AccountMargin ...
@@ -32,7 +32,7 @@ func (a *accountMargin) AccountMargin() (*model.AccountMarginRes, error) {
 
 // AccountMarginWithContext ...
 func (a *accountMargin) AccountMarginWithContext(ctx context.Context) (*model.AccountMarginRes, error) {
-	res, err := a.Get(ctx, url.Values{}, "/v1/account/margin")
+	res, err := a.apiBase.Get(ctx, url.Values{}, "/v1/account/margin")
 	if err != nil {
 		return nil, err
 	}

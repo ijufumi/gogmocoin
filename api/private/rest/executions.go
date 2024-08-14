@@ -22,12 +22,12 @@ type Executions interface {
 
 func newExecutions(apiKey, secretKey string) executions {
 	return executions{
-		RestAPIBase: api.NewPrivateRestAPIBase(apiKey, secretKey),
+		apiBase: api.NewPrivateRestAPIBase(apiKey, secretKey),
 	}
 }
 
 type executions struct {
-	api.RestAPIBase
+	apiBase api.RestAPIBase
 }
 
 // ExecutionsByOrderID ...
@@ -67,7 +67,7 @@ func (e *executions) ExecutionsWithContext(ctx context.Context, orderID, executi
 		param.Set("executionId", strconv.FormatInt(executionID, 10))
 	}
 
-	res, err := e.Get(ctx, param, "/v1/executions")
+	res, err := e.apiBase.Get(ctx, param, "/v1/executions")
 	if err != nil {
 		return nil, err
 	}

@@ -18,12 +18,12 @@ type OpenPositions interface {
 
 func newOpenPositions(apiKey, secretKey string) openPositions {
 	return openPositions{
-		RestAPIBase: api.NewPrivateRestAPIBase(apiKey, secretKey),
+		apiBase: api.NewPrivateRestAPIBase(apiKey, secretKey),
 	}
 }
 
 type openPositions struct {
-	api.RestAPIBase
+	apiBase api.RestAPIBase
 }
 
 // OpenPositions ...
@@ -37,7 +37,7 @@ func (c *openPositions) OpenPositionsWithContext(ctx context.Context, symbol con
 		"symbol": {string(symbol)},
 		"page":   {fmt.Sprint(pageNo)},
 	}
-	res, err := c.Get(ctx, req, "/v1/openPositions")
+	res, err := c.apiBase.Get(ctx, req, "/v1/openPositions")
 	if err != nil {
 		return nil, err
 	}
