@@ -44,12 +44,12 @@ func NewPrivateRestAPIBase(apiKey, secretKey string) RestAPIBase {
 }
 
 // Post ...
-func (c *RestAPIBase) Post(ctx context.Context, body interface{}, path string) ([]byte, error) {
+func (c *RestAPIBase) Post(ctx context.Context, body any, path string) ([]byte, error) {
 	return c.sendRequest(ctx, httpMethodPOST, body, path)
 }
 
 // Put ...
-func (c *RestAPIBase) Put(ctx context.Context, body interface{}, path string) ([]byte, error) {
+func (c *RestAPIBase) Put(ctx context.Context, body any, path string) ([]byte, error) {
 	return c.sendRequest(ctx, httpMethodPUT, body, path)
 }
 
@@ -64,11 +64,11 @@ func (c *RestAPIBase) Get(ctx context.Context, param url.Values, path string) ([
 }
 
 // Delete ...
-func (c *RestAPIBase) Delete(ctx context.Context, body interface{}, path string) ([]byte, error) {
+func (c *RestAPIBase) Delete(ctx context.Context, body any, path string) ([]byte, error) {
 	return c.sendRequest(ctx, httpMethodDELETE, body, path)
 }
 
-func (c *RestAPIBase) sendRequest(ctx context.Context, method httpMethod, bodyData interface{}, path string) ([]byte, error) {
+func (c *RestAPIBase) sendRequest(ctx context.Context, method httpMethod, bodyData any, path string) ([]byte, error) {
 	var body string
 	if bodyData != nil {
 		b, err := json.Marshal(bodyData)
