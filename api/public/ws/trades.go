@@ -18,7 +18,7 @@ type trades struct {
 
 func newTrades(symbol consts.Symbol, option *consts.Option) *trades {
 	apiBase := api.NewWSAPIBase()
-	apiBase.SetSubscribeFunc(func() interface{} {
+	apiBase.SetSubscribeFunc(func() any {
 		return model.NewTradesReq(
 			consts.WebSocketCommandSubscribe,
 			consts.WebSocketChannelTrades,
@@ -26,7 +26,7 @@ func newTrades(symbol consts.Symbol, option *consts.Option) *trades {
 			option,
 		)
 	})
-	apiBase.SetUnsubscribeFunc(func() interface{} {
+	apiBase.SetUnsubscribeFunc(func() any {
 		return model.NewTradesReq(
 			consts.WebSocketCommandUnsubscribe,
 			consts.WebSocketChannelTrades,

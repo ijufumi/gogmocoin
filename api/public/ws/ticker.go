@@ -18,14 +18,14 @@ type ticker struct {
 
 func newTicker(symbol consts.Symbol) *ticker {
 	apiBase := api.NewWSAPIBase()
-	apiBase.SetSubscribeFunc(func() interface{} {
+	apiBase.SetSubscribeFunc(func() any {
 		return model.NewTickerReq(
 			consts.WebSocketCommandSubscribe,
 			consts.WebSocketChannelTicker,
 			symbol,
 		)
 	})
-	apiBase.SetUnsubscribeFunc(func() interface{} {
+	apiBase.SetUnsubscribeFunc(func() any {
 		return model.NewTickerReq(
 			consts.WebSocketCommandUnsubscribe,
 			consts.WebSocketChannelTicker,

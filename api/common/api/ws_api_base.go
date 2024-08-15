@@ -35,7 +35,7 @@ type WSAPIBase struct {
 }
 
 type msgRequest struct {
-	msg     interface{}
+	msg     any
 	errChan chan error
 }
 
@@ -73,12 +73,12 @@ func (c *WSAPIBase) Start() {
 }
 
 // SetSubscribeFunc ...
-func (c *WSAPIBase) SetSubscribeFunc(f func() interface{}) {
+func (c *WSAPIBase) SetSubscribeFunc(f func() any) {
 	c.subscribeFunc = c.createSendFunc(f)
 }
 
 // SetUnsubscribeFunc ...
-func (c *WSAPIBase) SetUnsubscribeFunc(f func() interface{}) {
+func (c *WSAPIBase) SetUnsubscribeFunc(f func() any) {
 	c.unsubscribeFunc = c.createSendFunc(f)
 }
 
@@ -96,7 +96,7 @@ func (c *WSAPIBase) Unsubscribe() error {
 	return c.unsubscribeFunc()
 }
 
-func (c *WSAPIBase) createSendFunc(f func() interface{}) func() error {
+func (c *WSAPIBase) createSendFunc(f func() any) func() error {
 	return func() error {
 		req := msgRequest{
 			msg:     f(),
@@ -159,7 +159,7 @@ func (c *WSAPIBase) doReceiveGoroutine() {
 }
 
 // Send is...
-func (c *WSAPIBase) Send(msg interface{}) error {
+func (c *WSAPIBase) Send(msg any) error {
 	err := c.waitForConnected()
 	if err != nil {
 		return err
