@@ -18,16 +18,9 @@ type orderBooks struct {
 
 func newOrderBooks(symbol consts.Symbol) *orderBooks {
 	apiBase := api.NewWSAPIBase()
-	apiBase.SetSubscribeFunc(func() any {
+	apiBase.SetRequestFunc(func(command consts.WebSocketCommand) any {
 		return model.NewOrderBooksReq(
-			consts.WebSocketCommandSubscribe,
-			consts.WebSocketChannelOrderBooks,
-			symbol,
-		)
-	})
-	apiBase.SetUnsubscribeFunc(func() any {
-		return model.NewOrderBooksReq(
-			consts.WebSocketCommandUnsubscribe,
+			command,
 			consts.WebSocketChannelOrderBooks,
 			symbol,
 		)
