@@ -18,22 +18,15 @@ type trades struct {
 
 func newTrades(symbol consts.Symbol, option *consts.Option) *trades {
 	apiBase := api.NewWSAPIBase()
-	apiBase.SetSubscribeFunc(func() any {
+	apiBase.SetRequestFunc(func(command consts.WebSocketCommand) any {
 		return model.NewTradesReq(
-			consts.WebSocketCommandSubscribe,
+			command,
 			consts.WebSocketChannelTrades,
 			symbol,
 			option,
 		)
 	})
-	apiBase.SetUnsubscribeFunc(func() any {
-		return model.NewTradesReq(
-			consts.WebSocketCommandUnsubscribe,
-			consts.WebSocketChannelTrades,
-			symbol,
-			option,
-		)
-	})
+
 	return &trades{
 		apiBase: apiBase,
 	}

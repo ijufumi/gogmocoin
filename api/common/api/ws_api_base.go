@@ -72,14 +72,10 @@ func (c *WSAPIBase) Start() {
 	}
 }
 
-// SetSubscribeFunc ...
-func (c *WSAPIBase) SetSubscribeFunc(f func() any) {
-	c.subscribeFunc = c.createSendFunc(f)
-}
-
-// SetUnsubscribeFunc ...
-func (c *WSAPIBase) SetUnsubscribeFunc(f func() any) {
-	c.unsubscribeFunc = c.createSendFunc(f)
+// SetRequestFunc ...
+func (c *WSAPIBase) SetRequestFunc(f func(command consts.WebSocketCommand) any) {
+	c.subscribeFunc = c.createSendFunc(f(consts.WebSocketCommandSubscribe))
+	c.unsubscribeFunc = c.createSendFunc(f(consts.WebSocketCommandUnsubscribe))
 }
 
 // Subscribe ...
@@ -96,10 +92,10 @@ func (c *WSAPIBase) Unsubscribe() error {
 	return c.unsubscribeFunc()
 }
 
-func (c *WSAPIBase) createSendFunc(f func() any) func() error {
+func (c *WSAPIBase) createSendFunc(msg any) func() error {
 	return func() error {
 		req := msgRequest{
-			msg:     f(),
+			msg:     msg,
 			errChan: make(chan error),
 		}
 		c.msgStream <- req
