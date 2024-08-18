@@ -39,23 +39,34 @@ type msgRequest struct {
 	errChan chan error
 }
 
-func NewWSAPIBase() *WSAPIBase {
+type RequestFactoryFunc func(command consts.WebSocketCommand) any
+
+func NewWSAPIBase(requestFactory RequestFactoryFunc) *WSAPIBase {
 	base := &WSAPIBase{
 		state:     &atomic.Value{},
 		stream:    make(chan []byte, 100),
 		msgStream: make(chan msgRequest, 1),
 	}
 	base.changeStateToClosed()
+	base.setRequestFunc(requestFactory)
 	return base
 }
 
-func NewPrivateWSAPIBase(apiKey, secretKey string) WSAPIBase {
-	return WSAPIBase{
+func NewPrivateWSAPIBase(apiKey, secretKey string, requestFactory func(command consts.WebSocketCommand) any) WSAPIBase {
+	base := WSAPIBase{
+		state:     &atomic.Value{},
+		stream:    make(chan []byte, 100),
+		msgStream: make(chan msgRequest, 1),
 		needsAuth: true,
 		apiKey:    apiKey,
 		secretKey: secretKey,
 	}
+	base.changeStateToClosed()
+	base.setRequestFunc(requestFactory)
+
+	return base
 }
+
 func (c *WSAPIBase) initContext() {
 	ctx, cancelFunc := context.WithCancel(context.Background())
 	c.ctx = ctx
@@ -72,8 +83,7 @@ func (c *WSAPIBase) Start() {
 	}
 }
 
-// SetRequestFunc ...
-func (c *WSAPIBase) SetRequestFunc(f func(command consts.WebSocketCommand) any) {
+func (c *WSAPIBase) setRequestFunc(f RequestFactoryFunc) {
 	c.subscribeFunc = c.createSendFunc(f(consts.WebSocketCommandSubscribe))
 	c.unsubscribeFunc = c.createSendFunc(f(consts.WebSocketCommandUnsubscribe))
 }
