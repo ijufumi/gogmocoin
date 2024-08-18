@@ -17,8 +17,7 @@ type orderBooks struct {
 }
 
 func newOrderBooks(symbol consts.Symbol) *orderBooks {
-	apiBase := api.NewWSAPIBase()
-	apiBase.SetRequestFunc(func(command consts.WebSocketCommand) any {
+	apiBase := api.NewWSAPIBase(func(command consts.WebSocketCommand) any {
 		return model.NewOrderBooksReq(
 			command,
 			consts.WebSocketChannelOrderBooks,

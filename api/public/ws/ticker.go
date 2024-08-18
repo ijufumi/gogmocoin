@@ -17,8 +17,7 @@ type ticker struct {
 }
 
 func newTicker(symbol consts.Symbol) *ticker {
-	apiBase := api.NewWSAPIBase()
-	apiBase.SetRequestFunc(func(command consts.WebSocketCommand) any {
+	apiBase := api.NewWSAPIBase(func(command consts.WebSocketCommand) any {
 		return model.NewTickerReq(
 			command,
 			consts.WebSocketChannelTicker,

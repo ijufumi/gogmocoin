@@ -17,8 +17,7 @@ type trades struct {
 }
 
 func newTrades(symbol consts.Symbol, option *consts.Option) *trades {
-	apiBase := api.NewWSAPIBase()
-	apiBase.SetRequestFunc(func(command consts.WebSocketCommand) any {
+	apiBase := api.NewWSAPIBase(func(command consts.WebSocketCommand) any {
 		return model.NewTradesReq(
 			command,
 			consts.WebSocketChannelTrades,
