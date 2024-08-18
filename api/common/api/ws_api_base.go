@@ -42,22 +42,15 @@ type msgRequest struct {
 type RequestFactoryFunc func(command consts.WebSocketCommand) any
 
 func NewWSAPIBase(requestFactory RequestFactoryFunc) *WSAPIBase {
+	return NewPrivateWSAPIBase("", "", requestFactory)
+}
+
+func NewPrivateWSAPIBase(apiKey, secretKey string, requestFactory func(command consts.WebSocketCommand) any) *WSAPIBase {
 	base := &WSAPIBase{
 		state:     &atomic.Value{},
 		stream:    make(chan []byte, 100),
 		msgStream: make(chan msgRequest, 1),
-	}
-	base.changeStateToClosed()
-	base.setRequestFunc(requestFactory)
-	return base
-}
-
-func NewPrivateWSAPIBase(apiKey, secretKey string, requestFactory func(command consts.WebSocketCommand) any) WSAPIBase {
-	base := WSAPIBase{
-		state:     &atomic.Value{},
-		stream:    make(chan []byte, 100),
-		msgStream: make(chan msgRequest, 1),
-		needsAuth: true,
+		needsAuth: len(apiKey) != 0 && len(secretKey) != 0,
 		apiKey:    apiKey,
 		secretKey: secretKey,
 	}
