@@ -54,7 +54,7 @@ func NewPrivateWSAPIBase(apiKey, secretKey string, requestFactory func(command c
 		apiKey:    apiKey,
 		secretKey: secretKey,
 	}
-	base.changeStateToClosed()
+	base.changeStateToStopped()
 	base.setRequestFunc(requestFactory)
 
 	return base
@@ -233,7 +233,7 @@ func (c *WSAPIBase) isStopped() bool {
 		return true
 	}
 
-	return v == stateStopped
+	return v == stateStopped || v == stateConnectionClosed
 }
 
 func (c *WSAPIBase) isConnected() bool {
