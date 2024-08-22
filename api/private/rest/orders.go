@@ -4,7 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/ijufumi/gogmocoin/v2/api/common/api"
+	"github.com/ijufumi/gogmocoin/v2/api/internal/api"
 	"github.com/ijufumi/gogmocoin/v2/api/private/rest/model"
 	"net/url"
 	"strconv"
