@@ -36,3 +36,9 @@ type WebsocketRequestCommon struct {
 type WebsocketResponseCommon struct {
 	Channel consts.WebSocketChannel `json:"channel"`
 }
+
+// PrivateWebsocketResponseCommon ...
+type PrivateWebsocketResponseCommon struct {
+	WebsocketResponseCommon
+	MsgType consts.MsgType `json:"msgType"`
+}
