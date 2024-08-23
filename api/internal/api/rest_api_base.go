@@ -17,10 +17,10 @@ import (
 )
 
 type RestAPIBase struct {
-	getHostFunc GetHostFunc
-	needsAuth   bool
-	apiKey      string
-	secretKey   string
+	getHostFunc    GetHostFunc
+	makeHeaderFunc MakeHeaderFunc
+	apiKey         string
+	secretKey      string
 }
 
 type httpMethod string
@@ -35,15 +35,17 @@ const (
 func NewRestAPIBase() RestAPIBase {
 	return RestAPIBase{
 		getHostFunc: getPublicAPIHost,
+		makeHeaderFunc: func(apiKey, secretKey string, systemDatetime time.Time, r *http.Request, method httpMethod, path, body string) {
+		},
 	}
 }
 
 func NewPrivateRestAPIBase(apiKey, secretKey string) RestAPIBase {
 	return RestAPIBase{
-		getHostFunc: getPrivateAPIHost,
-		needsAuth:   true,
-		apiKey:      apiKey,
-		secretKey:   secretKey,
+		getHostFunc:    getPrivateAPIHost,
+		makeHeaderFunc: makeAuthHeader,
+		apiKey:         apiKey,
+		secretKey:      secretKey,
 	}
 }
 
@@ -85,12 +87,10 @@ func (c *RestAPIBase) sendRequest(ctx context.Context, method httpMethod, bodyDa
 	if err != nil {
 		return nil, err
 	}
-	if c.needsAuth {
-		if method == httpMethodPOST {
-			c.makeHeader(time.Now(), req, method, path, body)
-		} else {
-			c.makeHeader(time.Now(), req, method, path, "")
-		}
+	if method == httpMethodPOST {
+		c.makeHeaderFunc(c.apiKey, c.secretKey, time.Now(), req, method, path, body)
+	} else {
+		c.makeHeaderFunc(c.apiKey, c.secretKey, time.Now(), req, method, path, "")
 	}
 
 	if configuration.IsDebug() {
@@ -117,14 +117,14 @@ func (c *RestAPIBase) sendRequest(ctx context.Context, method httpMethod, bodyDa
 	return resBody, nil
 }
 
-func (c *RestAPIBase) makeHeader(systemDatetime time.Time, r *http.Request, method httpMethod, path, body string) {
+func makeAuthHeader(apiKey, secretKey string, systemDatetime time.Time, r *http.Request, method httpMethod, path, body string) {
 	timeStamp := systemDatetime.Unix()*1000 + int64(systemDatetime.Nanosecond())/int64(time.Millisecond)
 	r.Header.Set("API-TIMESTAMP", fmt.Sprint(timeStamp))
-	r.Header.Set("API-KEY", c.apiKey)
-	r.Header.Set("API-SIGN", c.makeSign(c.secretKey, timeStamp, method, path, body))
+	r.Header.Set("API-KEY", apiKey)
+	r.Header.Set("API-SIGN", makeSign(secretKey, timeStamp, method, path, body))
 }
 
-func (c *RestAPIBase) makeSign(secretKey string, timeStamp int64, method httpMethod, path, body string) string {
+func makeSign(secretKey string, timeStamp int64, method httpMethod, path, body string) string {
 	h := hmac.New(sha256.New, []byte(secretKey))
 	h.Write([]byte(fmt.Sprintf("%v%v%v%v", timeStamp, method, path, body)))
 	return hex.EncodeToString(h.Sum(nil))
