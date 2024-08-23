@@ -17,9 +17,10 @@ import (
 )
 
 type RestAPIBase struct {
-	needsAuth bool
-	apiKey    string
-	secretKey string
+	getHostFunc GetHostFunc
+	needsAuth   bool
+	apiKey      string
+	secretKey   string
 }
 
 type httpMethod string
@@ -32,14 +33,17 @@ const (
 )
 
 func NewRestAPIBase() RestAPIBase {
-	return RestAPIBase{}
+	return RestAPIBase{
+		getHostFunc: getPublicAPIHost,
+	}
 }
 
 func NewPrivateRestAPIBase(apiKey, secretKey string) RestAPIBase {
 	return RestAPIBase{
-		needsAuth: true,
-		apiKey:    apiKey,
-		secretKey: secretKey,
+		getHostFunc: getPrivateAPIHost,
+		needsAuth:   true,
+		apiKey:      apiKey,
+		secretKey:   secretKey,
 	}
 }
 
@@ -77,7 +81,7 @@ func (c *RestAPIBase) sendRequest(ctx context.Context, method httpMethod, bodyDa
 		}
 		body = string(b)
 	}
-	req, err := http.NewRequestWithContext(ctx, string(method), c.getHost()+path, strings.NewReader(body))
+	req, err := http.NewRequestWithContext(ctx, string(method), c.getHostFunc()+path, strings.NewReader(body))
 	if err != nil {
 		return nil, err
 	}
@@ -126,9 +130,10 @@ func (c *RestAPIBase) makeSign(secretKey string, timeStamp int64, method httpMet
 	return hex.EncodeToString(h.Sum(nil))
 }
 
-func (c *RestAPIBase) getHost() string {
-	if c.needsAuth {
-		return consts.PrivateRestAPIHost
-	}
+func getPublicAPIHost() string {
 	return consts.PublicRestAPIHost
+}
+
+func getPrivateAPIHost() string {
+	return consts.PrivateRestAPIHost
 }

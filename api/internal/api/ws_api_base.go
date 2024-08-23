@@ -20,10 +20,13 @@ const (
 	stateConnectionClosed = state("ConnectionClosed")
 )
 
+type RequestFactoryFunc func(command consts.WebSocketCommand) any
+
 type WSAPIBase struct {
 	conn            *websocket.Conn
 	state           *atomic.Value
 	ctx             context.Context
+	getHostFuc      GetHostFunc
 	stopFunc        context.CancelFunc
 	subscribeFunc   func() error
 	unsubscribeFunc func() error
@@ -36,18 +39,21 @@ type msgRequest struct {
 	errChan chan error
 }
 
-type RequestFactoryFunc func(command consts.WebSocketCommand) any
-
 func NewWSAPIBase(requestFactory RequestFactoryFunc) *WSAPIBase {
 	base := &WSAPIBase{
-		state:     &atomic.Value{},
-		stream:    make(chan []byte, 100),
-		msgStream: make(chan msgRequest, 1),
+		state:      &atomic.Value{},
+		stream:     make(chan []byte, 100),
+		msgStream:  make(chan msgRequest, 1),
+		getHostFuc: getPublicWSHost,
 	}
 	base.changeStateToStopped()
 	base.setRequestFunc(requestFactory)
 
 	return base
+}
+
+func (c *WSAPIBase) SetGetHostFunc(f GetHostFunc) {
+	c.getHostFuc = f
 }
 
 func (c *WSAPIBase) initContext() {
@@ -184,7 +190,7 @@ func (c *WSAPIBase) dial() error {
 	}
 
 	c.changeStateToConnecting()
-	conn, res, err := websocket.DefaultDialer.Dial(c.getHost(), nil)
+	conn, res, err := websocket.DefaultDialer.Dial(c.getHostFuc(), nil)
 	if err != nil {
 		c.changeStateToClosed()
 		return fmt.Errorf("dial error:%v, response:%v", err, res)
@@ -257,6 +263,6 @@ func (c *WSAPIBase) changeStateToConnecting() {
 	c.state.Store(stateConnecting)
 }
 
-func (c *WSAPIBase) getHost() string {
+func getPublicWSHost() string {
 	return consts.PublicWSAPIHost
 }
