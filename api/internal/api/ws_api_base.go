@@ -21,9 +21,6 @@ const (
 )
 
 type WSAPIBase struct {
-	needsAuth       bool
-	apiKey          string
-	secretKey       string
 	conn            *websocket.Conn
 	state           *atomic.Value
 	ctx             context.Context
@@ -42,17 +39,10 @@ type msgRequest struct {
 type RequestFactoryFunc func(command consts.WebSocketCommand) any
 
 func NewWSAPIBase(requestFactory RequestFactoryFunc) *WSAPIBase {
-	return NewPrivateWSAPIBase("", "", requestFactory)
-}
-
-func NewPrivateWSAPIBase(apiKey, secretKey string, requestFactory func(command consts.WebSocketCommand) any) *WSAPIBase {
 	base := &WSAPIBase{
 		state:     &atomic.Value{},
 		stream:    make(chan []byte, 100),
 		msgStream: make(chan msgRequest, 1),
-		needsAuth: len(apiKey) != 0 && len(secretKey) != 0,
-		apiKey:    apiKey,
-		secretKey: secretKey,
 	}
 	base.changeStateToStopped()
 	base.setRequestFunc(requestFactory)
@@ -267,22 +257,6 @@ func (c *WSAPIBase) changeStateToConnecting() {
 	c.state.Store(stateConnecting)
 }
 
-//func (c *WSAPIBase) makeHeader(systemDatetime time.Time, r *http.Request, method, path, body string) {
-//	timeStamp := systemDatetime.Unix()*1000 + int64(systemDatetime.Nanosecond())/int64(time.Millisecond)
-//	r.Header.Set("API-TIMESTAMP", fmt.Sprint(timeStamp))
-//	r.Header.Set("API-KEY", c.apiKey)
-//	r.Header.Set("API-SIGN", c.makeSign(c.secretKey, timeStamp, method, path, body))
-//}
-//
-//func (c *WSAPIBase) makeSign(secretKey string, timeStamp int64, method, path, body string) string {
-//	h := hmac.New(sha256.New, []byte(secretKey))
-//	h.Write([]byte(fmt.Sprintf("%v%v%v%v", timeStamp, method, path, body)))
-//	return hex.EncodeToString(h.Sum(nil))
-//}
-
 func (c *WSAPIBase) getHost() string {
-	if c.needsAuth {
-		return consts.PrivateWSAPIHost
-	}
 	return consts.PublicWSAPIHost
 }
