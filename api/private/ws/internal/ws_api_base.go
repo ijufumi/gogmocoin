@@ -14,8 +14,8 @@ func NewPrivateWSAPIBase(apiKey, secretKey string, requestFactory api.RequestFac
 	}
 }
 
-func (w *PrivateWSAPIBase) SetGetHostFunc(f api.GetHostFunc) {
-	w.wsAPIBase.SetGetHostFunc(f)
+func (w *PrivateWSAPIBase) SetHostFactoryFunc(f api.HostFactoryFunc) {
+	w.wsAPIBase.SetHostFactoryFunc(f)
 }
 
 func (w *PrivateWSAPIBase) Subscribe() error {

@@ -17,8 +17,8 @@ import (
 )
 
 type RestAPIBase struct {
-	getHostFunc    GetHostFunc
-	makeHeaderFunc MakeHeaderFunc
+	getHostFunc    HostFactoryFunc
+	makeHeaderFunc HeaderCreationFunc
 	apiKey         string
 	secretKey      string
 }

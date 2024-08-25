@@ -5,6 +5,6 @@ import (
 	"time"
 )
 
-type GetHostFunc func() string
+type HostFactoryFunc func() string
 
-type MakeHeaderFunc func(apiKey, secretKey string, systemDatetime time.Time, r *http.Request, method httpMethod, path, body string)
+type HeaderCreationFunc func(apiKey, secretKey string, systemDatetime time.Time, r *http.Request, method httpMethod, path, body string)

@@ -26,7 +26,7 @@ type WSAPIBase struct {
 	conn            *websocket.Conn
 	state           *atomic.Value
 	ctx             context.Context
-	getHostFuc      GetHostFunc
+	getHostFuc      HostFactoryFunc
 	stopFunc        context.CancelFunc
 	subscribeFunc   func() error
 	unsubscribeFunc func() error
@@ -44,7 +44,7 @@ func NewWSAPIBase(requestFactory RequestFactoryFunc) *WSAPIBase {
 		state:      &atomic.Value{},
 		stream:     make(chan []byte, 100),
 		msgStream:  make(chan msgRequest, 1),
-		getHostFuc: getPublicWSHost,
+		getHostFuc: publicHostFactory,
 	}
 	base.changeStateToStopped()
 	base.setRequestFunc(requestFactory)
@@ -52,7 +52,7 @@ func NewWSAPIBase(requestFactory RequestFactoryFunc) *WSAPIBase {
 	return base
 }
 
-func (c *WSAPIBase) SetGetHostFunc(f GetHostFunc) {
+func (c *WSAPIBase) SetHostFactoryFunc(f HostFactoryFunc) {
 	c.getHostFuc = f
 }
 
@@ -263,6 +263,6 @@ func (c *WSAPIBase) changeStateToConnecting() {
 	c.state.Store(stateConnecting)
 }
 
-func getPublicWSHost() string {
+func publicHostFactory() string {
 	return consts.PublicWSAPIHost
 }
