@@ -7,6 +7,19 @@ import (
 	"time"
 )
 
+func NewExecutionEventsReq(command consts.WebSocketCommand, channel consts.WebSocketChannel) ExecutionEventsReq {
+	return ExecutionEventsReq{
+		WebsocketRequestCommon: model.WebsocketRequestCommon{
+			Command: command,
+			Channel: channel,
+		},
+	}
+}
+
+type ExecutionEventsReq struct {
+	model.WebsocketRequestCommon
+}
+
 type ExecutionEventsRes struct {
 	model.WebsocketResponseCommon
 	OrderID            int64                `json:"orderId"`

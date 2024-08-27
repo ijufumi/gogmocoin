@@ -7,6 +7,19 @@ import (
 	"time"
 )
 
+func NewPositionEventsReq(command consts.WebSocketCommand, channel consts.WebSocketChannel) PositionEventsReq {
+	return PositionEventsReq{
+		WebsocketRequestCommon: model.WebsocketRequestCommon{
+			Command: command,
+			Channel: channel,
+		},
+	}
+}
+
+type PositionEventsReq struct {
+	model.WebsocketRequestCommon
+}
+
 type PositionEventsRes struct {
 	model.PrivateWebsocketResponseCommon
 	PositionID   int64           `json:"positionId"`
