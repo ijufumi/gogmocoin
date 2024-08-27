@@ -21,8 +21,7 @@ type PrivateWSAPIBase struct {
 }
 
 type tokenData struct {
-	Token      string
-	ExpireTime time.Time
+	Token string
 }
 
 func NewPrivateWSAPIBase(apiKey, secretKey string, tokenAutomaticExtension bool, requestFactory api.RequestFactoryFunc) *PrivateWSAPIBase {
@@ -40,15 +39,15 @@ func (w *PrivateWSAPIBase) SetHostFactoryFunc(f api.HostFactoryFunc) {
 }
 
 func (w *PrivateWSAPIBase) Subscribe() error {
-	if w.tokenAutomaticExtension {
-		ctx, cancelFunc := context.WithCancel(context.Background())
-		w.ctx = ctx
-		w.cancelFunc = cancelFunc
+	ctx, cancelFunc := context.WithCancel(context.Background())
+	w.ctx = ctx
+	w.cancelFunc = cancelFunc
 
-		err := w.createWSToken()
-		if err != nil {
-			return err
-		}
+	err := w.createWSToken()
+	if err != nil {
+		return err
+	}
+	if w.tokenAutomaticExtension {
 		w.automaticExtension()
 	}
 	return w.wsAPIBase.Subscribe()
