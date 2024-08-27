@@ -6,6 +6,7 @@ import (
 	"github.com/ijufumi/gogmocoin/v2/api/common/consts"
 	"github.com/ijufumi/gogmocoin/v2/api/internal/api"
 	"github.com/ijufumi/gogmocoin/v2/api/private/rest"
+	"log"
 	"sync/atomic"
 	"time"
 )
@@ -44,6 +45,10 @@ func (w *PrivateWSAPIBase) Subscribe() error {
 		w.ctx = ctx
 		w.cancelFunc = cancelFunc
 
+		err := w.createWSToken()
+		if err != nil {
+			return err
+		}
 		w.automaticExtension()
 	}
 	return w.wsAPIBase.Subscribe()
@@ -52,6 +57,7 @@ func (w *PrivateWSAPIBase) Subscribe() error {
 func (w *PrivateWSAPIBase) Unsubscribe() error {
 	if w.tokenAutomaticExtension {
 		w.cancelFunc()
+		_ = w.revokeWSToken()
 	}
 	return w.wsAPIBase.Unsubscribe()
 }
@@ -62,7 +68,10 @@ func (w *PrivateWSAPIBase) automaticExtension() {
 		for {
 			select {
 			case <-ticker.C:
-
+				err := w.extendWSToken()
+				if err != nil {
+					log.Printf("extend token error: %v", err)
+				}
 			case <-w.ctx.Done():
 				return
 			}
