@@ -39,5 +39,5 @@ func (c *orderBooks) Unsubscribe() error {
 }
 
 func (c *orderBooks) Receive() <-chan *model.OrderBooksRes {
-	return retrieveStream[model.OrderBooksRes]("OrderBooks", c.apiBase.Stream())
+	return api.RetrieveStream[model.OrderBooksRes]("OrderBooks", c.apiBase.Stream())
 }
