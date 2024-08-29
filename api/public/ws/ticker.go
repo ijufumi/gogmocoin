@@ -39,5 +39,5 @@ func (c *ticker) Unsubscribe() error {
 }
 
 func (c *ticker) Receive() <-chan *model.TickerRes {
-	return retrieveStream[model.TickerRes]("Ticker", c.apiBase.Stream())
+	return api.RetrieveStream[model.TickerRes]("Ticker", c.apiBase.Stream())
 }

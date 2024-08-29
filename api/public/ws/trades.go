@@ -40,5 +40,5 @@ func (c *trades) Unsubscribe() error {
 }
 
 func (c *trades) Receive() <-chan *model.TradesRes {
-	return retrieveStream[model.TradesRes]("Trades", c.apiBase.Stream())
+	return api.RetrieveStream[model.TradesRes]("Trades", c.apiBase.Stream())
 }
