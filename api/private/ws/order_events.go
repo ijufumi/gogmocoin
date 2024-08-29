@@ -20,7 +20,7 @@ type orderEvents struct {
 func newOrderEvents(apiKey, secretKey string, tokenAutomaticExtension bool) *orderEvents {
 	return &orderEvents{
 		apiBase: internal.NewPrivateWSAPIBase(apiKey, secretKey, tokenAutomaticExtension, func(command consts.WebSocketCommand) any {
-			return model.NewExecutionEventsReq(
+			return model.NewOrderEventsReq(
 				command,
 				consts.WebSocketChannelOrderEvents,
 			)

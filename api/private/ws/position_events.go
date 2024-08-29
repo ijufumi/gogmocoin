@@ -20,7 +20,7 @@ type positionEvents struct {
 func newPositionEvents(apiKey, secretKey string, tokenAutomaticExtension bool) *positionEvents {
 	return &positionEvents{
 		apiBase: internal.NewPrivateWSAPIBase(apiKey, secretKey, tokenAutomaticExtension, func(command consts.WebSocketCommand) any {
-			return model.NewExecutionEventsReq(
+			return model.NewPositionEventsReq(
 				command,
 				consts.WebSocketChannelPositionEvents,
 			)

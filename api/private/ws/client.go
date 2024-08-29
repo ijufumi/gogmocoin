@@ -33,11 +33,11 @@ func NewPositionEvents(tokenAutomaticExtension bool) PositionEvents {
 }
 
 // NewPositionSummaryEventsWithKeys ...
-func NewPositionSummaryEventsWithKeys(apiKey, secretKey string, tokenAutomaticExtension bool) PositionSummaryEvents {
-	return newPositionSummaryEvents(apiKey, secretKey, tokenAutomaticExtension)
+func NewPositionSummaryEventsWithKeys(apiKey, secretKey string, tokenAutomaticExtension, isPeriodic bool) PositionSummaryEvents {
+	return newPositionSummaryEvents(apiKey, secretKey, tokenAutomaticExtension, isPeriodic)
 }
 
 // NewPositionSummaryEvents ...
-func NewPositionSummaryEvents(tokenAutomaticExtension bool) PositionSummaryEvents {
-	return newPositionSummaryEvents(configuration.APIKey(), configuration.APISecret(), tokenAutomaticExtension)
+func NewPositionSummaryEvents(tokenAutomaticExtension, isPeriodic bool) PositionSummaryEvents {
+	return newPositionSummaryEvents(configuration.APIKey(), configuration.APISecret(), tokenAutomaticExtension, isPeriodic)
 }
