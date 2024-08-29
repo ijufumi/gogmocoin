@@ -33,6 +33,12 @@ https://api.coin.z.com/docs
 * `/private/v1/changeLosscutPrice`
 * `/private/v1/ws-auth`
 
+### Private Websocket API
+* `executionEvents`
+* `orderEvents`
+* `positionEvents`
+* `positionSummaryEvents`
+
 ## How to use
 ### Public API
 ```golang

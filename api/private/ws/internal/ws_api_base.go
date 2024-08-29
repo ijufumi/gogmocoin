@@ -61,6 +61,10 @@ func (w *PrivateWSAPIBase) Unsubscribe() error {
 	return w.wsAPIBase.Unsubscribe()
 }
 
+func (w *PrivateWSAPIBase) Stream() <-chan []byte {
+	return w.wsAPIBase.Stream()
+}
+
 func (w *PrivateWSAPIBase) automaticExtension() {
 	ticker := time.NewTicker(50 * time.Minute)
 	go func() {
