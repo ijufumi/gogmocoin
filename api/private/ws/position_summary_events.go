@@ -17,12 +17,13 @@ type positionSummaryEvents struct {
 	apiBase *internal.PrivateWSAPIBase
 }
 
-func newPositionSummaryEvents(apiKey, secretKey string, tokenAutomaticExtension bool) *positionSummaryEvents {
+func newPositionSummaryEvents(apiKey, secretKey string, tokenAutomaticExtension, isPeriodic bool) *positionSummaryEvents {
 	return &positionSummaryEvents{
 		apiBase: internal.NewPrivateWSAPIBase(apiKey, secretKey, tokenAutomaticExtension, func(command consts.WebSocketCommand) any {
-			return model.NewExecutionEventsReq(
+			return model.NewPositionSummaryEventsReq(
 				command,
 				consts.WebSocketChannelPositionSummaryEvents,
+				isPeriodic,
 			)
 		}),
 	}
