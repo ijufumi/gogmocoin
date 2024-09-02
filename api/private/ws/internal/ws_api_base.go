@@ -28,6 +28,7 @@ func NewPrivateWSAPIBase(apiKey, secretKey string, tokenAutomaticExtension bool,
 	wsAPIBase := &PrivateWSAPIBase{
 		restAPIClient:           rest.NewWithKeys(apiKey, secretKey),
 		wsAPIBase:               api.NewWSAPIBase(requestFactory),
+		token:                   &atomic.Value{},
 		tokenAutomaticExtension: tokenAutomaticExtension,
 	}
 	wsAPIBase.SetHostFactoryFunc(wsAPIBase.hostFactory)
