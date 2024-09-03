@@ -112,7 +112,7 @@ func (w *PrivateWSAPIBase) getToken() string {
 	if rawValue == nil {
 		return ""
 	}
-	tokenValue, ok := rawValue.(tokenData)
+	tokenValue, ok := rawValue.(*tokenData)
 	if !ok {
 		return ""
 	}
