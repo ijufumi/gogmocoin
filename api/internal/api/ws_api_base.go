@@ -240,7 +240,7 @@ func (c *WSAPIBase) isConnected() bool {
 		return false
 	}
 
-	return v == stateConnected || v == stateConnecting
+	return v == stateConnected
 }
 
 func (c *WSAPIBase) changeStateToStarted() {
