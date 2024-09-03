@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/gorilla/websocket"
+	"github.com/ijufumi/gogmocoin/v2/api/common/configuration"
 	"github.com/ijufumi/gogmocoin/v2/api/common/consts"
 	"log"
 	"sync/atomic"
@@ -193,7 +194,10 @@ func (c *WSAPIBase) dial() error {
 	conn, res, err := websocket.DefaultDialer.Dial(c.getHostFuc(), nil)
 	if err != nil {
 		c.changeStateToClosed()
-		return fmt.Errorf("dial error:%v, response:%v", err, res)
+		if configuration.IsDebug() {
+			return fmt.Errorf("dial error: %v, response: %v, host: %v", err, res, c.getHostFuc())
+		}
+		return fmt.Errorf("dial error: %v, response: %v", err, res)
 	}
 
 	conn.SetReadLimit(10240)
@@ -240,7 +244,7 @@ func (c *WSAPIBase) isConnected() bool {
 		return false
 	}
 
-	return v == stateConnected || v == stateConnecting
+	return v == stateConnected
 }
 
 func (c *WSAPIBase) changeStateToStarted() {
