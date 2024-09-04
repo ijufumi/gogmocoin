@@ -241,17 +241,6 @@ func (c *WSAPIBase) isConnected() bool {
 	return v == stateConnected
 }
 
-func (c *WSAPIBase) isConnecting() bool {
-	v, ok := c.state.Load().(state)
-
-	if !ok {
-		c.changeStateToStopped()
-		return false
-	}
-
-	return v == stateConnecting
-}
-
 func (c *WSAPIBase) changeStateToStarted() {
 	c.state.Store(stateStarted)
 }
