@@ -6,6 +6,7 @@ import (
 	"github.com/gorilla/websocket"
 	"github.com/ijufumi/gogmocoin/v2/api/common/configuration"
 	"github.com/ijufumi/gogmocoin/v2/api/common/consts"
+	"github.com/ijufumi/gogmocoin/v2/api/common/functions"
 	"log"
 	"sync/atomic"
 	"time"
@@ -159,7 +160,7 @@ func (c *WSAPIBase) Send(msg any) error {
 	if err != nil {
 		return fmt.Errorf("write error:%v", err)
 	}
-	log.Printf("[Send]msg: %v", EncodeJSON(msg))
+	log.Printf("[Send]msg: %v", functions.EncodeJSON(msg))
 	return nil
 }
 
