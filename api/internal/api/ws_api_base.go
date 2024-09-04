@@ -124,19 +124,13 @@ func (c *WSAPIBase) doReceiveGoroutine() {
 	}()
 
 	for {
-		if !c.isConnected() {
+		if c.isStopped() {
 			if err := c.dial(); err != nil {
 				log.Println(err)
 				continue
 			}
-			e := c.subscribeFunc()
-			if e != nil {
-				log.Printf("[Subscribe]error:%v\n", e)
-				_ = c.conn.Close()
-				c.changeStateToClosed()
-				continue // TODO:review
-			}
 		}
+
 		_, msg, err := c.conn.ReadMessage()
 		if err != nil {
 			log.Printf("[ReadMessage]error:%v\n", err)
@@ -165,7 +159,7 @@ func (c *WSAPIBase) Send(msg any) error {
 	if err != nil {
 		return fmt.Errorf("write error:%v", err)
 	}
-	log.Printf("[Send]msg:%+v", msg)
+	log.Printf("[Send]msg: %v", EncodeJSON(msg))
 	return nil
 }
 
@@ -245,6 +239,17 @@ func (c *WSAPIBase) isConnected() bool {
 	}
 
 	return v == stateConnected
+}
+
+func (c *WSAPIBase) isConnecting() bool {
+	v, ok := c.state.Load().(state)
+
+	if !ok {
+		c.changeStateToStopped()
+		return false
+	}
+
+	return v == stateConnecting
 }
 
 func (c *WSAPIBase) changeStateToStarted() {

@@ -26,3 +26,11 @@ func RetrieveStream[T any](name string, rawStream <-chan []byte) <-chan *T {
 	}()
 	return stream
 }
+
+func EncodeJSON(v any) string {
+	b, e := json.MarshalIndent(v, "", "")
+	if e != nil {
+		return ""
+	}
+	return string(b)
+}
