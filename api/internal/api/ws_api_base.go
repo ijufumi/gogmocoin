@@ -124,7 +124,7 @@ func (c *WSAPIBase) doReceiveGoroutine() {
 	}()
 
 	for {
-		if c.isStopped() {
+		if !c.isConnected() {
 			if err := c.dial(); err != nil {
 				log.Println(err)
 				continue
