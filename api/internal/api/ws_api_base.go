@@ -64,8 +64,8 @@ func (c *WSAPIBase) initContext() {
 	c.stopFunc = cancelFunc
 }
 
-// Start ...
-func (c *WSAPIBase) Start() {
+// start ...
+func (c *WSAPIBase) start() {
 	if c.isStopped() {
 		c.initContext()
 		go c.doSendGoroutine()
@@ -81,14 +81,14 @@ func (c *WSAPIBase) setRequestFunc(f RequestFactoryFunc) {
 
 // Subscribe ...
 func (c *WSAPIBase) Subscribe() error {
-	c.Start()
+	c.start()
 	return c.subscribeFunc()
 }
 
 // Unsubscribe ...
 func (c *WSAPIBase) Unsubscribe() error {
 	defer func() {
-		c.Close()
+		c.close()
 	}()
 	return c.unsubscribeFunc()
 }
@@ -108,7 +108,7 @@ func (c *WSAPIBase) doSendGoroutine() {
 	for {
 		select {
 		case m := <-c.msgStream:
-			e := c.Send(m.msg)
+			e := c.sendMessage(m.msg)
 			m.errChan <- e
 		case <-c.ctx.Done():
 			return
@@ -149,8 +149,8 @@ func (c *WSAPIBase) doReceiveGoroutine() {
 	}
 }
 
-// Send is...
-func (c *WSAPIBase) Send(msg any) error {
+// sendMessage is...
+func (c *WSAPIBase) sendMessage(msg any) error {
 	err := c.waitForConnected()
 	if err != nil {
 		return err
@@ -160,7 +160,7 @@ func (c *WSAPIBase) Send(msg any) error {
 	if err != nil {
 		return fmt.Errorf("write error:%v", err)
 	}
-	log.Printf("[Send]msg: %v", functions.EncodeJSON(msg))
+	log.Printf("[sendMessage]msg: %v", functions.EncodeJSON(msg))
 	return nil
 }
 
@@ -212,8 +212,8 @@ func (c *WSAPIBase) Stream() <-chan []byte {
 	return c.stream
 }
 
-// Close is ...
-func (c *WSAPIBase) Close() {
+// close is ...
+func (c *WSAPIBase) close() {
 	if c.stopFunc != nil {
 		c.stopFunc()
 	}
