@@ -3,7 +3,6 @@ package model
 import (
 	"fmt"
 	"github.com/ijufumi/gogmocoin/v2/api/common/consts"
-	"github.com/ijufumi/gogmocoin/v2/api/internal/api"
 	"time"
 )
 
@@ -37,10 +36,6 @@ type WebsocketRequestCommon struct {
 type WebsocketResponseCommon struct {
 	Channel consts.WebSocketChannel `json:"channel"`
 	Error   string                  `json:"error"`
-}
-
-func (c *WebsocketResponseCommon) String() string {
-	return api.EncodeJSON(c)
 }
 
 // PrivateWebsocketResponseCommon ...
