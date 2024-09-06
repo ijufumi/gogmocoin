@@ -1,6 +1,7 @@
 package ws
 
 import (
+	"context"
 	"github.com/ijufumi/gogmocoin/v2/api/common/consts"
 	"github.com/ijufumi/gogmocoin/v2/api/internal/api"
 	"github.com/ijufumi/gogmocoin/v2/api/private/ws/internal"
@@ -9,6 +10,7 @@ import (
 
 type OrderEvents interface {
 	Subscribe() error
+	SubscribeWithContext(ctx context.Context) error
 	Unsubscribe() error
 	Receive() <-chan *model.OrderEventsRes
 }
@@ -28,8 +30,12 @@ func newOrderEvents(apiKey, secretKey string, tokenAutomaticExtension bool) *ord
 	}
 }
 
-func (e *orderEvents) Subscribe() error {
-	return e.apiBase.Subscribe()
+func (c *orderEvents) Subscribe() error {
+	return c.SubscribeWithContext(context.Background())
+}
+
+func (c *orderEvents) SubscribeWithContext(ctx context.Context) error {
+	return c.apiBase.Subscribe(ctx)
 }
 
 func (e *orderEvents) Unsubscribe() error {

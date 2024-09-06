@@ -1,6 +1,7 @@
 package ws
 
 import (
+	"context"
 	"github.com/ijufumi/gogmocoin/v2/api/common/consts"
 	"github.com/ijufumi/gogmocoin/v2/api/internal/api"
 	"github.com/ijufumi/gogmocoin/v2/api/public/ws/model"
@@ -8,6 +9,7 @@ import (
 
 type Ticker interface {
 	Subscribe() error
+	SubscribeWithContext(ctx context.Context) error
 	Unsubscribe() error
 	Receive() <-chan *model.TickerRes
 }
@@ -31,7 +33,11 @@ func newTicker(symbol consts.Symbol) *ticker {
 }
 
 func (c *ticker) Subscribe() error {
-	return c.apiBase.Subscribe()
+	return c.SubscribeWithContext(context.Background())
+}
+
+func (c *ticker) SubscribeWithContext(ctx context.Context) error {
+	return c.apiBase.Subscribe(ctx)
 }
 
 func (c *ticker) Unsubscribe() error {

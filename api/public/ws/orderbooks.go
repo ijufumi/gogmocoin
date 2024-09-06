@@ -1,6 +1,7 @@
 package ws
 
 import (
+	"context"
 	"github.com/ijufumi/gogmocoin/v2/api/common/consts"
 	"github.com/ijufumi/gogmocoin/v2/api/internal/api"
 	"github.com/ijufumi/gogmocoin/v2/api/public/ws/model"
@@ -8,6 +9,7 @@ import (
 
 type OrderBooks interface {
 	Subscribe() error
+	SubscribeWithContext(ctx context.Context) error
 	Unsubscribe() error
 	Receive() <-chan *model.OrderBooksRes
 }
@@ -31,7 +33,11 @@ func newOrderBooks(symbol consts.Symbol) *orderBooks {
 }
 
 func (c *orderBooks) Subscribe() error {
-	return c.apiBase.Subscribe()
+	return c.SubscribeWithContext(context.Background())
+}
+
+func (c *orderBooks) SubscribeWithContext(ctx context.Context) error {
+	return c.apiBase.Subscribe(ctx)
 }
 
 func (c *orderBooks) Unsubscribe() error {
