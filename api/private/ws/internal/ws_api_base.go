@@ -39,9 +39,9 @@ func (w *PrivateWSAPIBase) SetHostFactoryFunc(f api.HostFactoryFunc) {
 	w.wsAPIBase.SetHostFactoryFunc(f)
 }
 
-func (w *PrivateWSAPIBase) Subscribe() error {
-	ctx, cancelFunc := context.WithCancel(context.Background())
-	w.ctx = ctx
+func (w *PrivateWSAPIBase) Subscribe(ctx context.Context) error {
+	newCtx, cancelFunc := context.WithCancel(ctx)
+	w.ctx = newCtx
 	w.cancelFunc = cancelFunc
 
 	err := w.createWSToken()
@@ -51,7 +51,7 @@ func (w *PrivateWSAPIBase) Subscribe() error {
 	if w.tokenAutomaticExtension {
 		w.automaticExtension()
 	}
-	return w.wsAPIBase.Subscribe()
+	return w.wsAPIBase.Subscribe(newCtx)
 }
 
 func (w *PrivateWSAPIBase) Unsubscribe() error {

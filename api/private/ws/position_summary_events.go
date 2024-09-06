@@ -1,6 +1,7 @@
 package ws
 
 import (
+	"context"
 	"github.com/ijufumi/gogmocoin/v2/api/common/consts"
 	"github.com/ijufumi/gogmocoin/v2/api/internal/api"
 	"github.com/ijufumi/gogmocoin/v2/api/private/ws/internal"
@@ -9,6 +10,7 @@ import (
 
 type PositionSummaryEvents interface {
 	Subscribe() error
+	SubscribeWithContext(ctx context.Context) error
 	Unsubscribe() error
 	Receive() <-chan *model.PositionSummaryEventsRes
 }
@@ -29,8 +31,12 @@ func newPositionSummaryEvents(apiKey, secretKey string, tokenAutomaticExtension,
 	}
 }
 
-func (e *positionSummaryEvents) Subscribe() error {
-	return e.apiBase.Subscribe()
+func (c *positionSummaryEvents) Subscribe() error {
+	return c.SubscribeWithContext(context.Background())
+}
+
+func (c *positionSummaryEvents) SubscribeWithContext(ctx context.Context) error {
+	return c.apiBase.Subscribe(ctx)
 }
 
 func (e *positionSummaryEvents) Unsubscribe() error {

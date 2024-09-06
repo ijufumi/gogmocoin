@@ -58,16 +58,16 @@ func (c *WSAPIBase) SetHostFactoryFunc(f HostFactoryFunc) {
 	c.getHostFuc = f
 }
 
-func (c *WSAPIBase) initContext() {
-	ctx, cancelFunc := context.WithCancel(context.Background())
-	c.ctx = ctx
+func (c *WSAPIBase) initContext(ctx context.Context) {
+	newCtx, cancelFunc := context.WithCancel(ctx)
+	c.ctx = newCtx
 	c.stopFunc = cancelFunc
 }
 
 // start ...
-func (c *WSAPIBase) start() {
+func (c *WSAPIBase) start(ctx context.Context) {
 	if c.isStopped() {
-		c.initContext()
+		c.initContext(ctx)
 		go c.doSendGoroutine()
 		go c.doReceiveGoroutine()
 		c.changeStateToStarted()
@@ -80,8 +80,8 @@ func (c *WSAPIBase) setRequestFunc(f RequestFactoryFunc) {
 }
 
 // Subscribe ...
-func (c *WSAPIBase) Subscribe() error {
-	c.start()
+func (c *WSAPIBase) Subscribe(ctx context.Context) error {
+	c.start(ctx)
 	return c.subscribeFunc()
 }
 
