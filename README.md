@@ -94,6 +94,7 @@ API_SECRET=YOUR_API_SECRET
 
 #### 2. Execute API
 
+##### REST API
 ```golang
 client := rest.New()
 ordersRes, err := client.Orders(12345676879)
@@ -103,7 +104,34 @@ if err != nil {
 log.Printf("ordersRes:%+v", ordersRes)
 ```
 
-[Examples](https://github.com/ijufumi/gogmocoin-examples/tree/master/app/private)
+[Examples](https://github.com/ijufumi/gogmocoin-examples/tree/master/app/private/rest)
+
+##### Websocket API
+```golang
+client := ws.NewExecutionEvents(true)
+if err := client.Subscribe(); err != nil {
+    log.Fatal(err)
+}
+timeoutCnt := 0
+for {
+    select {
+    case v := <-client.Receive():
+        log.Printf("msg:%+v\n", v)
+    case <-time.After(180 * time.Second):
+        log.Println("timeout...")
+        timeoutCnt++
+    }
+    if timeoutCnt > 20 {
+        break
+    }
+}
+if err := client.Unsubscribe(); err != nil {
+    log.Fatal(err)
+}
+```
+
+[Examples](https://github.com/ijufumi/gogmocoin-examples/tree/master/app/private/ws)
+
 
 ## Welcome your contribution.
 If you modified code by anything reasons (typo, bad coding, implements of features, etc...), please make `Issue` and `Pull Request`.
