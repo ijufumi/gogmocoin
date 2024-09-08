@@ -53,7 +53,7 @@ if err != nil {
 log.Printf("[result]%+v", orderbooks)
 ```
 
-[Examples](https://github.com/ijufumi/gogmocoin-examples/tree/master/app/public/rest)
+[Examples](https://github.com/ijufumi/gogmocoin-examples/tree/main/app/public/rest)
 
 ### Public Websocket API
 ```golang
@@ -81,7 +81,7 @@ if e != nil {
 }
 ```
 
-[Examples](https://github.com/ijufumi/gogmocoin-examples/tree/master/app/public/ws)
+[Examples](https://github.com/ijufumi/gogmocoin-examples/tree/main/app/public/ws)
 
 ### Private API
 #### 1. Create .env file
@@ -104,7 +104,7 @@ if err != nil {
 log.Printf("ordersRes:%+v", ordersRes)
 ```
 
-[Examples](https://github.com/ijufumi/gogmocoin-examples/tree/master/app/private/rest)
+[Examples](https://github.com/ijufumi/gogmocoin-examples/tree/main/app/private/rest)
 
 ##### Websocket API
 ```golang
@@ -130,7 +130,7 @@ if err := client.Unsubscribe(); err != nil {
 }
 ```
 
-[Examples](https://github.com/ijufumi/gogmocoin-examples/tree/master/app/private/ws)
+[Examples](https://github.com/ijufumi/gogmocoin-examples/tree/main/app/private/ws)
 
 
 ## Welcome your contribution.
