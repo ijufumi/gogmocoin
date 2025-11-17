@@ -15,7 +15,7 @@ type client struct {
 	status
 	orderBooks
 	trades
-	kKines
+	kLines
 	symbols
 }
 
@@ -26,7 +26,7 @@ func New() Client {
 		status:     newStatus(),
 		orderBooks: newOrderBooks(),
 		trades:     newTrades(),
-		kKines:     newKLines(),
+		kLines:     newKLines(),
 		symbols:    newSymbols(),
 	}
 }

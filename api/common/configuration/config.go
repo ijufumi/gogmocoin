@@ -12,7 +12,11 @@ type config struct {
 }
 
 func load() *config {
-	c, _ := env.ParseAs[config]()
+	c, err := env.ParseAs[config]()
+	if err != nil {
+		// Return default config if parsing fails
+		return &config{}
+	}
 	return &c
 }
 

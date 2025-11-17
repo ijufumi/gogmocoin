@@ -16,6 +16,10 @@ import (
 	"time"
 )
 
+var httpClient = &http.Client{
+	Timeout: 30 * time.Second,
+}
+
 type RestAPIBase struct {
 	getHostFunc    HostFactoryFunc
 	makeHeaderFunc HeaderCreationFunc
@@ -97,7 +101,7 @@ func (c *RestAPIBase) sendRequest(ctx context.Context, method httpMethod, bodyDa
 		fmt.Printf("[Request]Header:%v\n", req.Header)
 		fmt.Printf("[Request]Body:%v\n", body)
 	}
-	res, err := http.DefaultClient.Do(req)
+	res, err := httpClient.Do(req)
 	if err != nil {
 		return nil, err
 	}
@@ -111,7 +115,12 @@ func (c *RestAPIBase) sendRequest(ctx context.Context, method httpMethod, bodyDa
 	}
 
 	if configuration.IsDebug() {
+		fmt.Printf("[Response]StatusCode:%d\n", res.StatusCode)
 		fmt.Printf("[Response]Body:%v\n", string(resBody))
+	}
+
+	if res.StatusCode < 200 || res.StatusCode >= 300 {
+		return nil, fmt.Errorf("unexpected status code: %d, body: %s", res.StatusCode, string(resBody))
 	}
 
 	return resBody, nil
