@@ -15,23 +15,23 @@ type KLines interface {
 	KLinesWithContext(ctx context.Context, symbol consts.Symbol, intervalType consts.IntervalType, date string) (*model.KLinesRes, error)
 }
 
-func newKLines() kKines {
-	return kKines{
+func newKLines() kLines {
+	return kLines{
 		apiBase: api.NewRestAPIBase(),
 	}
 }
 
-type kKines struct {
+type kLines struct {
 	apiBase api.RestAPIBase
 }
 
 // KLines ...
-func (k *kKines) KLines(symbol consts.Symbol, intervalType consts.IntervalType, date string) (*model.KLinesRes, error) {
+func (k *kLines) KLines(symbol consts.Symbol, intervalType consts.IntervalType, date string) (*model.KLinesRes, error) {
 	return k.KLinesWithContext(context.Background(), symbol, intervalType, date)
 }
 
 // KLinesWithContext ...
-func (k *kKines) KLinesWithContext(ctx context.Context, symbol consts.Symbol, intervalType consts.IntervalType, date string) (*model.KLinesRes, error) {
+func (k *kLines) KLinesWithContext(ctx context.Context, symbol consts.Symbol, intervalType consts.IntervalType, date string) (*model.KLinesRes, error) {
 	param := url.Values{
 		"symbol":   {string(symbol)},
 		"interval": {string(intervalType)},

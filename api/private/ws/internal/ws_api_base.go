@@ -69,6 +69,7 @@ func (w *PrivateWSAPIBase) Stream() <-chan []byte {
 func (w *PrivateWSAPIBase) automaticExtension() {
 	ticker := time.NewTicker(50 * time.Minute)
 	go func() {
+		defer ticker.Stop()
 		for {
 			select {
 			case <-ticker.C:

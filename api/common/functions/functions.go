@@ -1,11 +1,14 @@
 package functions
 
-import "encoding/json"
+import (
+	"encoding/json"
+	"fmt"
+)
 
 func EncodeJSON(v any) string {
-	b, e := json.MarshalIndent(v, "", "")
-	if e != nil {
-		return ""
+	b, err := json.MarshalIndent(v, "", "  ")
+	if err != nil {
+		return fmt.Sprintf("<error marshaling JSON: %v>", err)
 	}
 	return string(b)
 }
