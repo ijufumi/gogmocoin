@@ -19,32 +19,18 @@ const (
 	SymbolLTC = Symbol("LTC")
 	// SymbolXRP ...
 	SymbolXRP = Symbol("XRP")
-	// SymbolXEM ...
-	SymbolXEM = Symbol("XEM")
 	// SymbolXLM ...
 	SymbolXLM = Symbol("XLM")
-	// SymbolBAT ...
-	SymbolBAT = Symbol("BAT")
 	// SymbolOMG ...
 	SymbolOMG = Symbol("OMG")
 	// SymbolXTZ ...
 	SymbolXTZ = Symbol("XTZ")
-	// SymbolQTUM ...
-	SymbolQTUM = Symbol("QTUM")
-	// SymbolENJ ...
-	SymbolENJ = Symbol("ENJ")
 	// SymbolDOT ...
 	SymbolDOT = Symbol("DOT")
 	// SymbolATOM ...
 	SymbolATOM = Symbol("ATOM")
-	// SymbolMKR ...
-	SymbolMKR = Symbol("MKR")
 	// SymbolDAI ...
 	SymbolDAI = Symbol("DAI")
-	// SymbolXYM ...
-	SymbolXYM = Symbol("XYM")
-	// SymbolMONA ...
-	SymbolMONA = Symbol("MONA")
 	// SymbolFCR ...
 	SymbolFCR = Symbol("FCR")
 	// SymbolADA ...
@@ -57,6 +43,10 @@ const (
 	SymbolSOL = Symbol("SOL")
 	// SymbolASTR ...
 	SymbolASTR = Symbol("ASTR")
+	// SymbolAVAX ...
+	SymbolAVAX = Symbol("AVAX")
+	// SymbolNAC ...
+	SymbolNAC = Symbol("NAC")
 	// SymbolBTCJPY ...
 	SymbolBTCJPY = Symbol("BTC_JPY")
 	// SymbolETHJPY ...
@@ -99,25 +89,20 @@ var allSymbols = []Symbol{
 	SymbolBCH,
 	SymbolLTC,
 	SymbolXRP,
-	SymbolXEM,
 	SymbolXLM,
-	SymbolBAT,
 	SymbolOMG,
 	SymbolXTZ,
-	SymbolQTUM,
-	SymbolENJ,
 	SymbolDOT,
 	SymbolATOM,
-	SymbolMKR,
 	SymbolDAI,
-	SymbolXYM,
-	SymbolMONA,
 	SymbolFCR,
 	SymbolADA,
 	SymbolLINK,
 	SymbolDOGE,
 	SymbolSOL,
 	SymbolASTR,
+	SymbolAVAX,
+	SymbolNAC,
 	SymbolBTCJPY,
 	SymbolETHJPY,
 	SymbolBCHJPY,
