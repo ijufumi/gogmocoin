@@ -1,13 +1,9 @@
-# Wrapper code of GMO Coin's API
-
-## API document
-
+# GMOコインAPIのラッパーコード
+## APIドキュメント
 https://api.coin.z.com/docs
 
-## Implemented API list
-
+## 実装済みAPI一覧
 ### Public API
-
 * `/public/v1/status`
 * `/public/v1/ticker`
 * `/public/v1/orderbooks`
@@ -16,13 +12,11 @@ https://api.coin.z.com/docs
 * `/public/v1/symbols`
 
 ### Public Websocket API
-
 * `ticker`
 * `orderbooks`
 * `trades`
 
 ### Private API
-
 * `/private/v1/account/margin`
 * `/private/v1/account/assets`
 * `/private/v1/orders`
@@ -40,16 +34,13 @@ https://api.coin.z.com/docs
 * `/private/v1/ws-auth`
 
 ### Private Websocket API
-
 * `executionEvents`
 * `orderEvents`
 * `positionEvents`
 * `positionSummaryEvents`
 
-## How to use
-
+## 使い方
 ### Public API
-
 ```golang
 client := rest.New()
 
@@ -62,10 +53,9 @@ if err != nil {
 log.Printf("[result]%+v", orderbooks)
 ```
 
-[Examples](https://github.com/ijufumi/gogmocoin-examples/tree/main/app/public/rest)
+[サンプルコード](httpss://github.com/ijufumi/gogmocoin-examples/tree/main/app/public/rest)
 
 ### Public Websocket API
-
 ```golang
 client := ws.NewTicker(consts.SymbolBTCJPY)
 timeoutCnt := 0
@@ -91,23 +81,20 @@ if e != nil {
 }
 ```
 
-[Examples](https://github.com/ijufumi/gogmocoin-examples/tree/main/app/public/ws)
+[サンプルコード](httpss://github.com/ijufumi/gogmocoin-examples/tree/main/app/public/ws)
 
 ### Private API
-
-#### 1. Create .env file
-
-Copy `.env.example` to `.env` ant then input your `API_KEY` and `API_SECRET` to `.env` file.
+#### 1. .envファイルを作成する
+`.env.example`を`.env`にコピーし、あなたの`API_KEY`と`API_SECRET`を`.env`ファイルに記述してください。
 
 ```.env
 API_KEY=YOUR_API_KEY
 API_SECRET=YOUR_API_SECRET
 ```
 
-#### 2. Execute API
+#### 2. APIを実行する
 
 ##### REST API
-
 ```golang
 client := rest.New()
 ordersRes, err := client.Orders(12345676879)
@@ -117,10 +104,9 @@ if err != nil {
 log.Printf("ordersRes:%+v", ordersRes)
 ```
 
-[Examples](https://github.com/ijufumi/gogmocoin-examples/tree/main/app/private/rest)
+[サンプルコード](httpss://github.com/ijufumi/gogmocoin-examples/tree/main/app/private/rest)
 
 ##### Websocket API
-
 ```golang
 client := ws.NewExecutionEvents(true)
 if err := client.Subscribe(); err != nil {
@@ -144,11 +130,8 @@ if err := client.Unsubscribe(); err != nil {
 }
 ```
 
-[Examples](https://github.com/ijufumi/gogmocoin-examples/tree/main/app/private/ws)
+[サンプルコード](httpss://github.com/ijufumi/gogmocoin-examples/tree/main/app/private/ws)
 
 
-## Welcome your contribution.
-
-If you modified code by anything reasons (typo, bad coding, implements of features, etc...), please make `Issue` and `Pull Request`.
-
-[Japanese version](README.ja.md)
+## コントリビュートをお待ちしています
+もしあなたが何かしらの理由（タイポ、イケてないコード、機能追加など）でコードを修正した場合は、`Issue`と`Pull Request`を作成してください。
