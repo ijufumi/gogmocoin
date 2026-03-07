@@ -1,8 +1,6 @@
 module github.com/ijufumi/gogmocoin/v2
 
-go 1.23
-
-toolchain go1.24.7
+go 1.25
 
 require (
 	github.com/gorilla/websocket v1.5.3

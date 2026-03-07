@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        go-version: [ '1.24', '1.25' ]
+        go-version: [ '1.25', '1.26' ]
     steps:
       # Initial setup
       - name: checkout
@@ -38,4 +38,4 @@ jobs:
         run: go test ./...
 
       - name: golangci-lint
-        uses: golangci/golangci-lint-action@v6
+        uses: golangci/golangci-lint-action@v9
