@@ -7,13 +7,14 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
-	"github.com/ijufumi/gogmocoin/v2/api/common/configuration"
-	"github.com/ijufumi/gogmocoin/v2/api/common/consts"
 	"io"
 	"net/http"
 	"net/url"
 	"strings"
 	"time"
+
+	"github.com/ijufumi/gogmocoin/v2/api/common/configuration"
+	"github.com/ijufumi/gogmocoin/v2/api/common/consts"
 )
 
 var httpClient = &http.Client{
@@ -135,7 +136,7 @@ func makeAuthHeader(apiKey, secretKey string, systemDatetime time.Time, r *http.
 
 func makeSign(secretKey string, timeStamp int64, method httpMethod, path, body string) string {
 	h := hmac.New(sha256.New, []byte(secretKey))
-	h.Write([]byte(fmt.Sprintf("%v%v%v%v", timeStamp, method, path, body)))
+	_, _ = fmt.Fprintf(h, "%v%v%v%v", timeStamp, method, path, body)
 	return hex.EncodeToString(h.Sum(nil))
 }
 
