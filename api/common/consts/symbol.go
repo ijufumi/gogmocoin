@@ -79,6 +79,10 @@ const (
 	SymbolSAND = Symbol("SAND")
 	// SymbolCHZ ...
 	SymbolCHZ = Symbol("CHZ")
+	// SymbolSUI ...
+	SymbolSUI = Symbol("SUI")
+	// SymbolSUIJPY ...
+	SymbolSUIJPY = Symbol("SUI_JPY")
 	// SymbolNONE ...
 	SymbolNONE = Symbol("")
 )
@@ -119,6 +123,8 @@ var allSymbols = []Symbol{
 	SymbolFIL,
 	SymbolSAND,
 	SymbolCHZ,
+	SymbolSUI,
+	SymbolSUIJPY,
 }
 
 func (c *Symbol) UnmarshalJSON(d []byte) error {
