@@ -27,7 +27,7 @@
     "@actions/http-client": {
       "undici": "^6.24.0"
     },
-    "npm": "^11.13.0"
+    "npm": "^11.14.0"
   },
   "release": {
     "plugins": [
