@@ -19,12 +19,12 @@ type Trades interface {
 
 func newTrades() trades {
 	return trades{
-		apiBase: api.NewRestAPIBase(),
+		RestAPIBase: api.NewRestAPIBase(),
 	}
 }
 
 type trades struct {
-	apiBase api.RestAPIBase
+	api.RestAPIBase
 }
 
 // Trades ...
@@ -46,7 +46,7 @@ func (t *trades) TradesWithContext(ctx context.Context, symbol consts.Symbol, pa
 		param.Set("count", strconv.FormatInt(count, 10))
 	}
 
-	res, err := t.apiBase.Get(ctx, param, "/v1/trades")
+	res, err := t.Get(ctx, param, "/v1/trades")
 	if err != nil {
 		return nil, err
 	}

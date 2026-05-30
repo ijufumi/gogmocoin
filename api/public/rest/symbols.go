@@ -17,12 +17,12 @@ type Symbols interface {
 
 func newSymbols() symbols {
 	return symbols{
-		apiBase: api.NewRestAPIBase(),
+		RestAPIBase: api.NewRestAPIBase(),
 	}
 }
 
 type symbols struct {
-	apiBase api.RestAPIBase
+	api.RestAPIBase
 }
 
 // Symbols ...
@@ -32,7 +32,7 @@ func (t *symbols) Symbols() (*model.SymbolsRes, error) {
 
 // SymbolsWithContext ...
 func (t *symbols) SymbolsWithContext(ctx context.Context) (*model.SymbolsRes, error) {
-	res, err := t.apiBase.Get(ctx, url.Values{}, "/v1/symbols")
+	res, err := t.Get(ctx, url.Values{}, "/v1/symbols")
 	if err != nil {
 		return nil, err
 	}

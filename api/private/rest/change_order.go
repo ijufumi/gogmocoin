@@ -17,12 +17,12 @@ type ChangeOrder interface {
 
 func newChangeOrder(apiKey, secretKey string) changeOrder {
 	return changeOrder{
-		apiBase: api.NewPrivateRestAPIBase(apiKey, secretKey),
+		RestAPIBase: api.NewPrivateRestAPIBase(apiKey, secretKey),
 	}
 }
 
 type changeOrder struct {
-	apiBase api.RestAPIBase
+	api.RestAPIBase
 }
 
 // ChangeOrder ...
@@ -37,7 +37,7 @@ func (c *changeOrder) ChangeOrderWithContext(ctx context.Context, orderID int64,
 		Price:   price,
 	}
 
-	res, err := c.apiBase.Post(ctx, request, "/v1/changeOrder")
+	res, err := c.Post(ctx, request, "/v1/changeOrder")
 	if err != nil {
 		return nil, err
 	}

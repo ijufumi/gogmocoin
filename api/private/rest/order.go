@@ -18,12 +18,12 @@ type Order interface {
 
 func newOrder(apiKey, secretKey string) order {
 	return order{
-		apiBase: api.NewPrivateRestAPIBase(apiKey, secretKey),
+		RestAPIBase: api.NewPrivateRestAPIBase(apiKey, secretKey),
 	}
 }
 
 type order struct {
-	apiBase api.RestAPIBase
+	api.RestAPIBase
 }
 
 // Order ...
@@ -44,7 +44,7 @@ func (c *order) OrderWithContext(ctx context.Context, symbol consts.Symbol, side
 		req.Price = &price
 	}
 
-	res, err := c.apiBase.Post(ctx, req, "/v1/order")
+	res, err := c.Post(ctx, req, "/v1/order")
 	if err != nil {
 		return nil, err
 	}

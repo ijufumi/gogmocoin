@@ -17,12 +17,12 @@ type ChangeLosscutPrice interface {
 
 func newChangeLosscutPrice(apiKey, secretKey string) changeLosscutPrice {
 	return changeLosscutPrice{
-		apiBase: api.NewPrivateRestAPIBase(apiKey, secretKey),
+		RestAPIBase: api.NewPrivateRestAPIBase(apiKey, secretKey),
 	}
 }
 
 type changeLosscutPrice struct {
-	apiBase api.RestAPIBase
+	api.RestAPIBase
 }
 
 // ChangeLosscutPrice ...
@@ -37,7 +37,7 @@ func (c *changeLosscutPrice) ChangeLosscutPriceWithContext(ctx context.Context, 
 		LosscutPrice: losscutPrice,
 	}
 
-	res, err := c.apiBase.Post(ctx, request, "/v1/changeLosscutPrice")
+	res, err := c.Post(ctx, request, "/v1/changeLosscutPrice")
 	if err != nil {
 		return nil, err
 	}
