@@ -10,7 +10,7 @@ import (
 func NewPositionSummaryEventsReq(command consts.WebSocketCommand, channel consts.WebSocketChannel, isPeriodic bool) PositionSummaryEventsReq {
 	option := ""
 	if isPeriodic {
-		option = "PERIODIC"
+		option = string(consts.MsgTypePERIODIC)
 	}
 	return PositionSummaryEventsReq{
 		WebsocketRequestCommon: model.WebsocketRequestCommon{

@@ -22,8 +22,19 @@ const (
 	stateConnectionClosed = state("ConnectionClosed")
 )
 
-// reconnectInterval is the wait time before retrying a failed WebSocket dial.
-const reconnectInterval = time.Second
+const (
+	// reconnectInterval is the wait time before retrying a failed WebSocket dial.
+	reconnectInterval = time.Second
+	// readLimitBytes caps the size of an incoming WebSocket message.
+	readLimitBytes = 10240
+	// readDeadline is how long a read may block before the connection is
+	// considered dead; it is renewed on every pong.
+	readDeadline = 120 * time.Second
+	// connectWaitInterval / connectWaitMax bound how long sendMessage waits for
+	// the connection to be established before giving up.
+	connectWaitInterval = 100 * time.Millisecond
+	connectWaitMax      = 10 * time.Second
+)
 
 type RequestFactoryFunc func(command consts.WebSocketCommand) any
 
@@ -32,7 +43,7 @@ type WSAPIBase struct {
 	state           *atomic.Value
 	startMu         sync.Mutex
 	ctx             context.Context
-	getHostFuc      HostFactoryFunc
+	getHostFunc      HostFactoryFunc
 	stopFunc        context.CancelFunc
 	subscribeFunc   func() error
 	unsubscribeFunc func() error
@@ -50,7 +61,7 @@ func NewWSAPIBase(requestFactory RequestFactoryFunc) *WSAPIBase {
 		state:      &atomic.Value{},
 		stream:     make(chan []byte, 100),
 		msgStream:  make(chan msgRequest, 1),
-		getHostFuc: publicHostFactory,
+		getHostFunc: publicHostFactory,
 	}
 	base.changeStateToStopped()
 	base.setRequestFunc(requestFactory)
@@ -59,7 +70,7 @@ func NewWSAPIBase(requestFactory RequestFactoryFunc) *WSAPIBase {
 }
 
 func (c *WSAPIBase) SetHostFactoryFunc(f HostFactoryFunc) {
-	c.getHostFuc = f
+	c.getHostFunc = f
 }
 
 func (c *WSAPIBase) initContext(ctx context.Context) {
@@ -216,17 +227,20 @@ func (c *WSAPIBase) sendMessage(msg any) error {
 }
 
 func (c *WSAPIBase) waitForConnected() error {
-	if c.isConnected() {
-		return nil
-	}
-
-	for i := 0; i < 10; i++ {
+	deadline := time.Now().Add(connectWaitMax)
+	for {
 		if c.isConnected() {
 			return nil
 		}
-		time.Sleep(time.Second)
+		if time.Now().After(deadline) {
+			return fmt.Errorf("connection timeout")
+		}
+		select {
+		case <-c.ctx.Done():
+			return c.ctx.Err()
+		case <-time.After(connectWaitInterval):
+		}
 	}
-	return fmt.Errorf("connection timeout")
 }
 
 func (c *WSAPIBase) dial() error {
@@ -237,20 +251,23 @@ func (c *WSAPIBase) dial() error {
 	}
 
 	c.changeStateToConnecting()
-	conn, res, err := websocket.DefaultDialer.Dial(c.getHostFuc(), nil)
+	conn, res, err := websocket.DefaultDialer.Dial(c.getHostFunc(), nil)
 	if err != nil {
 		c.changeStateToClosed()
 		if configuration.IsDebug() {
-			return fmt.Errorf("dial error: %v, response: %v, host: %v", err, res, c.getHostFuc())
+			return fmt.Errorf("dial error: %v, response: %v, host: %v", err, res, c.getHostFunc())
 		}
 		return fmt.Errorf("dial error: %v, response: %v", err, res)
 	}
 
-	conn.SetReadLimit(10240)
-	_ = conn.SetReadDeadline(time.Now().Add(120 * time.Second))
+	conn.SetReadLimit(readLimitBytes)
+	if err := conn.SetReadDeadline(time.Now().Add(readDeadline)); err != nil {
+		c.changeStateToClosed()
+		_ = conn.Close()
+		return fmt.Errorf("set read deadline error: %w", err)
+	}
 	conn.SetPongHandler(func(appData string) error {
-		_ = conn.SetReadDeadline(time.Now().Add(120 * time.Second))
-		return nil
+		return conn.SetReadDeadline(time.Now().Add(readDeadline))
 	})
 	c.conn.Store(conn)
 	c.changeStateToConnected()

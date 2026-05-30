@@ -27,12 +27,12 @@ type ticker struct {
 }
 
 // Ticker ...
-func (t ticker) Ticker(symbol consts.Symbol) (*model.TickerRes, error) {
+func (t *ticker) Ticker(symbol consts.Symbol) (*model.TickerRes, error) {
 	return t.TickerWithContext(context.Background(), symbol)
 }
 
 // TickerWithContext ...
-func (t ticker) TickerWithContext(ctx context.Context, symbol consts.Symbol) (*model.TickerRes, error) {
+func (t *ticker) TickerWithContext(ctx context.Context, symbol consts.Symbol) (*model.TickerRes, error) {
 	param := url.Values{}
 
 	if symbol != consts.SymbolNONE {

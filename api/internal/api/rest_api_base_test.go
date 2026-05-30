@@ -1,8 +1,12 @@
 package api
 
 import (
+	"crypto/hmac"
+	"crypto/sha256"
+	"encoding/hex"
 	"net/http"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -42,4 +46,35 @@ func TestMaskSensitiveHeader_NoCredentials(t *testing.T) {
 		_ = maskSensitiveHeader(http.Header{})
 		_ = maskSensitiveHeader(nil)
 	})
+}
+
+// TestMakeSign locks the signing input order (timestamp + method + path + body)
+// so a refactor of makeSign cannot silently change the produced signature.
+func TestMakeSign(t *testing.T) {
+	secret := "test-secret"
+	ts := "1700000000000"
+	method := httpMethodPOST
+	path := "/v1/order"
+	body := `{"symbol":"BTC_JPY"}`
+
+	got := makeSign(secret, ts, method, path, body)
+
+	mac := hmac.New(sha256.New, []byte(secret))
+	mac.Write([]byte(ts + string(method) + path + body))
+	want := hex.EncodeToString(mac.Sum(nil))
+
+	assert.Equal(t, want, got)
+}
+
+// TestMakeAuthHeader verifies the auth headers are populated, including the
+// millisecond timestamp and a non-empty signature.
+func TestMakeAuthHeader(t *testing.T) {
+	r, err := http.NewRequest(http.MethodPost, "https://example.com/v1/order", nil)
+	assert.NoError(t, err)
+
+	makeAuthHeader("my-key", "my-secret", time.UnixMilli(1700000000000), r, httpMethodPOST, "/v1/order", "{}")
+
+	assert.Equal(t, "1700000000000", r.Header.Get("API-TIMESTAMP"))
+	assert.Equal(t, "my-key", r.Header.Get("API-KEY"))
+	assert.NotEmpty(t, r.Header.Get("API-SIGN"))
 }

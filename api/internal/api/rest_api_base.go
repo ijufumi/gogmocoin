@@ -10,6 +10,7 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	"strconv"
 	"strings"
 	"time"
 
@@ -144,15 +145,19 @@ func maskSensitiveHeader(h http.Header) http.Header {
 }
 
 func makeAuthHeader(apiKey, secretKey string, systemDatetime time.Time, r *http.Request, method httpMethod, path, body string) {
-	timeStamp := systemDatetime.Unix()*1000 + int64(systemDatetime.Nanosecond())/int64(time.Millisecond)
-	r.Header.Set("API-TIMESTAMP", fmt.Sprint(timeStamp))
+	timeStamp := strconv.FormatInt(systemDatetime.UnixMilli(), 10)
+	r.Header.Set("API-TIMESTAMP", timeStamp)
 	r.Header.Set("API-KEY", apiKey)
 	r.Header.Set("API-SIGN", makeSign(secretKey, timeStamp, method, path, body))
 }
 
-func makeSign(secretKey string, timeStamp int64, method httpMethod, path, body string) string {
+func makeSign(secretKey, timeStamp string, method httpMethod, path, body string) string {
 	h := hmac.New(sha256.New, []byte(secretKey))
-	_, _ = fmt.Fprintf(h, "%v%v%v%v", timeStamp, method, path, body)
+	// Write the parts directly to avoid the reflection overhead of fmt.Fprintf.
+	_, _ = io.WriteString(h, timeStamp)
+	_, _ = io.WriteString(h, string(method))
+	_, _ = io.WriteString(h, path)
+	_, _ = io.WriteString(h, body)
 	return hex.EncodeToString(h.Sum(nil))
 }
 
