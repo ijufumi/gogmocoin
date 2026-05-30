@@ -99,7 +99,7 @@ func (c *RestAPIBase) sendRequest(ctx context.Context, method httpMethod, bodyDa
 	}
 
 	if configuration.IsDebug() {
-		fmt.Printf("[Request]Header:%v\n", req.Header)
+		fmt.Printf("[Request]Header:%v\n", maskSensitiveHeader(req.Header))
 		fmt.Printf("[Request]Body:%v\n", body)
 	}
 	res, err := httpClient.Do(req)
@@ -125,6 +125,22 @@ func (c *RestAPIBase) sendRequest(ctx context.Context, method httpMethod, bodyDa
 	}
 
 	return resBody, nil
+}
+
+// maskSensitiveHeader returns a copy of h with credential headers redacted so
+// that enabling debug output never writes the API key or request signature to
+// stdout.
+func maskSensitiveHeader(h http.Header) http.Header {
+	masked := h.Clone()
+	if masked == nil {
+		return masked
+	}
+	for _, key := range []string{"API-KEY", "API-SIGN"} {
+		if masked.Get(key) != "" {
+			masked.Set(key, "[REDACTED]")
+		}
+	}
+	return masked
 }
 
 func makeAuthHeader(apiKey, secretKey string, systemDatetime time.Time, r *http.Request, method httpMethod, path, body string) {
