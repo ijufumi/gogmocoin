@@ -55,9 +55,15 @@ func (w *PrivateWSAPIBase) Subscribe(ctx context.Context) error {
 }
 
 func (w *PrivateWSAPIBase) Unsubscribe() error {
-	if w.tokenAutomaticExtension {
+	// Always cancel the context so the token-extension goroutine and any work
+	// derived from it stops, regardless of whether automatic extension was on.
+	if w.cancelFunc != nil {
 		w.cancelFunc()
-		_ = w.revokeWSToken()
+	}
+	if w.tokenAutomaticExtension {
+		if err := w.revokeWSToken(); err != nil {
+			log.Printf("revoke token error: %v", err)
+		}
 	}
 	return w.wsAPIBase.Unsubscribe()
 }
