@@ -24,5 +24,5 @@ type OpenPositionRes struct {
 			LosscutPrice decimal.Decimal `json:"losscutPrice"`
 			Timestamp    time.Time       `json:"timestamp"`
 		} `json:"list"`
-	}
+	} `json:"data"`
 }

@@ -17,5 +17,5 @@ type AccountTradingVolumeRes struct {
 			TakerFee           decimal.Decimal `json:"takerFee"`
 			MakerFee           decimal.Decimal `json:"makerFee"`
 		} `json:"limit"`
-	}
+	} `json:"data"`
 }

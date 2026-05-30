@@ -38,10 +38,10 @@ func (c *executionEvents) SubscribeWithContext(ctx context.Context) error {
 	return c.apiBase.Subscribe(ctx)
 }
 
-func (e *executionEvents) Unsubscribe() error {
-	return e.apiBase.Unsubscribe()
+func (c *executionEvents) Unsubscribe() error {
+	return c.apiBase.Unsubscribe()
 }
 
-func (e *executionEvents) Receive() <-chan *model.ExecutionEventsRes {
-	return api.RetrieveStream[model.ExecutionEventsRes]("ExecutionEvents", e.apiBase.Stream())
+func (c *executionEvents) Receive() <-chan *model.ExecutionEventsRes {
+	return api.RetrieveStream[model.ExecutionEventsRes]("ExecutionEvents", c.apiBase.Stream())
 }

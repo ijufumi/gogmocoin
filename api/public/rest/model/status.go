@@ -10,5 +10,5 @@ type StatusRes struct {
 	model.ResponseCommon
 	Data struct {
 		Status consts.ExchangeStatus `json:"status"`
-	}
+	} `json:"data"`
 }

@@ -17,6 +17,6 @@ type TradesRes struct {
 			Timestamp time.Time       `json:"timestamp"`
 		} `json:"list"`
 		model.Pagination `json:"pagination"`
-	}
+	} `json:"data"`
 	model.ResponseCommon
 }

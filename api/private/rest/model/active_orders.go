@@ -28,5 +28,5 @@ type ActiveOrdersRes struct {
 			TimeInForce   consts.TimeInForce   `json:"timeInForce"`
 			Timestamp     time.Time            `json:"timestamp"`
 		} `json:"list"`
-	}
+	} `json:"data"`
 }
