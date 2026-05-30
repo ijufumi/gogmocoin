@@ -8,6 +8,7 @@ import (
 	"github.com/ijufumi/gogmocoin/v2/api/common/consts"
 	"github.com/ijufumi/gogmocoin/v2/api/common/functions"
 	"log"
+	"sync"
 	"sync/atomic"
 	"time"
 )
@@ -15,18 +16,21 @@ import (
 type state string
 
 const (
-	stateStarted          = state("Started")
 	stateStopped          = state("Stopped")
 	stateConnecting       = state("Connecting")
 	stateConnected        = state("Connected")
 	stateConnectionClosed = state("ConnectionClosed")
 )
 
+// reconnectInterval is the wait time before retrying a failed WebSocket dial.
+const reconnectInterval = time.Second
+
 type RequestFactoryFunc func(command consts.WebSocketCommand) any
 
 type WSAPIBase struct {
-	conn            *websocket.Conn
+	conn            atomic.Pointer[websocket.Conn]
 	state           *atomic.Value
+	startMu         sync.Mutex
 	ctx             context.Context
 	getHostFuc      HostFactoryFunc
 	stopFunc        context.CancelFunc
@@ -64,13 +68,21 @@ func (c *WSAPIBase) initContext(ctx context.Context) {
 	c.stopFunc = cancelFunc
 }
 
-// start ...
+// start launches the send/receive goroutines if they are not already running.
+// The check-and-start is guarded by startMu so that concurrent Subscribe calls
+// cannot both pass the isStopped check and spawn duplicate goroutine pairs.
 func (c *WSAPIBase) start(ctx context.Context) {
+	c.startMu.Lock()
+	defer c.startMu.Unlock()
 	if c.isStopped() {
 		c.initContext(ctx)
+		// Move out of the stopped state while still holding the lock so that a
+		// concurrent Subscribe observes a non-stopped state and does not spawn a
+		// second goroutine pair. The receive goroutine transitions to Connected
+		// once dialing succeeds.
+		c.changeStateToConnecting()
 		go c.doSendGoroutine()
 		go c.doReceiveGoroutine()
-		c.changeStateToStarted()
 	}
 }
 
@@ -95,12 +107,28 @@ func (c *WSAPIBase) Unsubscribe() error {
 
 func (c *WSAPIBase) createSendFunc(msg any) func() error {
 	return func() error {
+		// errChan is buffered so that doSendGoroutine can always deliver its
+		// result without blocking, even if this caller has already returned
+		// because the context was cancelled.
 		req := msgRequest{
 			msg:     msg,
-			errChan: make(chan error),
+			errChan: make(chan error, 1),
 		}
-		c.msgStream <- req
-		return <-req.errChan
+		ctx := c.ctx
+		if ctx == nil {
+			ctx = context.Background()
+		}
+		select {
+		case c.msgStream <- req:
+		case <-ctx.Done():
+			return ctx.Err()
+		}
+		select {
+		case err := <-req.errChan:
+			return err
+		case <-ctx.Done():
+			return ctx.Err()
+		}
 	}
 }
 
@@ -118,49 +146,72 @@ func (c *WSAPIBase) doSendGoroutine() {
 
 func (c *WSAPIBase) doReceiveGoroutine() {
 	defer func() {
-		if c.isConnected() {
-			_ = c.conn.WriteMessage(websocket.CloseMessage, websocket.FormatCloseMessage(websocket.CloseNormalClosure, ""))
-			_ = c.conn.Close()
+		if conn := c.conn.Load(); conn != nil && c.isConnected() {
+			_ = conn.WriteMessage(websocket.CloseMessage, websocket.FormatCloseMessage(websocket.CloseNormalClosure, ""))
+			_ = conn.Close()
 		}
 	}()
 
 	for {
-		if !c.isConnected() {
-			if err := c.dial(); err != nil {
-				log.Println(err)
-				continue
-			}
-		}
-
-		_, msg, err := c.conn.ReadMessage()
-		if err != nil {
-			log.Printf("[ReadMessage]error:%v\n", err)
-			_ = c.conn.Close()
-			c.changeStateToClosed()
-			continue // TODO:review
-		}
-
-		c.stream <- msg
+		// Stop reconnecting/reading once the context is cancelled. Without this
+		// guard a persistently failing dial would spin the loop at full CPU and
+		// the goroutine would never terminate.
 		select {
 		case <-c.ctx.Done():
 			return
 		default:
 		}
+
+		if !c.isConnected() {
+			if err := c.dial(); err != nil {
+				log.Println(err)
+				select {
+				case <-c.ctx.Done():
+					return
+				case <-time.After(reconnectInterval):
+				}
+				continue
+			}
+		}
+
+		conn := c.conn.Load()
+		if conn == nil {
+			continue
+		}
+		_, msg, err := conn.ReadMessage()
+		if err != nil {
+			log.Printf("[ReadMessage]error:%v\n", err)
+			_ = conn.Close()
+			c.changeStateToClosed()
+			continue
+		}
+
+		select {
+		case c.stream <- msg:
+		case <-c.ctx.Done():
+			return
+		}
 	}
 }
 
-// sendMessage is...
+// sendMessage waits for the connection to be established and writes msg as JSON.
 func (c *WSAPIBase) sendMessage(msg any) error {
 	err := c.waitForConnected()
 	if err != nil {
 		return err
 	}
 
-	err = c.conn.WriteJSON(msg)
-	if err != nil {
-		return fmt.Errorf("write error:%v", err)
+	conn := c.conn.Load()
+	if conn == nil {
+		return fmt.Errorf("connection is not established")
 	}
-	log.Printf("[sendMessage]msg: %v", functions.EncodeJSON(msg))
+	err = conn.WriteJSON(msg)
+	if err != nil {
+		return fmt.Errorf("write error:%w", err)
+	}
+	if configuration.IsDebug() {
+		log.Printf("[sendMessage]msg: %v", functions.EncodeJSON(msg))
+	}
 	return nil
 }
 
@@ -180,9 +231,9 @@ func (c *WSAPIBase) waitForConnected() error {
 
 func (c *WSAPIBase) dial() error {
 	log.Println("dial start")
-	if c.conn != nil {
+	if old := c.conn.Load(); old != nil {
 		c.changeStateToClosed()
-		_ = c.conn.Close()
+		_ = old.Close()
 	}
 
 	c.changeStateToConnecting()
@@ -201,7 +252,7 @@ func (c *WSAPIBase) dial() error {
 		_ = conn.SetReadDeadline(time.Now().Add(120 * time.Second))
 		return nil
 	})
-	c.conn = conn
+	c.conn.Store(conn)
 	c.changeStateToConnected()
 
 	return nil
@@ -240,10 +291,6 @@ func (c *WSAPIBase) isConnected() bool {
 	}
 
 	return v == stateConnected
-}
-
-func (c *WSAPIBase) changeStateToStarted() {
-	c.state.Store(stateStarted)
 }
 
 func (c *WSAPIBase) changeStateToStopped() {

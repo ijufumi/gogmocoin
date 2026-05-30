@@ -1,8 +1,10 @@
 package configuration
 
 import (
+	"sync"
+
 	"github.com/caarlos0/env/v11"
-	_ "github.com/joho/godotenv/autoload"
+	"github.com/joho/godotenv"
 )
 
 type config struct {
@@ -12,6 +14,11 @@ type config struct {
 }
 
 func load() *config {
+	// Load .env for convenience, but godotenv.Load does not override variables
+	// that are already present in the process environment, so a caller that sets
+	// its own environment (Vault, Kubernetes secrets, os.Setenv, ...) keeps
+	// precedence.
+	_ = godotenv.Load()
 	c, err := env.ParseAs[config]()
 	if err != nil {
 		// Return default config if parsing fails
@@ -20,17 +27,32 @@ func load() *config {
 	return &c
 }
 
-var c = load()
+var (
+	once   sync.Once
+	cached *config
+)
 
-// IsDebug ...
+// get loads the configuration lazily on first access. This avoids reading the
+// environment (and the .env file) as an import-time side effect, which a
+// library must not impose on its callers.
+func get() *config {
+	once.Do(func() {
+		cached = load()
+	})
+	return cached
+}
+
+// IsDebug reports whether debug output is enabled (DEBUG_MODE).
 func IsDebug() bool {
-	return c.DebugMode
+	return get().DebugMode
 }
 
+// APIKey returns the API key read from the environment (API_KEY).
 func APIKey() string {
-	return c.APIKey
+	return get().APIKey
 }
 
+// APISecret returns the API secret read from the environment (API_SECRET).
 func APISecret() string {
-	return c.APISecret
+	return get().APISecret
 }
