@@ -53,7 +53,7 @@ if err != nil {
 log.Printf("[result]%+v", orderbooks)
 ```
 
-[サンプルコード](httpss://github.com/ijufumi/gogmocoin-examples/tree/main/app/public/rest)
+[サンプルコード](https://github.com/ijufumi/gogmocoin-examples/tree/main/app/public/rest)
 
 ### Public Websocket API
 ```golang
@@ -81,7 +81,7 @@ if e != nil {
 }
 ```
 
-[サンプルコード](httpss://github.com/ijufumi/gogmocoin-examples/tree/main/app/public/ws)
+[サンプルコード](https://github.com/ijufumi/gogmocoin-examples/tree/main/app/public/ws)
 
 ### Private API
 #### 1. .envファイルを作成する
@@ -104,7 +104,7 @@ if err != nil {
 log.Printf("ordersRes:%+v", ordersRes)
 ```
 
-[サンプルコード](httpss://github.com/ijufumi/gogmocoin-examples/tree/main/app/private/rest)
+[サンプルコード](https://github.com/ijufumi/gogmocoin-examples/tree/main/app/private/rest)
 
 ##### Websocket API
 ```golang
@@ -130,7 +130,7 @@ if err := client.Unsubscribe(); err != nil {
 }
 ```
 
-[サンプルコード](httpss://github.com/ijufumi/gogmocoin-examples/tree/main/app/private/ws)
+[サンプルコード](https://github.com/ijufumi/gogmocoin-examples/tree/main/app/private/ws)
 
 
 ## コントリビュートをお待ちしています
