@@ -18,12 +18,12 @@ type OrderBooks interface {
 
 func newOrderBooks() orderBooks {
 	return orderBooks{
-		apiBase: api.NewRestAPIBase(),
+		RestAPIBase: api.NewRestAPIBase(),
 	}
 }
 
 type orderBooks struct {
-	apiBase api.RestAPIBase
+	api.RestAPIBase
 }
 
 // OrderBooks ...
@@ -37,7 +37,7 @@ func (o *orderBooks) OrderBooksWithContext(ctx context.Context, symbol consts.Sy
 		"symbol": {string(symbol)},
 	}
 
-	res, err := o.apiBase.Get(ctx, param, "/v1/orderbooks")
+	res, err := o.Get(ctx, param, "/v1/orderbooks")
 	if err != nil {
 		return nil, err
 	}

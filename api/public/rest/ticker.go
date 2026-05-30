@@ -18,12 +18,12 @@ type Ticker interface {
 
 func newTicker() ticker {
 	return ticker{
-		apiBase: api.NewRestAPIBase(),
+		RestAPIBase: api.NewRestAPIBase(),
 	}
 }
 
 type ticker struct {
-	apiBase api.RestAPIBase
+	api.RestAPIBase
 }
 
 // Ticker ...
@@ -39,7 +39,7 @@ func (t *ticker) TickerWithContext(ctx context.Context, symbol consts.Symbol) (*
 		param.Set("symbol", string(symbol))
 	}
 
-	res, err := t.apiBase.Get(ctx, param, "/v1/ticker")
+	res, err := t.Get(ctx, param, "/v1/ticker")
 	if err != nil {
 		return nil, err
 	}

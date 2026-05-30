@@ -16,12 +16,12 @@ type CancelOrder interface {
 
 func newCancelOrder(apiKey, secretKey string) cancelOrder {
 	return cancelOrder{
-		apiBase: api.NewPrivateRestAPIBase(apiKey, secretKey),
+		RestAPIBase: api.NewPrivateRestAPIBase(apiKey, secretKey),
 	}
 }
 
 type cancelOrder struct {
-	apiBase api.RestAPIBase
+	api.RestAPIBase
 }
 
 // CancelOrder ...
@@ -32,7 +32,7 @@ func (c *cancelOrder) CancelOrder(orderID int64) error {
 // CancelOrderWithContext ...
 func (c *cancelOrder) CancelOrderWithContext(ctx context.Context, orderID int64) error {
 	req := model.CancelOrderReq{OrderID: orderID}
-	res, err := c.apiBase.Post(ctx, req, "/v1/cancelOrder")
+	res, err := c.Post(ctx, req, "/v1/cancelOrder")
 	if err != nil {
 		return err
 	}

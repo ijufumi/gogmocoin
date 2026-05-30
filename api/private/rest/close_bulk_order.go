@@ -18,12 +18,12 @@ type CloseBulkOrder interface {
 
 func newCloseBulkOrder(apiKey, secretKey string) closeBulkOrder {
 	return closeBulkOrder{
-		apiBase: api.NewPrivateRestAPIBase(apiKey, secretKey),
+		RestAPIBase: api.NewPrivateRestAPIBase(apiKey, secretKey),
 	}
 }
 
 type closeBulkOrder struct {
-	apiBase api.RestAPIBase
+	api.RestAPIBase
 }
 
 // CloseBulkOrder ...
@@ -44,7 +44,7 @@ func (c *closeBulkOrder) CloseBulkOrderWithContext(ctx context.Context, symbol c
 		request.Price = &price
 	}
 
-	res, err := c.apiBase.Post(ctx, request, "/v1/closeBulkOrder")
+	res, err := c.Post(ctx, request, "/v1/closeBulkOrder")
 	if err != nil {
 		return nil, err
 	}

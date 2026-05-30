@@ -17,12 +17,12 @@ type KLines interface {
 
 func newKLines() kLines {
 	return kLines{
-		apiBase: api.NewRestAPIBase(),
+		RestAPIBase: api.NewRestAPIBase(),
 	}
 }
 
 type kLines struct {
-	apiBase api.RestAPIBase
+	api.RestAPIBase
 }
 
 // KLines ...
@@ -38,7 +38,7 @@ func (k *kLines) KLinesWithContext(ctx context.Context, symbol consts.Symbol, in
 		"date":     {date},
 	}
 
-	res, err := k.apiBase.Get(ctx, param, "/v1/klines")
+	res, err := k.Get(ctx, param, "/v1/klines")
 	if err != nil {
 		return nil, err
 	}
