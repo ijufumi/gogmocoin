@@ -65,7 +65,7 @@ if err != nil {
 }
 for {
     select {
-    case v := <-client.Receive():
+    case v := <-client.Stream():
         log.Printf("msg:%+v", v)
     case <-time.After(180 * time.Second):
         log.Println("timeout...")
@@ -115,7 +115,7 @@ if err := client.Subscribe(); err != nil {
 timeoutCnt := 0
 for {
     select {
-    case v := <-client.Receive():
+    case v := <-client.Stream():
         log.Printf("msg:%+v\n", v)
     case <-time.After(180 * time.Second):
         log.Println("timeout...")

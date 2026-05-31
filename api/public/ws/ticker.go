@@ -11,6 +11,9 @@ type Ticker interface {
 	Subscribe() error
 	SubscribeWithContext(ctx context.Context) error
 	Unsubscribe() error
+	Stream() <-chan *model.TickerRes
+	// Deprecated: use Stream instead. Receive is kept as an alias for backward
+	// compatibility and will be removed in a future major release.
 	Receive() <-chan *model.TickerRes
 }
 
@@ -44,6 +47,11 @@ func (c *ticker) Unsubscribe() error {
 	return c.apiBase.Unsubscribe()
 }
 
+func (c *ticker) Stream() <-chan *model.TickerRes {
+	return api.RetrieveStreamOnce[model.TickerRes](c.apiBase, "Ticker")
+}
+
+// Deprecated: use Stream instead.
 func (c *ticker) Receive() <-chan *model.TickerRes {
-	return api.RetrieveStream[model.TickerRes]("Ticker", c.apiBase.Stream())
+	return c.Stream()
 }

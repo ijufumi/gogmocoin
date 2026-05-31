@@ -72,6 +72,12 @@ func (w *PrivateWSAPIBase) Stream() <-chan []byte {
 	return w.wsAPIBase.Stream()
 }
 
+// WS exposes the underlying WSAPIBase so generic helpers such as
+// api.RetrieveStreamOnce can access the shared raw stream and session state.
+func (w *PrivateWSAPIBase) WS() *api.WSAPIBase {
+	return w.wsAPIBase
+}
+
 func (w *PrivateWSAPIBase) automaticExtension() {
 	ticker := time.NewTicker(50 * time.Minute)
 	go func() {

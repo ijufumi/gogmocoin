@@ -12,6 +12,9 @@ type ExecutionEvents interface {
 	Subscribe() error
 	SubscribeWithContext(ctx context.Context) error
 	Unsubscribe() error
+	Stream() <-chan *model.ExecutionEventsRes
+	// Deprecated: use Stream instead. Receive is kept as an alias for backward
+	// compatibility and will be removed in a future major release.
 	Receive() <-chan *model.ExecutionEventsRes
 }
 
@@ -42,6 +45,11 @@ func (c *executionEvents) Unsubscribe() error {
 	return c.apiBase.Unsubscribe()
 }
 
+func (c *executionEvents) Stream() <-chan *model.ExecutionEventsRes {
+	return api.RetrieveStreamOnce[model.ExecutionEventsRes](c.apiBase.WS(), "ExecutionEvents")
+}
+
+// Deprecated: use Stream instead.
 func (c *executionEvents) Receive() <-chan *model.ExecutionEventsRes {
-	return api.RetrieveStream[model.ExecutionEventsRes]("ExecutionEvents", c.apiBase.Stream())
+	return c.Stream()
 }

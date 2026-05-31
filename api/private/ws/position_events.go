@@ -12,6 +12,9 @@ type PositionEvents interface {
 	Subscribe() error
 	SubscribeWithContext(ctx context.Context) error
 	Unsubscribe() error
+	Stream() <-chan *model.PositionEventsRes
+	// Deprecated: use Stream instead. Receive is kept as an alias for backward
+	// compatibility and will be removed in a future major release.
 	Receive() <-chan *model.PositionEventsRes
 }
 
@@ -42,6 +45,11 @@ func (c *positionEvents) Unsubscribe() error {
 	return c.apiBase.Unsubscribe()
 }
 
+func (c *positionEvents) Stream() <-chan *model.PositionEventsRes {
+	return api.RetrieveStreamOnce[model.PositionEventsRes](c.apiBase.WS(), "PositionEvents")
+}
+
+// Deprecated: use Stream instead.
 func (c *positionEvents) Receive() <-chan *model.PositionEventsRes {
-	return api.RetrieveStream[model.PositionEventsRes]("PositionEvents", c.apiBase.Stream())
+	return c.Stream()
 }
