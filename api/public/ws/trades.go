@@ -11,6 +11,9 @@ type Trades interface {
 	Subscribe() error
 	SubscribeWithContext(ctx context.Context) error
 	Unsubscribe() error
+	Stream() <-chan *model.TradesRes
+	// Deprecated: use Stream instead. Receive is kept as an alias for backward
+	// compatibility and will be removed in a future major release.
 	Receive() <-chan *model.TradesRes
 }
 
@@ -45,6 +48,11 @@ func (c *trades) Unsubscribe() error {
 	return c.apiBase.Unsubscribe()
 }
 
+func (c *trades) Stream() <-chan *model.TradesRes {
+	return api.RetrieveStreamOnce[model.TradesRes](c.apiBase, "Trades")
+}
+
+// Deprecated: use Stream instead.
 func (c *trades) Receive() <-chan *model.TradesRes {
-	return api.RetrieveStream[model.TradesRes]("Trades", c.apiBase.Stream())
+	return c.Stream()
 }

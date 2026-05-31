@@ -49,6 +49,10 @@ type WSAPIBase struct {
 	unsubscribeFunc func() error
 	stream          chan []byte
 	msgStream       chan msgRequest
+	// streamMu guards typedStream, the per-session memoized typed stream built
+	// lazily by RetrieveStreamOnce.
+	streamMu    sync.Mutex
+	typedStream any
 }
 
 type msgRequest struct {
@@ -87,6 +91,10 @@ func (c *WSAPIBase) start(ctx context.Context) {
 	defer c.startMu.Unlock()
 	if c.isStopped() {
 		c.initContext(ctx)
+		// Drop any typed stream from a previous session: it is bound to the old
+		// (now cancelled) context and its channel is already closed, so the next
+		// RetrieveStreamOnce must build a fresh one against the new context.
+		c.resetTypedStream()
 		// Move out of the stopped state while still holding the lock so that a
 		// concurrent Subscribe observes a non-stopped state and does not spawn a
 		// second goroutine pair. The receive goroutine transitions to Connected
@@ -278,6 +286,14 @@ func (c *WSAPIBase) dial() error {
 // Stream ...
 func (c *WSAPIBase) Stream() <-chan []byte {
 	return c.stream
+}
+
+// resetTypedStream clears the memoized typed stream so the next
+// RetrieveStreamOnce rebuilds it for the current session.
+func (c *WSAPIBase) resetTypedStream() {
+	c.streamMu.Lock()
+	c.typedStream = nil
+	c.streamMu.Unlock()
 }
 
 // close is ...

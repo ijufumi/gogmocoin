@@ -12,6 +12,9 @@ type OrderEvents interface {
 	Subscribe() error
 	SubscribeWithContext(ctx context.Context) error
 	Unsubscribe() error
+	Stream() <-chan *model.OrderEventsRes
+	// Deprecated: use Stream instead. Receive is kept as an alias for backward
+	// compatibility and will be removed in a future major release.
 	Receive() <-chan *model.OrderEventsRes
 }
 
@@ -42,6 +45,11 @@ func (c *orderEvents) Unsubscribe() error {
 	return c.apiBase.Unsubscribe()
 }
 
+func (c *orderEvents) Stream() <-chan *model.OrderEventsRes {
+	return api.RetrieveStreamOnce[model.OrderEventsRes](c.apiBase.WS(), "OrderEvents")
+}
+
+// Deprecated: use Stream instead.
 func (c *orderEvents) Receive() <-chan *model.OrderEventsRes {
-	return api.RetrieveStream[model.OrderEventsRes]("OrderEvents", c.apiBase.Stream())
+	return c.Stream()
 }

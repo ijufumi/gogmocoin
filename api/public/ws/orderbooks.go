@@ -11,6 +11,9 @@ type OrderBooks interface {
 	Subscribe() error
 	SubscribeWithContext(ctx context.Context) error
 	Unsubscribe() error
+	Stream() <-chan *model.OrderBooksRes
+	// Deprecated: use Stream instead. Receive is kept as an alias for backward
+	// compatibility and will be removed in a future major release.
 	Receive() <-chan *model.OrderBooksRes
 }
 
@@ -44,6 +47,11 @@ func (c *orderBooks) Unsubscribe() error {
 	return c.apiBase.Unsubscribe()
 }
 
+func (c *orderBooks) Stream() <-chan *model.OrderBooksRes {
+	return api.RetrieveStreamOnce[model.OrderBooksRes](c.apiBase, "OrderBooks")
+}
+
+// Deprecated: use Stream instead.
 func (c *orderBooks) Receive() <-chan *model.OrderBooksRes {
-	return api.RetrieveStream[model.OrderBooksRes]("OrderBooks", c.apiBase.Stream())
+	return c.Stream()
 }
