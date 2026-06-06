@@ -6,7 +6,7 @@ import (
 	"github.com/shopspring/decimal"
 )
 
-// PositionSummaryRes ...
+// PositionSummaryRes is the response of the position summary endpoint.
 type PositionSummaryRes struct {
 	Data struct {
 		List []struct {

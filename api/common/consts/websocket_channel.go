@@ -1,21 +1,21 @@
 package consts
 
-// WebSocketChannel ...
+// WebSocketChannel is the name of a GMO Coin WebSocket subscription channel.
 type WebSocketChannel string
 
 const (
-	// WebSocketChannelTicker ...
+	// WebSocketChannelTicker is the public channel streaming ticker updates.
 	WebSocketChannelTicker = WebSocketChannel("ticker")
-	// WebSocketChannelOrderBooks ...
+	// WebSocketChannelOrderBooks is the public channel streaming order book snapshots.
 	WebSocketChannelOrderBooks = WebSocketChannel("orderbooks")
-	// WebSocketChannelTrades ...
+	// WebSocketChannelTrades is the public channel streaming executed trades.
 	WebSocketChannelTrades = WebSocketChannel("trades")
-	// WebSocketChannelExecutionEvents ...
+	// WebSocketChannelExecutionEvents is the private channel streaming the user's execution events.
 	WebSocketChannelExecutionEvents = WebSocketChannel("executionEvents")
-	// WebSocketChannelOrderEvents ...
+	// WebSocketChannelOrderEvents is the private channel streaming the user's order events.
 	WebSocketChannelOrderEvents = WebSocketChannel("orderEvents")
-	// WebSocketChannelPositionEvents ...
+	// WebSocketChannelPositionEvents is the private channel streaming the user's position events.
 	WebSocketChannelPositionEvents = WebSocketChannel("positionEvents")
-	// WebSocketChannelPositionSummaryEvents ...
+	// WebSocketChannelPositionSummaryEvents is the private channel streaming the user's position summary events.
 	WebSocketChannelPositionSummaryEvents = WebSocketChannel("positionSummaryEvents")
 )

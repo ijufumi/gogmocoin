@@ -25,12 +25,12 @@ type kLines struct {
 	api.RestAPIBase
 }
 
-// KLines ...
+// KLines retrieves candlestick data for the given symbol, interval and date using a background context.
 func (k *kLines) KLines(symbol consts.Symbol, intervalType consts.IntervalType, date string) (*model.KLinesRes, error) {
 	return k.KLinesWithContext(context.Background(), symbol, intervalType, date)
 }
 
-// KLinesWithContext ...
+// KLinesWithContext retrieves candlestick data for the given symbol, interval and date using the provided context.
 func (k *kLines) KLinesWithContext(ctx context.Context, symbol consts.Symbol, intervalType consts.IntervalType, date string) (*model.KLinesRes, error) {
 	param := url.Values{
 		"symbol":   {string(symbol)},

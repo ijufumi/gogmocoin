@@ -11,7 +11,7 @@ import (
 	"strconv"
 )
 
-// Trades ...
+// Trades is the client interface for the public trade history endpoint.
 type Trades interface {
 	Trades(symbol consts.Symbol, page, count int64) (*model.TradesRes, error)
 	TradesWithContext(ctx context.Context, symbol consts.Symbol, page, count int64) (*model.TradesRes, error)
@@ -27,12 +27,12 @@ type trades struct {
 	api.RestAPIBase
 }
 
-// Trades ...
+// Trades retrieves the trade history for the given symbol with pagination using a background context.
 func (t *trades) Trades(symbol consts.Symbol, page, count int64) (*model.TradesRes, error) {
 	return t.TradesWithContext(context.Background(), symbol, page, count)
 }
 
-// TradesWithContext ...
+// TradesWithContext retrieves the trade history for the given symbol with pagination using the provided context.
 func (t *trades) TradesWithContext(ctx context.Context, symbol consts.Symbol, page, count int64) (*model.TradesRes, error) {
 	param := url.Values{
 		"symbol": {string(symbol)},

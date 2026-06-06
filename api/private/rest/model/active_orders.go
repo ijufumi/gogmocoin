@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-// ActiveOrdersRes ...
+// ActiveOrdersRes is the response of the active orders endpoint.
 type ActiveOrdersRes struct {
 	model.ResponseCommon
 	Data struct {

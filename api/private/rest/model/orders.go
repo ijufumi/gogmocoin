@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-// OrdersRes ...
+// OrdersRes is the response of the order lookup endpoint.
 type OrdersRes struct {
 	Data struct {
 		List []struct {

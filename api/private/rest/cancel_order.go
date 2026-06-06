@@ -8,7 +8,7 @@ import (
 	"github.com/ijufumi/gogmocoin/v2/api/private/rest/model"
 )
 
-// CancelOrder ...
+// CancelOrder is the client interface for the cancel order endpoint.
 type CancelOrder interface {
 	CancelOrder(orderID int64) error
 	CancelOrderWithContext(ctx context.Context, orderID int64) error
@@ -24,12 +24,12 @@ type cancelOrder struct {
 	api.RestAPIBase
 }
 
-// CancelOrder ...
+// CancelOrder cancels the order with the given order ID using a background context.
 func (c *cancelOrder) CancelOrder(orderID int64) error {
 	return c.CancelOrderWithContext(context.Background(), orderID)
 }
 
-// CancelOrderWithContext ...
+// CancelOrderWithContext cancels the order with the given order ID using the provided context.
 func (c *cancelOrder) CancelOrderWithContext(ctx context.Context, orderID int64) error {
 	req := model.CancelOrderReq{OrderID: orderID}
 	res, err := c.Post(ctx, req, "/v1/cancelOrder")

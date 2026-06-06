@@ -10,7 +10,7 @@ import (
 	"net/url"
 )
 
-// OpenPositions ...
+// OpenPositions is the client interface for the open positions endpoint.
 type OpenPositions interface {
 	OpenPositions(symbol consts.Symbol, pageNo int) (*model.OpenPositionRes, error)
 	OpenPositionsWithContext(ctx context.Context, symbol consts.Symbol, pageNo int) (*model.OpenPositionRes, error)
@@ -26,12 +26,12 @@ type openPositions struct {
 	api.RestAPIBase
 }
 
-// OpenPositions ...
+// OpenPositions retrieves the account's open positions for the given symbol and page using a background context.
 func (c *openPositions) OpenPositions(symbol consts.Symbol, pageNo int) (*model.OpenPositionRes, error) {
 	return c.OpenPositionsWithContext(context.Background(), symbol, pageNo)
 }
 
-// OpenPositionsWithContext ...
+// OpenPositionsWithContext retrieves the account's open positions for the given symbol and page using the provided context.
 func (c *openPositions) OpenPositionsWithContext(ctx context.Context, symbol consts.Symbol, pageNo int) (*model.OpenPositionRes, error) {
 	req := url.Values{
 		"symbol": {string(symbol)},

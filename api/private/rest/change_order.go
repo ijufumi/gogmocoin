@@ -9,7 +9,7 @@ import (
 	"github.com/shopspring/decimal"
 )
 
-// ChangeOrder ...
+// ChangeOrder is the client interface for the change order endpoint.
 type ChangeOrder interface {
 	ChangeOrder(orderID int64, price decimal.Decimal) (*model.ChangeOrderRes, error)
 	ChangeOrderWithContext(ctx context.Context, orderID int64, price decimal.Decimal) (*model.ChangeOrderRes, error)
@@ -25,12 +25,12 @@ type changeOrder struct {
 	api.RestAPIBase
 }
 
-// ChangeOrder ...
+// ChangeOrder updates the price of the given order using a background context.
 func (c *changeOrder) ChangeOrder(orderID int64, price decimal.Decimal) (*model.ChangeOrderRes, error) {
 	return c.ChangeOrderWithContext(context.Background(), orderID, price)
 }
 
-// ChangeOrderWithContext ...
+// ChangeOrderWithContext updates the price of the given order using the provided context.
 func (c *changeOrder) ChangeOrderWithContext(ctx context.Context, orderID int64, price decimal.Decimal) (*model.ChangeOrderRes, error) {
 	request := model.ChangeOrderReq{
 		OrderID: orderID,

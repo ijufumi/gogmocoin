@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-// ExecutionsRes ...
+// ExecutionsRes is the response of the executions (fills) endpoint.
 type ExecutionsRes struct {
 	Data struct {
 		List []struct {

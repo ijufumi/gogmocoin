@@ -6,7 +6,7 @@ import (
 	"github.com/shopspring/decimal"
 )
 
-// AccountAssetsRes ...
+// AccountAssetsRes is the response of the account assets endpoint.
 type AccountAssetsRes struct {
 	Data []struct {
 		consts.Symbol  `json:"symbol"`

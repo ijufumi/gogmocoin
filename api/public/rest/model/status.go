@@ -5,7 +5,7 @@ import (
 	"github.com/ijufumi/gogmocoin/v2/api/common/model"
 )
 
-// StatusRes ...
+// StatusRes is the response of the exchange status endpoint.
 type StatusRes struct {
 	model.ResponseCommon
 	Data struct {

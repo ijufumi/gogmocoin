@@ -4,7 +4,7 @@ import (
 	"github.com/ijufumi/gogmocoin/v2/api/common/configuration"
 )
 
-// Client ...
+// Client is the private REST API client composing every authenticated endpoint.
 type Client interface {
 	AccountMargin
 	AccountAssets
@@ -79,7 +79,7 @@ func NewWithKeys(apiKey, secretKey string) Client {
 	return c
 }
 
-// New ...
+// New returns a private REST API client using the API key and secret from configuration.
 func New() Client {
 	apiKey := configuration.APIKey()
 	secretKey := configuration.APISecret()

@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-// TickerRes ...
+// TickerRes is the response of the public ticker endpoint.
 type TickerRes struct {
 	model.ResponseCommon
 	Data []struct {

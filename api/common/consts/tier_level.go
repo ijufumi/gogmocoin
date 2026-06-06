@@ -5,7 +5,7 @@ import (
 	"strconv"
 )
 
-// TierLevel ...
+// TierLevel is the account trading tier reported by GMO Coin.
 type TierLevel int8
 
 const (

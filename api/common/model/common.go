@@ -38,7 +38,7 @@ func (r *ResponseCommon) Success() bool {
 	return r.Status.IsOK()
 }
 
-// Pagination ...
+// Pagination holds the current page and total count returned by paginated endpoints.
 type Pagination struct {
 	CurrentPage int `json:"currentPage"`
 	Count       int `json:"count"`
@@ -51,13 +51,15 @@ type WebsocketRequestCommon struct {
 	Channel consts.WebSocketChannel `json:"channel"`
 }
 
-// WebsocketResponseCommon ...
+// WebsocketResponseCommon is embedded in every WebSocket message and carries the
+// channel name and any error reported by the server.
 type WebsocketResponseCommon struct {
 	Channel consts.WebSocketChannel `json:"channel"`
 	Error   string                  `json:"error"`
 }
 
-// PrivateWebsocketResponseCommon ...
+// PrivateWebsocketResponseCommon is embedded in private WebSocket messages and
+// adds the message type to the common WebSocket response fields.
 type PrivateWebsocketResponseCommon struct {
 	WebsocketResponseCommon
 	MsgType consts.MsgType `json:"msgType"`

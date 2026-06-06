@@ -10,7 +10,7 @@ import (
 	"net/url"
 )
 
-// Ticker ...
+// Ticker is the client interface for the public ticker endpoint.
 type Ticker interface {
 	Ticker(symbol consts.Symbol) (*model.TickerRes, error)
 	TickerWithContext(ctx context.Context, symbol consts.Symbol) (*model.TickerRes, error)
@@ -26,12 +26,12 @@ type ticker struct {
 	api.RestAPIBase
 }
 
-// Ticker ...
+// Ticker retrieves the latest ticker for the given symbol (or all symbols when SymbolNONE) using a background context.
 func (t *ticker) Ticker(symbol consts.Symbol) (*model.TickerRes, error) {
 	return t.TickerWithContext(context.Background(), symbol)
 }
 
-// TickerWithContext ...
+// TickerWithContext retrieves the latest ticker for the given symbol (or all symbols when SymbolNONE) using the provided context.
 func (t *ticker) TickerWithContext(ctx context.Context, symbol consts.Symbol) (*model.TickerRes, error) {
 	param := url.Values{}
 

@@ -9,7 +9,7 @@ import (
 	"net/url"
 )
 
-// AccountMargin ...
+// AccountMargin is the client interface for the account margin endpoint.
 type AccountMargin interface {
 	AccountMargin() (*model.AccountMarginRes, error)
 	AccountMarginWithContext(ctx context.Context) (*model.AccountMarginRes, error)
@@ -25,12 +25,12 @@ type accountMargin struct {
 	api.RestAPIBase
 }
 
-// AccountMargin ...
+// AccountMargin retrieves the account's margin status using a background context.
 func (a *accountMargin) AccountMargin() (*model.AccountMarginRes, error) {
 	return a.AccountMarginWithContext(context.Background())
 }
 
-// AccountMarginWithContext ...
+// AccountMarginWithContext retrieves the account's margin status using the provided context.
 func (a *accountMargin) AccountMarginWithContext(ctx context.Context) (*model.AccountMarginRes, error) {
 	res, err := a.Get(ctx, url.Values{}, "/v1/account/margin")
 	if err != nil {

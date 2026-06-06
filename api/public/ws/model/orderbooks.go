@@ -8,7 +8,7 @@ import (
 	"github.com/shopspring/decimal"
 )
 
-// NewOrderBooksReq ...
+// NewOrderBooksReq builds a subscribe/unsubscribe request for the orderbooks channel.
 func NewOrderBooksReq(command consts.WebSocketCommand, channel consts.WebSocketChannel, symbol consts.Symbol) OrderBooksReq {
 	return OrderBooksReq{
 		WebsocketRequestCommon: model.WebsocketRequestCommon{

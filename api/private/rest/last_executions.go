@@ -11,7 +11,7 @@ import (
 	"strconv"
 )
 
-// LastExecutions ...
+// LastExecutions is the client interface for the latest executions endpoint.
 type LastExecutions interface {
 	LastExecutions(symbol consts.Symbol, page, count int) (*model.LastExecutionsRes, error)
 	LastExecutionsWithContext(ctx context.Context, symbol consts.Symbol, page, count int) (*model.LastExecutionsRes, error)
@@ -27,12 +27,12 @@ type lastExecutions struct {
 	api.RestAPIBase
 }
 
-// LastExecutions ...
+// LastExecutions retrieves the most recent executions for the given symbol with pagination using a background context.
 func (l *lastExecutions) LastExecutions(symbol consts.Symbol, page, count int) (*model.LastExecutionsRes, error) {
 	return l.LastExecutionsWithContext(context.Background(), symbol, page, count)
 }
 
-// LastExecutionsWithContext ...
+// LastExecutionsWithContext retrieves the most recent executions for the given symbol with pagination using the provided context.
 func (l *lastExecutions) LastExecutionsWithContext(ctx context.Context, symbol consts.Symbol, page, count int) (*model.LastExecutionsRes, error) {
 	param := url.Values{
 		"symbol": {string(symbol)},

@@ -9,7 +9,7 @@ import (
 	"net/url"
 )
 
-// Status ...
+// Status is the client interface for the exchange status endpoint.
 type Status interface {
 	Status() (*model.StatusRes, error)
 	StatusWithContext(ctx context.Context) (*model.StatusRes, error)
@@ -25,12 +25,12 @@ type status struct {
 	api.RestAPIBase
 }
 
-// Status ...
+// Status retrieves the current exchange operational status using a background context.
 func (s *status) Status() (*model.StatusRes, error) {
 	return s.StatusWithContext(context.Background())
 }
 
-// StatusWithContext ...
+// StatusWithContext retrieves the current exchange operational status using the provided context.
 func (s *status) StatusWithContext(ctx context.Context) (*model.StatusRes, error) {
 	res, err := s.Get(ctx, url.Values{}, "/v1/status")
 	if err != nil {

@@ -9,7 +9,7 @@ import (
 	"github.com/shopspring/decimal"
 )
 
-// ChangeLosscutPrice ...
+// ChangeLosscutPrice is the client interface for the change loss-cut price endpoint.
 type ChangeLosscutPrice interface {
 	ChangeLosscutPrice(positionID int64, losscutPrice decimal.Decimal) (*model.ChangeLosscutPriceRes, error)
 	ChangeLosscutPriceWithContext(ctx context.Context, positionID int64, losscutPrice decimal.Decimal) (*model.ChangeLosscutPriceRes, error)
@@ -25,12 +25,12 @@ type changeLosscutPrice struct {
 	api.RestAPIBase
 }
 
-// ChangeLosscutPrice ...
+// ChangeLosscutPrice updates the loss-cut price of the given position using a background context.
 func (c *changeLosscutPrice) ChangeLosscutPrice(positionID int64, losscutPrice decimal.Decimal) (*model.ChangeLosscutPriceRes, error) {
 	return c.ChangeLosscutPriceWithContext(context.Background(), positionID, losscutPrice)
 }
 
-// ChangeLosscutPriceWithContext ...
+// ChangeLosscutPriceWithContext updates the loss-cut price of the given position using the provided context.
 func (c *changeLosscutPrice) ChangeLosscutPriceWithContext(ctx context.Context, positionID int64, losscutPrice decimal.Decimal) (*model.ChangeLosscutPriceRes, error) {
 	request := model.ChangeLosscutPriceReq{
 		PositionID:   positionID,

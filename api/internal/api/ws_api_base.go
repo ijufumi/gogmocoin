@@ -43,7 +43,7 @@ type WSAPIBase struct {
 	state           *atomic.Value
 	startMu         sync.Mutex
 	ctx             context.Context
-	getHostFunc      HostFactoryFunc
+	getHostFunc     HostFactoryFunc
 	stopFunc        context.CancelFunc
 	subscribeFunc   func() error
 	unsubscribeFunc func() error
@@ -62,9 +62,9 @@ type msgRequest struct {
 
 func NewWSAPIBase(requestFactory RequestFactoryFunc) *WSAPIBase {
 	base := &WSAPIBase{
-		state:      &atomic.Value{},
-		stream:     make(chan []byte, 100),
-		msgStream:  make(chan msgRequest, 1),
+		state:       &atomic.Value{},
+		stream:      make(chan []byte, 100),
+		msgStream:   make(chan msgRequest, 1),
 		getHostFunc: publicHostFactory,
 	}
 	base.changeStateToStopped()
@@ -110,13 +110,13 @@ func (c *WSAPIBase) setRequestFunc(f RequestFactoryFunc) {
 	c.unsubscribeFunc = c.createSendFunc(f(consts.WebSocketCommandUnsubscribe))
 }
 
-// Subscribe ...
+// Subscribe starts the WebSocket session if needed and sends the subscribe request.
 func (c *WSAPIBase) Subscribe(ctx context.Context) error {
 	c.start(ctx)
 	return c.subscribeFunc()
 }
 
-// Unsubscribe ...
+// Unsubscribe sends the unsubscribe request and closes the WebSocket session.
 func (c *WSAPIBase) Unsubscribe() error {
 	defer func() {
 		c.close()
@@ -283,7 +283,7 @@ func (c *WSAPIBase) dial() error {
 	return nil
 }
 
-// Stream ...
+// Stream returns the channel that delivers raw messages received from the WebSocket connection.
 func (c *WSAPIBase) Stream() <-chan []byte {
 	return c.stream
 }
@@ -296,7 +296,7 @@ func (c *WSAPIBase) resetTypedStream() {
 	c.streamMu.Unlock()
 }
 
-// close is ...
+// close cancels the session context and marks the connection as closed.
 func (c *WSAPIBase) close() {
 	if c.stopFunc != nil {
 		c.stopFunc()

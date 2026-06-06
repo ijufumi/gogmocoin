@@ -10,7 +10,7 @@ import (
 	"net/url"
 )
 
-// PositionSummary ...
+// PositionSummary is the client interface for the position summary endpoint.
 type PositionSummary interface {
 	PositionSummary(symbol consts.Symbol) (*model.PositionSummaryRes, error)
 	PositionSummaryWithContext(ctx context.Context, symbol consts.Symbol) (*model.PositionSummaryRes, error)
@@ -26,12 +26,12 @@ type positionSummary struct {
 	api.RestAPIBase
 }
 
-// PositionSummary ...
+// PositionSummary retrieves the average position summary for the given symbol using a background context.
 func (p *positionSummary) PositionSummary(symbol consts.Symbol) (*model.PositionSummaryRes, error) {
 	return p.PositionSummaryWithContext(context.Background(), symbol)
 }
 
-// PositionSummaryWithContext ...
+// PositionSummaryWithContext retrieves the average position summary for the given symbol using the provided context.
 func (p *positionSummary) PositionSummaryWithContext(ctx context.Context, symbol consts.Symbol) (*model.PositionSummaryRes, error) {
 	param := url.Values{
 		"symbol": {string(symbol)},

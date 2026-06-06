@@ -1,6 +1,6 @@
 package consts
 
-// Side ...
+// Side is the direction of an order, either buy or sell.
 type Side string
 
 // Opposite returns opposite side.
@@ -12,8 +12,8 @@ func (s Side) Opposite() Side {
 }
 
 const (
-	// SideBUY ...
+	// SideBUY is the buy side of an order.
 	SideBUY = Side("BUY")
-	// SideSELL ...
+	// SideSELL is the sell side of an order.
 	SideSELL = Side("SELL")
 )

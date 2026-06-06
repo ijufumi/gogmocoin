@@ -6,7 +6,7 @@ import (
 	"github.com/shopspring/decimal"
 )
 
-// CloseBulkOrderReq...
+// CloseBulkOrderReq is the request of the bulk position close endpoint.
 type CloseBulkOrderReq struct {
 	Symbol        consts.Symbol        `json:"symbol"`
 	Side          consts.Side          `json:"side"`
@@ -15,7 +15,7 @@ type CloseBulkOrderReq struct {
 	Size          decimal.Decimal      `json:"size"`
 }
 
-// CloseBulkOrderRes ...
+// CloseBulkOrderRes is the response of the bulk position close endpoint, carrying the created order ID.
 type CloseBulkOrderRes struct {
 	model.ResponseCommon
 	Data int64 `json:"data,string"`

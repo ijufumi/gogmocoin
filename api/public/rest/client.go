@@ -1,6 +1,6 @@
 package rest
 
-// Client ...
+// Client is the public REST API client composing every public endpoint.
 type Client interface {
 	Ticker
 	Status
@@ -19,7 +19,7 @@ type client struct {
 	symbols
 }
 
-// New ...
+// New returns a public REST API client ready to call every public endpoint.
 func New() Client {
 	return &client{
 		ticker:     newTicker(),
