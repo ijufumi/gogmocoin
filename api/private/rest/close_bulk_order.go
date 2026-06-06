@@ -10,7 +10,7 @@ import (
 	"github.com/shopspring/decimal"
 )
 
-// CloseBulkOrder ...
+// CloseBulkOrder is the client interface for the bulk position close endpoint.
 type CloseBulkOrder interface {
 	CloseBulkOrder(symbol consts.Symbol, side consts.Side, executionType consts.ExecutionType, price, size decimal.Decimal) (*model.CloseBulkOrderRes, error)
 	CloseBulkOrderWithContext(ctx context.Context, symbol consts.Symbol, side consts.Side, executionType consts.ExecutionType, price, size decimal.Decimal) (*model.CloseBulkOrderRes, error)
@@ -26,12 +26,12 @@ type closeBulkOrder struct {
 	api.RestAPIBase
 }
 
-// CloseBulkOrder ...
+// CloseBulkOrder closes positions for the given symbol in bulk using a background context.
 func (c *closeBulkOrder) CloseBulkOrder(symbol consts.Symbol, side consts.Side, executionType consts.ExecutionType, price, size decimal.Decimal) (*model.CloseBulkOrderRes, error) {
 	return c.CloseBulkOrderWithContext(context.Background(), symbol, side, executionType, price, size)
 }
 
-// CloseBulkOrderWithContext ...
+// CloseBulkOrderWithContext closes positions for the given symbol in bulk using the provided context.
 func (c *closeBulkOrder) CloseBulkOrderWithContext(ctx context.Context, symbol consts.Symbol, side consts.Side, executionType consts.ExecutionType, price, size decimal.Decimal) (*model.CloseBulkOrderRes, error) {
 	request := model.CloseBulkOrderReq{
 		Symbol:        symbol,

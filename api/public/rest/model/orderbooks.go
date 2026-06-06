@@ -6,7 +6,7 @@ import (
 	"github.com/shopspring/decimal"
 )
 
-// OrderBooksRes ...
+// OrderBooksRes is the response of the public order book endpoint.
 type OrderBooksRes struct {
 	model.ResponseCommon
 	Data struct {

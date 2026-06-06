@@ -10,7 +10,7 @@ import (
 	"strconv"
 )
 
-// Orders ...
+// Orders is the client interface for the order lookup endpoint.
 type Orders interface {
 	Orders(orderID int64) (*model.OrdersRes, error)
 	OrdersWithContext(ctx context.Context, orderID int64) (*model.OrdersRes, error)
@@ -26,12 +26,12 @@ type orders struct {
 	api.RestAPIBase
 }
 
-// Orders ...
+// Orders retrieves the order with the given order ID using a background context.
 func (o *orders) Orders(orderID int64) (*model.OrdersRes, error) {
 	return o.OrdersWithContext(context.Background(), orderID)
 }
 
-// OrdersWithContext ...
+// OrdersWithContext retrieves the order with the given order ID using the provided context.
 func (o *orders) OrdersWithContext(ctx context.Context, orderID int64) (*model.OrdersRes, error) {
 	param := url.Values{
 		"orderId": {strconv.FormatInt(orderID, 10)},

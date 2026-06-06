@@ -55,17 +55,17 @@ func NewPrivateRestAPIBase(apiKey, secretKey string) RestAPIBase {
 	}
 }
 
-// Post ...
+// Post sends an HTTP POST request with the given body to path and returns the raw response body.
 func (c *RestAPIBase) Post(ctx context.Context, body any, path string) ([]byte, error) {
 	return c.sendRequest(ctx, httpMethodPOST, body, path)
 }
 
-// Put ...
+// Put sends an HTTP PUT request with the given body to path and returns the raw response body.
 func (c *RestAPIBase) Put(ctx context.Context, body any, path string) ([]byte, error) {
 	return c.sendRequest(ctx, httpMethodPUT, body, path)
 }
 
-// Get ...
+// Get sends an HTTP GET request with the given query parameters to path and returns the raw response body.
 func (c *RestAPIBase) Get(ctx context.Context, param url.Values, path string) ([]byte, error) {
 	queryString := param.Encode()
 	urlString := path
@@ -75,7 +75,7 @@ func (c *RestAPIBase) Get(ctx context.Context, param url.Values, path string) ([
 	return c.sendRequest(ctx, httpMethodGET, nil, urlString)
 }
 
-// Delete ...
+// Delete sends an HTTP DELETE request with the given body to path and returns the raw response body.
 func (c *RestAPIBase) Delete(ctx context.Context, body any, path string) ([]byte, error) {
 	return c.sendRequest(ctx, httpMethodDELETE, body, path)
 }

@@ -8,7 +8,7 @@ import (
 	"net/url"
 )
 
-// WSAuth ...
+// WSAuth is the client interface for managing private WebSocket access tokens.
 type WSAuth interface {
 	CreateWSAuthToken() (string, error)
 	CreateWSAuthTokenWithContext(ctx context.Context) (string, error)
@@ -28,12 +28,12 @@ type wsAuth struct {
 	api.RestAPIBase
 }
 
-// CreateWSAuthToken ...
+// CreateWSAuthToken issues a new access token for private WebSocket channels using a background context.
 func (w *wsAuth) CreateWSAuthToken() (string, error) {
 	return w.CreateWSAuthTokenWithContext(context.Background())
 }
 
-// CreateWSAuthTokenWithContext ...
+// CreateWSAuthTokenWithContext issues a new access token for private WebSocket channels using the provided context.
 func (w *wsAuth) CreateWSAuthTokenWithContext(ctx context.Context) (string, error) {
 	res, err := w.Post(ctx, url.Values{}, "/v1/ws-auth")
 	if err != nil {
@@ -51,12 +51,12 @@ func (w *wsAuth) CreateWSAuthTokenWithContext(ctx context.Context) (string, erro
 	return wsTokenRes.Data, nil
 }
 
-// ExtendWSAuthToken ...
+// ExtendWSAuthToken extends the lifetime of the given WebSocket access token using a background context.
 func (w *wsAuth) ExtendWSAuthToken(token string) error {
 	return w.ExtendWSAuthTokenWithContext(context.Background(), token)
 }
 
-// ExtendWSAuthTokenWithContext ...
+// ExtendWSAuthTokenWithContext extends the lifetime of the given WebSocket access token using the provided context.
 func (w *wsAuth) ExtendWSAuthTokenWithContext(ctx context.Context, token string) error {
 	req := model.WSAuthReq{Token: token}
 	res, err := w.Put(ctx, req, "/v1/ws-auth")
@@ -75,12 +75,12 @@ func (w *wsAuth) ExtendWSAuthTokenWithContext(ctx context.Context, token string)
 	return nil
 }
 
-// RevokeWSAuthToken ...
+// RevokeWSAuthToken revokes the given WebSocket access token using a background context.
 func (w *wsAuth) RevokeWSAuthToken(token string) error {
 	return w.RevokeWSAuthTokenWithContext(context.Background(), token)
 }
 
-// RevokeWSAuthTokenWithContext ...
+// RevokeWSAuthTokenWithContext revokes the given WebSocket access token using the provided context.
 func (w *wsAuth) RevokeWSAuthTokenWithContext(ctx context.Context, token string) error {
 	req := model.WSAuthReq{Token: token}
 	res, err := w.Delete(ctx, req, "/v1/ws-auth")

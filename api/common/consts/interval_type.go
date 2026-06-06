@@ -1,6 +1,6 @@
 package consts
 
-// IntervalType ...
+// IntervalType is the candlestick interval used by the KLines endpoint.
 type IntervalType string
 
 const (

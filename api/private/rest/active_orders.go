@@ -10,7 +10,7 @@ import (
 	"net/url"
 )
 
-// ActiveOrders ...
+// ActiveOrders is the client interface for the active orders endpoint.
 type ActiveOrders interface {
 	ActiveOrders(symbol consts.Symbol, pageNo int) (*model.ActiveOrdersRes, error)
 	ActiveOrdersWithContext(ctx context.Context, symbol consts.Symbol, pageNo int) (*model.ActiveOrdersRes, error)
@@ -26,12 +26,12 @@ type activeOrders struct {
 	api.RestAPIBase
 }
 
-// ActiveOrders ...
+// ActiveOrders retrieves the account's active (open) orders for the given symbol and page using a background context.
 func (c activeOrders) ActiveOrders(symbol consts.Symbol, pageNo int) (*model.ActiveOrdersRes, error) {
 	return c.ActiveOrdersWithContext(context.Background(), symbol, pageNo)
 }
 
-// ActiveOrdersWithContext ...
+// ActiveOrdersWithContext retrieves the account's active (open) orders for the given symbol and page using the provided context.
 func (c activeOrders) ActiveOrdersWithContext(ctx context.Context, symbol consts.Symbol, pageNo int) (*model.ActiveOrdersRes, error) {
 	req := url.Values{
 		"symbol": {string(symbol)},

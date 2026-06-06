@@ -10,7 +10,7 @@ import (
 	"github.com/shopspring/decimal"
 )
 
-// Order ...
+// Order is the client interface for the new order endpoint.
 type Order interface {
 	Order(symbol consts.Symbol, side consts.Side, executionType consts.ExecutionType, price, size decimal.Decimal) (*model.OrderRes, error)
 	OrderWithContext(ctx context.Context, symbol consts.Symbol, side consts.Side, executionType consts.ExecutionType, price, size decimal.Decimal) (*model.OrderRes, error)
@@ -26,12 +26,12 @@ type order struct {
 	api.RestAPIBase
 }
 
-// Order ...
+// Order places a new order for the given symbol using a background context.
 func (c *order) Order(symbol consts.Symbol, side consts.Side, executionType consts.ExecutionType, price, size decimal.Decimal) (*model.OrderRes, error) {
 	return c.OrderWithContext(context.Background(), symbol, side, executionType, price, size)
 }
 
-// OrderWithContext ...
+// OrderWithContext places a new order for the given symbol using the provided context.
 func (c *order) OrderWithContext(ctx context.Context, symbol consts.Symbol, side consts.Side, executionType consts.ExecutionType, price, size decimal.Decimal) (*model.OrderRes, error) {
 	req := model.OrderReq{
 		Symbol:        symbol,

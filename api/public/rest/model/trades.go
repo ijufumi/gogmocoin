@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-// TradesRes ...
+// TradesRes is the response of the public trade history endpoint.
 type TradesRes struct {
 	Data struct {
 		List []struct {

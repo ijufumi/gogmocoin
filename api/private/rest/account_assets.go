@@ -9,7 +9,7 @@ import (
 	"net/url"
 )
 
-// AccountAssets ...
+// AccountAssets is the client interface for the account assets endpoint.
 type AccountAssets interface {
 	AccountAssets() (*model.AccountAssetsRes, error)
 	AccountAssetsWithContext(ctx context.Context) (*model.AccountAssetsRes, error)
@@ -25,12 +25,12 @@ type accountAssets struct {
 	api.RestAPIBase
 }
 
-// AccountAssets ...
+// AccountAssets retrieves the account's asset balances using a background context.
 func (a *accountAssets) AccountAssets() (*model.AccountAssetsRes, error) {
 	return a.AccountAssetsWithContext(context.Background())
 }
 
-// AccountAssetsWithContext ...
+// AccountAssetsWithContext retrieves the account's asset balances using the provided context.
 func (a *accountAssets) AccountAssetsWithContext(ctx context.Context) (*model.AccountAssetsRes, error) {
 	res, err := a.Get(ctx, url.Values{}, "/v1/account/assets")
 	if err != nil {

@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-// LastExecutionsRes ...
+// LastExecutionsRes is the response of the latest executions endpoint.
 type LastExecutionsRes struct {
 	Data struct {
 		List []struct {

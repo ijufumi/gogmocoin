@@ -10,7 +10,7 @@ import (
 	"github.com/shopspring/decimal"
 )
 
-// CloseOrder ...
+// CloseOrder is the client interface for the position close endpoint.
 type CloseOrder interface {
 	CloseOrder(positionID int64, symbol consts.Symbol, side consts.Side, executionType consts.ExecutionType, price, size decimal.Decimal) (*model.CloseOrderRes, error)
 	CloseOrderWithContext(ctx context.Context, positionID int64, symbol consts.Symbol, side consts.Side, executionType consts.ExecutionType, price, size decimal.Decimal) (*model.CloseOrderRes, error)
@@ -26,12 +26,12 @@ type closeOrder struct {
 	api.RestAPIBase
 }
 
-// CloseOrder ...
+// CloseOrder closes the given position using a background context.
 func (c *closeOrder) CloseOrder(positionID int64, symbol consts.Symbol, side consts.Side, executionType consts.ExecutionType, price, size decimal.Decimal) (*model.CloseOrderRes, error) {
 	return c.CloseOrderWithContext(context.Background(), positionID, symbol, side, executionType, price, size)
 }
 
-// CloseOrderWithContext ...
+// CloseOrderWithContext closes the given position using the provided context.
 func (c *closeOrder) CloseOrderWithContext(ctx context.Context, positionID int64, symbol consts.Symbol, side consts.Side, executionType consts.ExecutionType, price, size decimal.Decimal) (*model.CloseOrderRes, error) {
 	req := model.CloseOrderReq{
 		Symbol:        symbol,

@@ -10,7 +10,7 @@ import (
 	"strconv"
 )
 
-// Executions ...
+// Executions is the client interface for the executions (fills) endpoint.
 type Executions interface {
 	Executions(orderID, executionID int64) (*model.ExecutionsRes, error)
 	ExecutionsWithContext(ctx context.Context, orderID, executionID int64) (*model.ExecutionsRes, error)
@@ -30,32 +30,32 @@ type executions struct {
 	api.RestAPIBase
 }
 
-// ExecutionsByOrderID ...
+// ExecutionsByOrderID retrieves executions for the given order ID using a background context.
 func (e *executions) ExecutionsByOrderID(orderID int64) (*model.ExecutionsRes, error) {
 	return e.Executions(orderID, 0)
 }
 
-// ExecutionsByOrderIDWithContext ...
+// ExecutionsByOrderIDWithContext retrieves executions for the given order ID using the provided context.
 func (e *executions) ExecutionsByOrderIDWithContext(ctx context.Context, orderID int64) (*model.ExecutionsRes, error) {
 	return e.ExecutionsWithContext(ctx, orderID, 0)
 }
 
-// ExecutionsByExecutionID ...
+// ExecutionsByExecutionID retrieves the execution with the given execution ID using a background context.
 func (e *executions) ExecutionsByExecutionID(executionID int64) (*model.ExecutionsRes, error) {
 	return e.Executions(0, executionID)
 }
 
-// ExecutionsByExecutionIDWithContext ...
+// ExecutionsByExecutionIDWithContext retrieves the execution with the given execution ID using the provided context.
 func (e *executions) ExecutionsByExecutionIDWithContext(ctx context.Context, executionID int64) (*model.ExecutionsRes, error) {
 	return e.ExecutionsWithContext(ctx, 0, executionID)
 }
 
-// Executions ...
+// Executions retrieves executions filtered by order ID or execution ID using a background context.
 func (e *executions) Executions(orderID, executionID int64) (*model.ExecutionsRes, error) {
 	return e.ExecutionsWithContext(context.Background(), orderID, executionID)
 }
 
-// ExecutionsWithContext ...
+// ExecutionsWithContext retrieves executions filtered by order ID or execution ID using the provided context.
 func (e *executions) ExecutionsWithContext(ctx context.Context, orderID, executionID int64) (*model.ExecutionsRes, error) {
 	param := url.Values{}
 

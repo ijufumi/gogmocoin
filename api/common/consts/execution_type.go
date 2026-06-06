@@ -1,15 +1,15 @@
 package consts
 
-// ExecutionType ...
+// ExecutionType is the execution method of an order.
 type ExecutionType string
 
 const (
-	// ExecutionTypeMARKET ...
+	// ExecutionTypeMARKET is a market order executed at the best available price.
 	ExecutionTypeMARKET = ExecutionType("MARKET")
 
-	// ExecutionTypeLIMIT ...
+	// ExecutionTypeLIMIT is a limit order executed at the specified price or better.
 	ExecutionTypeLIMIT = ExecutionType("LIMIT")
 
-	// ExecutionTypeSTOP ...
+	// ExecutionTypeSTOP is a stop order triggered when the market reaches the specified price.
 	ExecutionTypeSTOP = ExecutionType("STOP")
 )

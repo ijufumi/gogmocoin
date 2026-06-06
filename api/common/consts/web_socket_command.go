@@ -1,11 +1,11 @@
 package consts
 
-// WebSocketCommand ...
+// WebSocketCommand is the command sent to a WebSocket channel to start or stop a subscription.
 type WebSocketCommand string
 
 const (
-	// WebSocketCommandSubscribe ...
+	// WebSocketCommandSubscribe starts a subscription to a channel.
 	WebSocketCommandSubscribe = WebSocketCommand("subscribe")
-	// WebSocketCommandUnsubscribe ...
+	// WebSocketCommandUnsubscribe stops a subscription to a channel.
 	WebSocketCommandUnsubscribe = WebSocketCommand("unsubscribe")
 )

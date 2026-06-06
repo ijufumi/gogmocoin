@@ -1,11 +1,11 @@
 package consts
 
-// SettleType ...
+// SettleType indicates whether an order opens or closes a position.
 type SettleType string
 
 const (
-	// SettleTypeOPEN ...
+	// SettleTypeOPEN opens a new position.
 	SettleTypeOPEN = SettleType("OPEN")
-	// SettleTypeCLOSE ...
+	// SettleTypeCLOSE closes an existing position.
 	SettleTypeCLOSE = SettleType("CLOSE")
 )

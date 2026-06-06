@@ -5,7 +5,7 @@ import (
 	"github.com/shopspring/decimal"
 )
 
-// AccountMarginRes ...
+// AccountMarginRes is the response of the account margin endpoint.
 type AccountMarginRes struct {
 	Data struct {
 		ProfitLoss       decimal.Decimal `json:"profitLoss"`

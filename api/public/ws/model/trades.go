@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-// NewTradesReq ...
+// NewTradesReq builds a subscribe/unsubscribe request for the trades channel.
 func NewTradesReq(command consts.WebSocketCommand, channel consts.WebSocketChannel, symbol consts.Symbol, option *consts.Option) TradesReq {
 	return TradesReq{
 		WebsocketRequestCommon: model.WebsocketRequestCommon{

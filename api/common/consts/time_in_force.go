@@ -5,12 +5,15 @@ package consts
 type TimeInForce string
 
 const (
-	// TimeInForceFAK ...
+	// TimeInForceFAK is Fill And Kill: fill as much as possible immediately and
+	// cancel any remaining quantity.
 	TimeInForceFAK = TimeInForce("FAK")
-	// TimeInForceFAS ...
+	// TimeInForceFAS is Fill And Store: fill as much as possible immediately and
+	// keep any remaining quantity on the order book.
 	TimeInForceFAS = TimeInForce("FAS")
-	// TimeInForceFOK ...
+	// TimeInForceFOK is Fill Or Kill: fill the entire quantity immediately or
+	// cancel the whole order.
 	TimeInForceFOK = TimeInForce("FOK")
-	// TimeInForceSOK ...
+	// TimeInForceSOK is Success Or Kill, used for closing positions in bulk.
 	TimeInForceSOK = TimeInForce("SOK")
 )

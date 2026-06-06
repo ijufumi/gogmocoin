@@ -5,13 +5,13 @@ import (
 	"github.com/shopspring/decimal"
 )
 
-// ChangeLosscutPriceReq ...
+// ChangeLosscutPriceReq is the request of the change loss-cut price endpoint.
 type ChangeLosscutPriceReq struct {
 	PositionID   int64           `json:"positionId"`
 	LosscutPrice decimal.Decimal `json:"losscutPrice"`
 }
 
-// ChangeLosscutPriceRes ...
+// ChangeLosscutPriceRes is the response of the change loss-cut price endpoint.
 type ChangeLosscutPriceRes struct {
 	model.ResponseCommon
 }

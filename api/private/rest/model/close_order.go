@@ -6,7 +6,7 @@ import (
 	"github.com/shopspring/decimal"
 )
 
-// CloseOrderReq ...
+// CloseOrderReq is the request of the position close endpoint.
 type CloseOrderReq struct {
 	Symbol         consts.Symbol        `json:"symbol"`
 	Side           consts.Side          `json:"side"`
@@ -15,13 +15,13 @@ type CloseOrderReq struct {
 	SettlePosition []SettlePosition     `json:"settlePosition"`
 }
 
-// SettlePosition ...
+// SettlePosition specifies a position and the size to settle when closing.
 type SettlePosition struct {
 	PositionID int64           `json:"positionId"`
 	Size       decimal.Decimal `json:"size"`
 }
 
-// CloseOrderRes ...
+// CloseOrderRes is the response of the position close endpoint, carrying the created order ID.
 type CloseOrderRes struct {
 	model.ResponseCommon
 	Data int64 `json:"data,string"`

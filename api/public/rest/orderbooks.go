@@ -10,7 +10,7 @@ import (
 	"net/url"
 )
 
-// OrderBooks ...
+// OrderBooks is the client interface for the public order book endpoint.
 type OrderBooks interface {
 	OrderBooks(symbol consts.Symbol) (*model.OrderBooksRes, error)
 	OrderBooksWithContext(ctx context.Context, symbol consts.Symbol) (*model.OrderBooksRes, error)
@@ -26,12 +26,12 @@ type orderBooks struct {
 	api.RestAPIBase
 }
 
-// OrderBooks ...
+// OrderBooks retrieves the current order book for the given symbol using a background context.
 func (o *orderBooks) OrderBooks(symbol consts.Symbol) (*model.OrderBooksRes, error) {
 	return o.OrderBooksWithContext(context.Background(), symbol)
 }
 
-// OrderBooksWithContext ...
+// OrderBooksWithContext retrieves the current order book for the given symbol using the provided context.
 func (o *orderBooks) OrderBooksWithContext(ctx context.Context, symbol consts.Symbol) (*model.OrderBooksRes, error) {
 	param := url.Values{
 		"symbol": {string(symbol)},

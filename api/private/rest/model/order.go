@@ -6,7 +6,7 @@ import (
 	"github.com/shopspring/decimal"
 )
 
-// OrderReq ...
+// OrderReq is the request of the new order endpoint.
 type OrderReq struct {
 	Symbol        consts.Symbol        `json:"symbol"`
 	Side          consts.Side          `json:"side"`
@@ -16,7 +16,7 @@ type OrderReq struct {
 	Size          decimal.Decimal      `json:"size"`
 }
 
-// OrderRes ...
+// OrderRes is the response of the new order endpoint, carrying the created order ID.
 type OrderRes struct {
 	model.ResponseCommon
 	Data int64 `json:"data,string"`

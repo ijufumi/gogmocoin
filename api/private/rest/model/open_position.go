@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-// OpenPositionRes ...
+// OpenPositionRes is the response of the open positions endpoint.
 type OpenPositionRes struct {
 	model.ResponseCommon
 	Data struct {

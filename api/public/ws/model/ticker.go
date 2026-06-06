@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-// NewTickerReq ...
+// NewTickerReq builds a subscribe/unsubscribe request for the ticker channel.
 func NewTickerReq(command consts.WebSocketCommand, channel consts.WebSocketChannel, symbol consts.Symbol) TickerReq {
 	return TickerReq{
 		WebsocketRequestCommon: model.WebsocketRequestCommon{
